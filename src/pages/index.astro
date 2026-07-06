@@ -1,0 +1,263 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const stats = [
+  { value: '4,400+', label: 'commits shipped' },
+  { value: '7', label: 'production repositories' },
+  { value: '19 mo', label: 'building one ecosystem' },
+  { value: '11 → 13', label: 'Laravel major versions' },
+];
+
+const projects = [
+  {
+    name: 'UPLB-TKS · Timekeeping System',
+    role: 'Lead developer · ~95% of ~3,500 commits',
+    featured: true,
+    desc: 'University-wide timekeeping platform for University of the Philippines Los Baños personnel — daily time records, leave, performance reviews, certificates of service, and schedules, served through dual Filament panels (HR admin + employee self-service).',
+    highlights: [
+      'DTR engine: flexible periods, biometric + manual attendance merge, grace-period undertime computation, IP-based clock-in validation',
+      'Leave management that acts as the canonical balance source for the whole ecosystem — consumed over REST by the HR system-of-record',
+      'Reusable approval-workflow state machine (draft → approved) with per-transition audit logging, later extracted into its own app',
+      'Kafka consumers with data-contract enforcement, plus RBAC across 30+ models with office-scoped, self-only, and unscoped role tiers',
+      'Release pipeline with AI-drafted, human-reviewed changelogs feeding a personnel-facing "What\'s New" page — covered by unit and feature tests',
+    ],
+    stack: ['PHP 8.2', 'Laravel 11', 'Filament 3', 'Livewire 3', 'MySQL', 'Apache Kafka', 'Tailwind CSS', 'DomPDF', 'PHPUnit 11', 'GitHub Actions'],
+  },
+  {
+    name: 'PerporManTask · Performance Management',
+    role: 'Sole author · 96/96 commits',
+    desc: 'Dedicated performance-management service (IPCR) deliberately extracted from the timekeeping monolith into its own app, sharing data over Kafka — a real modularization story, not a greenfield toy.',
+    highlights: [
+      'IPCR module: semestral rating periods, weighted target distribution validated to 100%, UP SPMS-compliant landscape PDFs',
+      'Production AI feature: task logs exported as structured bundles → LLM clusters them → tolerant JSON import transactionally builds draft reviews. Human-in-the-loop by design',
+      'Cross-app import with stable identity resolution (uuid → email → employee number) and a dry-run preview mode built on rolled-back transactions',
+    ],
+    stack: ['Laravel 12', 'Filament 5', 'Kafka', 'MySQL', 'Tailwind CSS 4', 'PHPUnit 11'],
+  },
+  {
+    name: 'DAME UPLB · Department Website + CMS',
+    role: 'Lead developer · ~97% of commits',
+    desc: 'Public website and admin CMS for UPLB\'s Department of Agribusiness Management and Entrepreneurship — faculty profiles, academic programs, research areas, and news, on the newest stack in this portfolio.',
+    highlights: [
+      'Personnel module with typed roles, designations, and slug-routed public profile pages',
+      'Post/category CMS with publication statuses and soft deletes',
+      'Filament 5 admin using delegated Form/Table/Infolist schema classes; public Blade site with Tailwind v4 design tokens',
+    ],
+    stack: ['PHP 8.3', 'Laravel 13', 'Filament 5', 'Livewire 4', 'PostgreSQL', 'Tailwind CSS 4', 'Pest 4'],
+  },
+  {
+    name: 'UPLB HR Ecosystem · Shared Systems',
+    role: 'Contributor across 4 team repositories',
+    desc: 'The ecosystem\'s shared apps — HR system-of-record, SALN asset-disclosure e-filing, and salary document submission — where I built specific, traceable layers within team codebases.',
+    highlights: [
+      'SALN e-filing: Kafka consumer layer with transactional staging, UUID standardization across core models, and coordinate-mapped PDF generation onto official government forms (FPDI)',
+      'HR system-of-record: bulk employee-number importer with selective field mapping, composite user+personnel+appointment creation flow, model change-detection logic',
+      'Submission portal: submission-window control gating user submissions behind an admin toggle',
+    ],
+    stack: ['Laravel 11', 'Filament 3', 'PostgreSQL', 'MariaDB', 'Kafka', 'RabbitMQ', 'FPDI/FPDF', 'Vue 3'],
+  },
+];
+
+const aiPractices = [
+  {
+    title: '190+ agent skill files',
+    desc: 'Structured domain knowledge across every repo — YAML-triggered deep-dives, DRY tables cataloguing reusable traits and services, gotcha docs. Progressive-disclosure knowledge architecture so AI agents work accurately in each codebase.',
+  },
+  {
+    title: 'Executable specifications',
+    desc: 'Self-contained spec documents a fresh agent can run: full context payloads, per-deliverable requirements, execution checklists, and bash verification scripts — with explicit "do not invent" guardrails. Prompt engineering as an engineering practice.',
+  },
+  {
+    title: 'AI features in production',
+    desc: 'Two human-in-the-loop pipelines shipped: an IPCR drafting flow that clusters task logs into performance functions, and an AI changelog generator behind a human review gate — both guarded by tests.',
+  },
+  {
+    title: 'Discipline around the workflow',
+    desc: 'Conventional commits across thousands of commits, documented Kafka integration contracts, automated commit reports, and CI/CD on self-hosted runners. The boring parts that make AI leverage compound.',
+  },
+];
+
+const stackGroups = [
+  {
+    label: 'Backend',
+    items: ['PHP 8.2–8.4', 'Laravel 11/12/13', 'Filament 3–5', 'Livewire 3/4', 'REST APIs'],
+  },
+  {
+    label: 'Data & Messaging',
+    items: ['MySQL', 'MariaDB', 'PostgreSQL', 'Apache Kafka', 'RabbitMQ'],
+  },
+  {
+    label: 'Frontend',
+    items: ['Tailwind CSS 3/4', 'Alpine.js', 'Vue 3', 'Vite', 'Blade'],
+  },
+  {
+    label: 'Quality & Delivery',
+    items: ['PHPUnit 11', 'Pest 4', 'Laravel Pint', 'GitHub Actions', 'Conventional Commits'],
+  },
+  {
+    label: 'Domain Depth',
+    items: ['RBAC (Shield + Spatie)', 'Approval workflows', 'PDF generation (DomPDF/FPDI)', 'PII encryption', 'Gov-compliance forms'],
+  },
+];
+
+const navLinks = [
+  { href: '#projects', label: 'Projects' },
+  { href: '#ai', label: 'AI Engineering' },
+  { href: '#stack', label: 'Stack' },
+  { href: '#contact', label: 'Contact' },
+];
+---
+
+<Layout
+  title="Carl Janzell Oropesa — Full-Stack Developer"
+  description="Full-stack developer building government-grade HR systems: an integrated ecosystem of Laravel + Filament apps exchanging data over Kafka — plus the AI agent infrastructure that helps ship them."
+>
+  <!-- nav -->
+  <header class="fixed top-0 inset-x-0 z-50 border-b border-white/5 bg-[#030014]/70 backdrop-blur-md">
+    <nav class="mx-auto flex max-w-6xl items-center justify-between px-6 py-3.5">
+      <a href="#top" class="font-display text-sm font-semibold tracking-wide text-white">
+        <span class="gradient-text">✦</span> Carl Janzell
+      </a>
+      <div class="flex items-center gap-5 text-sm text-slate-400 sm:gap-7">
+        {navLinks.map((link) => (
+          <a href={link.href} class="hidden transition hover:text-white sm:block">{link.label}</a>
+        ))}
+        <a
+          href="https://github.com/Darkify19"
+          target="_blank"
+          rel="noopener"
+          class="rounded-full border border-white/15 px-3.5 py-1.5 text-xs font-medium text-slate-200 transition hover:border-violet-400/60 hover:text-white"
+        >GitHub</a>
+      </div>
+    </nav>
+  </header>
+
+  <main id="top" class="relative mx-auto max-w-6xl px-6">
+    <!-- hero -->
+    <section class="flex min-h-screen flex-col justify-center pt-24 pb-16">
+      <p class="role-tag mb-5" data-reveal>Full-Stack Developer · Laravel &amp; Filament</p>
+      <h1 class="font-display max-w-4xl text-4xl font-bold leading-tight text-white sm:text-6xl lg:text-7xl" data-reveal>
+        Building an entire HR universe,<br />
+        <span class="gradient-text">one system at a time.</span>
+      </h1>
+      <p class="mt-7 max-w-2xl text-lg leading-relaxed text-slate-400" data-reveal>
+        I'm Carl Janzell Oropesa. Over the last 19 months I've built and shipped a constellation of
+        government-grade HR systems for the University of the Philippines Los Baños — integrated
+        Laravel applications exchanging data over Kafka — along with the AI agent infrastructure
+        that helps a small team move like a big one.
+      </p>
+      <div class="mt-9 flex flex-wrap items-center gap-4" data-reveal>
+        <a
+          href="#projects"
+          class="rounded-full bg-gradient-to-r from-violet-600 to-fuchsia-600 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-violet-900/40 transition hover:from-violet-500 hover:to-fuchsia-500"
+        >Explore the work</a>
+        <a
+          href="mailto:carl.oropesa11@gmail.com"
+          class="rounded-full border border-white/15 px-6 py-3 text-sm font-semibold text-slate-200 transition hover:border-cyan-300/50 hover:text-white"
+        >Get in touch</a>
+      </div>
+      <dl class="mt-16 grid grid-cols-2 gap-6 sm:grid-cols-4" data-reveal>
+        {stats.map((s) => (
+          <div class="card px-5 py-4">
+            <dt class="order-2 mt-1 text-xs uppercase tracking-wider text-slate-500">{s.label}</dt>
+            <dd class="font-display text-2xl font-bold text-white sm:text-3xl">{s.value}</dd>
+          </div>
+        ))}
+      </dl>
+    </section>
+
+    <!-- projects -->
+    <section id="projects" class="scroll-mt-24 py-20">
+      <p class="role-tag" data-reveal>The Constellation</p>
+      <h2 class="font-display mt-3 text-3xl font-bold text-white sm:text-4xl" data-reveal>Projects</h2>
+      <p class="mt-4 max-w-2xl text-slate-400" data-reveal>
+        Internal university systems doing compliance-heavy, real-world work: civil-service forms,
+        multi-stage approval chains, audit trails, and encrypted PII. Attribution below is exact —
+        every claim traces to commit history.
+      </p>
+      <div class="mt-12 grid gap-6 lg:grid-cols-2">
+        {projects.map((p) => (
+          <article class={`card p-7 ${p.featured ? 'lg:col-span-2' : ''}`} data-reveal>
+            <div class="flex flex-wrap items-baseline justify-between gap-2">
+              <h3 class="font-display text-xl font-semibold text-white">{p.name}</h3>
+              <span class="text-xs font-medium tracking-wide text-fuchsia-300/90">{p.role}</span>
+            </div>
+            <p class="mt-3 text-sm leading-relaxed text-slate-400">{p.desc}</p>
+            <ul class="mt-5 space-y-2.5">
+              {p.highlights.map((h) => (
+                <li class="flex gap-2.5 text-sm leading-relaxed text-slate-300">
+                  <span class="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-gradient-to-r from-violet-400 to-cyan-300"></span>
+                  {h}
+                </li>
+              ))}
+            </ul>
+            <div class="mt-6 flex flex-wrap gap-2">
+              {p.stack.map((tech) => <span class="chip">{tech}</span>)}
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <!-- ai engineering -->
+    <section id="ai" class="scroll-mt-24 py-20">
+      <p class="role-tag" data-reveal>The Dark Matter</p>
+      <h2 class="font-display mt-3 text-3xl font-bold text-white sm:text-4xl" data-reveal>AI-Native Engineering</h2>
+      <p class="mt-4 max-w-2xl text-slate-400" data-reveal>
+        I don't just use AI coding tools — I build the infrastructure that makes them effective.
+        I treat AI agents as team members that need onboarding docs, so I write them.
+      </p>
+      <div class="mt-12 grid gap-6 sm:grid-cols-2">
+        {aiPractices.map((item) => (
+          <article class="card p-7" data-reveal>
+            <h3 class="font-display text-lg font-semibold text-white">{item.title}</h3>
+            <p class="mt-3 text-sm leading-relaxed text-slate-400">{item.desc}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <!-- stack -->
+    <section id="stack" class="scroll-mt-24 py-20">
+      <p class="role-tag" data-reveal>The Toolkit</p>
+      <h2 class="font-display mt-3 text-3xl font-bold text-white sm:text-4xl" data-reveal>Stack</h2>
+      <div class="mt-12 space-y-8">
+        {stackGroups.map((group) => (
+          <div class="flex flex-col gap-3 sm:flex-row sm:items-baseline" data-reveal>
+            <h3 class="w-44 shrink-0 text-sm font-semibold uppercase tracking-wider text-slate-500">{group.label}</h3>
+            <div class="flex flex-wrap gap-2">
+              {group.items.map((item) => <span class="chip chip-cyan">{item}</span>)}
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- contact -->
+    <section id="contact" class="scroll-mt-24 py-24 text-center">
+      <h2 class="font-display text-3xl font-bold text-white sm:text-5xl" data-reveal>
+        Let's build something <span class="gradient-text">stellar.</span>
+      </h2>
+      <p class="mx-auto mt-5 max-w-xl text-slate-400" data-reveal>
+        Open to opportunities where deep Laravel craft, event-driven architecture, and an
+        AI-native workflow make a difference.
+      </p>
+      <div class="mt-9 flex flex-wrap items-center justify-center gap-4" data-reveal>
+        <a
+          href="mailto:carl.oropesa11@gmail.com"
+          class="rounded-full bg-gradient-to-r from-violet-600 to-fuchsia-600 px-7 py-3 text-sm font-semibold text-white shadow-lg shadow-violet-900/40 transition hover:from-violet-500 hover:to-fuchsia-500"
+        >carl.oropesa11@gmail.com</a>
+        <a
+          href="https://github.com/Darkify19"
+          target="_blank"
+          rel="noopener"
+          class="rounded-full border border-white/15 px-7 py-3 text-sm font-semibold text-slate-200 transition hover:border-cyan-300/50 hover:text-white"
+        >github.com/Darkify19</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-white/5 py-8 text-center text-xs text-slate-600">
+    <p>© 2026 Carl Janzell Oropesa · Built with Astro &amp; Tailwind CSS · Deployed on GitHub Pages</p>
+  </footer>
+</Layout>

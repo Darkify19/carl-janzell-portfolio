@@ -1,0 +1,11 @@
+# local-only agent knowledge — never publish
+.claude/
+
+# dependencies & build output
+node_modules/
+dist/
+.astro/
+
+# misc
+.DS_Store
+*.log
