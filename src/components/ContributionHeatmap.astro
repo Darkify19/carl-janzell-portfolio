@@ -1,0 +1,125 @@
+---
+import contributions from '../data/contributions.json';
+
+const days = contributions.days;
+const total = contributions.total;
+
+const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const WEEKDAYS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+
+const LEVEL_COLORS = [
+  'rgba(255,255,255,0.04)',
+  'rgba(124,58,237,0.35)',
+  'rgba(167,139,250,0.55)',
+  'rgba(217,70,239,0.72)',
+  'rgba(34,211,238,0.9)',
+];
+
+function level(c: number): number {
+  if (c <= 0) return 0;
+  if (c < 10) return 1;
+  if (c < 20) return 2;
+  if (c < 40) return 3;
+  return 4;
+}
+
+// Rebuild GitHub-style weeks (Sunday-first columns of 7 days)
+const pad = new Date(days[0].date + 'T00:00:00').getUTCDay();
+const grid: ({ date: string; count: number } | null)[] = [];
+let week: ({ date: string; count: number } | null)[] = new Array(pad).fill(null);
+for (const d of days) {
+  week.push(d);
+  if (week.length === 7) {
+    grid.push(...week);
+    week = [];
+  }
+}
+if (week.length) {
+  while (week.length < 7) week.push(null);
+  grid.push(...week);
+}
+const weeks: (({ date: string; count: number } | null)[])[] = [];
+for (let i = 0; i < grid.length; i += 7) weeks.push(grid.slice(i, i + 7));
+
+// Month labels aligned to week columns (show when the month first appears)
+const monthLabels: string[] = weeks.map((w) => {
+  const first = w.find((d) => d);
+  if (!first) return '';
+  return first.date.slice(5, 7); // MM
+});
+let lastMonth = -1;
+const monthLabelText: string[] = weeks.map((w, i) => {
+  const first = w.find((d) => d);
+  if (!first) return '';
+  const m = parseInt(first.date.slice(5, 7), 10) - 1;
+  if (m !== lastMonth) {
+    lastMonth = m;
+    return MONTHS[m];
+  }
+  return '';
+});
+
+const firstDate = days[0].date;
+const lastDate = days[days.length - 1].date;
+---
+
+<section id="activity" class="scroll-mt-24 py-20">
+  <p class="role-tag" data-reveal>The Gravity Well</p>
+  <h2 class="font-display mt-3 text-3xl font-bold text-white sm:text-4xl" data-reveal>
+    {total.toLocaleString()} contributions
+  </h2>
+  <p class="mt-4 max-w-2xl text-slate-400" data-reveal>
+    Every square is a day of work — pulled live from my GitHub activity
+    ({firstDate} → {lastDate}). The density tracks the build-out of the UPLB HR
+    ecosystem: quiet stretches between deployments, then long bursts of shipping.
+  </p>
+
+  <div class="card mt-10 overflow-hidden p-6 sm:p-8" data-reveal>
+    <div class="flex gap-3 overflow-x-auto pb-2">
+      <!-- weekday gutter -->
+      <div class="mt-6 flex shrink-0 flex-col gap-[3px] pr-1 text-[9px] leading-none text-slate-600">
+        {WEEKDAYS.map((d, i) => <span class="h-[11px]">{i % 2 === 1 ? d.slice(0, 2) : ''}</span>)}
+      </div>
+
+      <div class="shrink-0">
+        <!-- month labels -->
+        <div class="flex gap-[3px]">
+          {weeks.map((_, i) => (
+            <span class="w-[11px] text-[9px] leading-none text-slate-500">{monthLabelText[i]}</span>
+          ))}
+        </div>
+        <!-- grid -->
+        <div class="mt-1 flex gap-[3px]">
+          {weeks.map((w) => (
+            <div class="flex flex-col gap-[3px]">
+              {w.map((d) => (
+                <div
+                  class="h-[11px] w-[11px] rounded-[2px]"
+                  style={`background:${d ? LEVEL_COLORS[level(d.count)] : LEVEL_COLORS[0]}`}
+                  title={d ? `${d.date}: ${d.count} contribution${d.count === 1 ? '' : 's'}` : 'No contributions'}
+                ></div>
+              ))}
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <!-- legend -->
+    <div class="mt-5 flex items-center justify-end gap-2 text-[10px] text-slate-500">
+      <span>Less</span>
+      {LEVEL_COLORS.map((c) => <span class="h-[11px] w-[11px] rounded-[2px]" style={`background:${c}`}></span>)}
+      <span>More</span>
+    </div>
+  </div>
+</section>
+
+<style>
+  .card { border: 1px solid rgba(255,255,255,0.06); background: rgba(255,255,255,0.02); border-radius: 1rem; }
+  [style*="background"] { transition: transform 0.15s ease, box-shadow 0.15s ease; }
+  [style*="background"]:hover {
+    transform: scale(1.35);
+    box-shadow: 0 0 8px rgba(217,70,239,0.6);
+    outline: 1px solid rgba(255,255,255,0.25);
+  }
+</style>

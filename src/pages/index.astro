@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import ContributionHeatmap from '../components/ContributionHeatmap.astro';
 
 const stats = [
   { value: '4,400+', label: 'commits shipped' },
@@ -165,6 +166,9 @@ const navLinks = [
         ))}
       </dl>
     </section>
+
+    <!-- contribution heatmap -->
+    <ContributionHeatmap />
 
     <!-- projects -->
     <section id="projects" class="scroll-mt-24 py-20">
