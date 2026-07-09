@@ -3,16 +3,16 @@ import Layout from '../layouts/Layout.astro';
 import ContributionHeatmap from '../components/ContributionHeatmap.astro';
 
 const stats = [
-  { value: '4,400+', label: 'commits shipped' },
+  { value: '4,760', label: 'commits shipped' },
   { value: '7', label: 'production repositories' },
-  { value: '19 mo', label: 'building one ecosystem' },
+  { value: '500+', label: 'tagged deploys & releases' },
   { value: '11 → 13', label: 'Laravel major versions' },
 ];
 
 const projects = [
   {
     name: 'UPLB-TKS · Timekeeping System',
-    role: 'Lead developer · ~95% of ~3,500 commits',
+    role: 'Lead developer · 3,412 of 3,507 commits (97%)',
     featured: true,
     desc: 'University-wide timekeeping platform for University of the Philippines Los Baños personnel — daily time records, leave, performance reviews, certificates of service, and schedules, served through dual Filament panels (HR admin + employee self-service).',
     highlights: [
@@ -20,7 +20,7 @@ const projects = [
       'Leave management that acts as the canonical balance source for the whole ecosystem — consumed over REST by the HR system-of-record',
       'Reusable approval-workflow state machine (draft → approved) with per-transition audit logging, later extracted into its own app',
       'Kafka consumers with data-contract enforcement, plus RBAC across 30+ models with office-scoped, self-only, and unscoped role tiers',
-      'Release pipeline with AI-drafted, human-reviewed changelogs feeding a personnel-facing "What\'s New" page — covered by unit and feature tests',
+      'Release pipeline with AI-drafted, human-reviewed changelogs feeding a personnel-facing "What\'s New" page — 512 deploy & version tags to date, covered by unit and feature tests',
     ],
     stack: ['PHP 8.2', 'Laravel 11', 'Filament 3', 'Livewire 3', 'MySQL', 'Apache Kafka', 'Tailwind CSS', 'DomPDF', 'PHPUnit 11', 'GitHub Actions'],
   },
@@ -37,7 +37,7 @@ const projects = [
   },
   {
     name: 'DAME UPLB · Department Website + CMS',
-    role: 'Lead developer · ~97% of commits',
+    role: 'Lead developer · 286 of 293 commits (98%)',
     desc: 'Public website and admin CMS for UPLB\'s Department of Agribusiness Management and Entrepreneurship — faculty profiles, academic programs, research areas, and news, on the newest stack in this portfolio.',
     highlights: [
       'Personnel module with typed roles, designations, and slug-routed public profile pages',
@@ -48,10 +48,10 @@ const projects = [
   },
   {
     name: 'UPLB HR Ecosystem · Shared Systems',
-    role: 'Contributor across 4 team repositories',
+    role: 'Contributor · 965 commits across 4 team repos',
     desc: 'The ecosystem\'s shared apps — HR system-of-record, SALN asset-disclosure e-filing, and salary document submission — where I built specific, traceable layers within team codebases.',
     highlights: [
-      'SALN e-filing: Kafka consumer layer with transactional staging, UUID standardization across core models, and coordinate-mapped PDF generation onto official government forms (FPDI)',
+      'SALN e-filing — largest single contributor (620 of 1,330 commits): Kafka consumer layer with transactional staging, UUID standardization across core models, and coordinate-mapped PDF generation onto official government forms (FPDI)',
       'HR system-of-record: bulk employee-number importer with selective field mapping, composite user+personnel+appointment creation flow, model change-detection logic',
       'Submission portal: submission-window control gating user submissions behind an admin toggle',
     ],
@@ -142,7 +142,7 @@ const navLinks = [
         <span class="gradient-text">one system at a time.</span>
       </h1>
       <p class="mt-7 max-w-2xl text-lg leading-relaxed text-slate-400" data-reveal>
-        I'm Carl Janzell Oropesa. Over the last 19 months I've built and shipped a constellation of
+        I'm Carl Janzell Oropesa. Since January 2025 I've built and shipped a constellation of
         government-grade HR systems for the University of the Philippines Los Baños — integrated
         Laravel applications exchanging data over Kafka — along with the AI agent infrastructure
         that helps a small team move like a big one.
