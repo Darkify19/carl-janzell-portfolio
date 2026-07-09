@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "preview": "astro preview"
+    "preview": "astro preview",
+    "refresh-data": "node .claude/skills/carl-dev-portfolio/scripts/refresh-contributions.mjs",
+    "stats": "node .claude/skills/carl-dev-portfolio/scripts/collect-stats.mjs"
   },
   "dependencies": {
     "astro": "^5.12.0"

@@ -3,6 +3,8 @@ import contributions from '../data/contributions.json';
 
 const days = contributions.days;
 const total = contributions.total;
+const busiest = contributions.busiest ?? days.reduce((m, d) => (d.count > m.count ? d : m), days[0]);
+const activeDays = contributions.activeDays ?? days.filter((d) => d.count > 0).length;
 
 const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 const WEEKDAYS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
@@ -71,8 +73,8 @@ const lastDate = days[days.length - 1].date;
   <p class="mt-4 max-w-2xl text-slate-400" data-reveal>
     Every square is a day of work — rebuilt from the full git history of every
     repository I've committed to ({firstDate} → {lastDate}). The density tracks the
-    build-out of the UPLB HR ecosystem: quiet stretches between deployments, then
-    long bursts of shipping. Busiest day so far: 118 commits.
+    build-out of the UPLB HR ecosystem: {activeDays} active days, with the busiest
+    ({busiest.date}) landing {busiest.count} commits.
   </p>
 
   <div class="card mt-10 overflow-hidden p-6 sm:p-8" data-reveal>

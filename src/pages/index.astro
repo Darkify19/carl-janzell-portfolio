@@ -1,9 +1,10 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import ContributionHeatmap from '../components/ContributionHeatmap.astro';
+import contributions from '../data/contributions.json';
 
 const stats = [
-  { value: '4,760', label: 'commits shipped' },
+  { value: contributions.total.toLocaleString(), label: 'commits shipped' },
   { value: '7', label: 'production repositories' },
   { value: '500+', label: 'tagged deploys & releases' },
   { value: '11 → 13', label: 'Laravel major versions' },
