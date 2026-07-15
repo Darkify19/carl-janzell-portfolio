@@ -7,7 +7,7 @@ const stats = [
   { value: contributions.total.toLocaleString(), label: 'commits shipped' },
   { value: '7', label: 'production repositories' },
   { value: '500+', label: 'tagged deploys & releases' },
-  { value: '11 → 13', label: 'Laravel major versions' },
+  { value: '2', label: 'full stacks built — Laravel & Rails' },
 ];
 
 const projects = [
@@ -81,8 +81,12 @@ const aiPractices = [
 
 const stackGroups = [
   {
+    label: 'Languages',
+    items: ['PHP 8.2–8.4', 'Ruby 3.3', 'JavaScript / TypeScript', 'SQL'],
+  },
+  {
     label: 'Backend',
-    items: ['PHP 8.2–8.4', 'Laravel 11/12/13', 'Filament 3–5', 'Livewire 3/4', 'REST APIs'],
+    items: ['Laravel 11/12/13', 'Filament 3–5', 'Livewire 3/4', 'Ruby on Rails 8', 'REST & GraphQL APIs'],
   },
   {
     label: 'Data & Messaging',
@@ -90,11 +94,11 @@ const stackGroups = [
   },
   {
     label: 'Frontend',
-    items: ['Tailwind CSS 3/4', 'Alpine.js', 'Vue 3', 'Vite', 'Blade'],
+    items: ['Tailwind CSS 3/4', 'Vue 2 & 3', 'Vuex', 'Apollo Client', 'Alpine.js', 'Vite', 'Blade'],
   },
   {
     label: 'Quality & Delivery',
-    items: ['PHPUnit 11', 'Pest 4', 'Laravel Pint', 'GitHub Actions', 'Conventional Commits'],
+    items: ['PHPUnit 11', 'Pest 4', 'GitHub Actions', 'Kamal', 'Cloudinary', 'Conventional Commits'],
   },
   {
     label: 'Domain Depth',
@@ -111,8 +115,8 @@ const navLinks = [
 ---
 
 <Layout
-  title="Carl Janzell Oropesa — Full-Stack Developer"
-  description="Full-stack developer building government-grade HR systems: an integrated ecosystem of Laravel + Filament apps exchanging data over Kafka — plus the AI agent infrastructure that helps ship them."
+  title="Carl Janzell Oropesa — Full-Stack Software Engineer"
+  description="Full-stack software engineer. Deepest in Laravel — an integrated ecosystem of government-grade HR systems exchanging data over Kafka — but not tied to it: also shipped a Ruby on Rails 8 GraphQL API with a Vue + Vuex client, plus the AI agent infrastructure that helps ship it all."
 >
   <!-- nav -->
   <header class="fixed top-0 inset-x-0 z-50 border-b border-white/5 bg-[#030014]/70 backdrop-blur-md">
@@ -137,16 +141,18 @@ const navLinks = [
   <main id="top" class="relative mx-auto max-w-6xl px-6">
     <!-- hero -->
     <section class="flex min-h-screen flex-col justify-center pt-24 pb-16">
-      <p class="role-tag mb-5" data-reveal>Full-Stack Developer · Laravel &amp; Filament</p>
+      <p class="role-tag mb-5" data-reveal>Full-Stack Software Engineer</p>
       <h1 class="font-display max-w-4xl text-4xl font-bold leading-tight text-white sm:text-6xl lg:text-7xl" data-reveal>
-        Building an entire HR universe,<br />
-        <span class="gradient-text">one system at a time.</span>
+        Production-grade software,<br />
+        <span class="gradient-text">whatever the stack.</span>
       </h1>
       <p class="mt-7 max-w-2xl text-lg leading-relaxed text-slate-400" data-reveal>
-        I'm Carl Janzell Oropesa. Since January 2025 I've built and shipped a constellation of
-        government-grade HR systems for the University of the Philippines Los Baños — integrated
-        Laravel applications exchanging data over Kafka — along with the AI agent infrastructure
-        that helps a small team move like a big one.
+        I'm Carl Janzell Oropesa, a full-stack software engineer. My deepest production work is a
+        constellation of government-grade HR systems for the University of the Philippines Los Baños —
+        integrated Laravel applications exchanging data over Kafka — but the through-line isn't a
+        framework. I've also shipped a full GraphQL API in Ruby on Rails with a Vue + Vuex client to
+        match, and I reach for whatever stack the problem needs — plus the AI agent infrastructure that
+        helps a small team move like a big one.
       </p>
       <div class="mt-9 flex flex-wrap items-center gap-4" data-reveal>
         <a
@@ -176,9 +182,10 @@ const navLinks = [
       <p class="role-tag" data-reveal>The Constellation</p>
       <h2 class="font-display mt-3 text-3xl font-bold text-white sm:text-4xl" data-reveal>Projects</h2>
       <p class="mt-4 max-w-2xl text-slate-400" data-reveal>
-        Internal university systems doing compliance-heavy, real-world work: civil-service forms,
-        multi-stage approval chains, audit trails, and encrypted PII. Attribution below is exact —
-        every claim traces to commit history.
+        The production flagships — internal university systems doing compliance-heavy, real-world work:
+        civil-service forms, multi-stage approval chains, audit trails, and encrypted PII. All Laravel
+        here; for range beyond that stack, see the toolkit below. Attribution is exact — every claim
+        traces to commit history.
       </p>
       <div class="mt-12 grid gap-6 lg:grid-cols-2">
         {projects.map((p) => (
@@ -226,6 +233,22 @@ const navLinks = [
     <section id="stack" class="scroll-mt-24 py-20">
       <p class="role-tag" data-reveal>The Toolkit</p>
       <h2 class="font-display mt-3 text-3xl font-bold text-white sm:text-4xl" data-reveal>Stack</h2>
+      <p class="mt-4 max-w-2xl text-slate-400" data-reveal>
+        Laravel is where I go deepest, but I'm not tied to it. I built
+        <span class="text-slate-200">samyang</span> — a full dating app — solo: a Ruby on Rails 8
+        GraphQL API (<a
+          href="https://github.com/Darkify19/samyang-back"
+          target="_blank"
+          rel="noopener"
+          class="text-cyan-300 underline decoration-cyan-300/30 underline-offset-4 transition hover:text-cyan-200"
+        >samyang-back</a>) and a Vue 2 + Vuex SPA (<a
+          href="https://github.com/Darkify19/samyang-front"
+          target="_blank"
+          rel="noopener"
+          class="text-cyan-300 underline decoration-cyan-300/30 underline-offset-4 transition hover:text-cyan-200"
+        >samyang-front</a>) with Apollo, Cloudinary uploads, swipe/match mechanics, and an admin panel.
+        Source is public; the demo backend is retired.
+      </p>
       <div class="mt-12 space-y-8">
         {stackGroups.map((group) => (
           <div class="flex flex-col gap-3 sm:flex-row sm:items-baseline" data-reveal>
@@ -244,8 +267,8 @@ const navLinks = [
         Let's build something <span class="gradient-text">stellar.</span>
       </h2>
       <p class="mx-auto mt-5 max-w-xl text-slate-400" data-reveal>
-        Open to opportunities where deep Laravel craft, event-driven architecture, and an
-        AI-native workflow make a difference.
+        Open to opportunities where systems thinking, event-driven architecture, and an AI-native
+        workflow matter more than any single framework.
       </p>
       <div class="mt-9 flex flex-wrap items-center justify-center gap-4" data-reveal>
         <a
