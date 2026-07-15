@@ -13,7 +13,7 @@ const stats = [
 const projects = [
   {
     name: 'UPLB-TKS · Timekeeping System',
-    role: 'Lead developer · 3,412 of 3,507 commits (97%)',
+    role: 'Lead developer · 3,528 of 3,623 commits (97%)',
     featured: true,
     desc: 'University-wide timekeeping platform for University of the Philippines Los Baños personnel — daily time records, leave, performance reviews, certificates of service, and schedules, served through dual Filament panels (HR admin + employee self-service).',
     highlights: [
@@ -21,13 +21,13 @@ const projects = [
       'Leave management that acts as the canonical balance source for the whole ecosystem — consumed over REST by the HR system-of-record',
       'Reusable approval-workflow state machine (draft → approved) with per-transition audit logging, later extracted into its own app',
       'Kafka consumers with data-contract enforcement, plus RBAC across 30+ models with office-scoped, self-only, and unscoped role tiers',
-      'Release pipeline with AI-drafted, human-reviewed changelogs feeding a personnel-facing "What\'s New" page — 512 deploy & version tags to date, covered by unit and feature tests',
+      'Release pipeline with AI-drafted, human-reviewed changelogs feeding a personnel-facing "What\'s New" page — 531 deploy & version tags to date, covered by unit and feature tests',
     ],
     stack: ['PHP 8.2', 'Laravel 11', 'Filament 3', 'Livewire 3', 'MySQL', 'Apache Kafka', 'Tailwind CSS', 'DomPDF', 'PHPUnit 11', 'GitHub Actions'],
   },
   {
     name: 'PerporManTask · Performance Management',
-    role: 'Sole author · 96/96 commits',
+    role: 'Sole author · 192/192 commits',
     desc: 'Dedicated performance-management service (IPCR) deliberately extracted from the timekeeping monolith into its own app, sharing data over Kafka — a real modularization story, not a greenfield toy.',
     highlights: [
       'IPCR module: semestral rating periods, weighted target distribution validated to 100%, UP SPMS-compliant landscape PDFs',
@@ -49,7 +49,7 @@ const projects = [
   },
   {
     name: 'UPLB HR Ecosystem · Shared Systems',
-    role: 'Contributor · 965 commits across 4 team repos',
+    role: 'Contributor · 1,005 commits across 4 team repos',
     desc: 'The ecosystem\'s shared apps — HR system-of-record, SALN asset-disclosure e-filing, and salary document submission — where I built specific, traceable layers within team codebases.',
     highlights: [
       'SALN e-filing — largest single contributor (620 of 1,330 commits): Kafka consumer layer with transactional staging, UUID standardization across core models, and coordinate-mapped PDF generation onto official government forms (FPDI)',
