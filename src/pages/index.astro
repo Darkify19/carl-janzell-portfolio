@@ -1,45 +1,64 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import ContributionHeatmap from '../components/ContributionHeatmap.astro';
-import contributions from '../data/contributions.json';
 
+const base = import.meta.env.BASE_URL.endsWith('/')
+  ? import.meta.env.BASE_URL
+  : import.meta.env.BASE_URL + '/';
+const cvHref = `${base}OropesaCarlJanzell-CV.pdf`;
+const linkedin = 'https://www.linkedin.com/in/carl-janzell-764399179/';
+const github = 'https://github.com/carljanzell';
+
+// Headline metrics chosen to signal shipped impact, not raw activity.
+// Scale from the platform's own usage analytics + CV; deploys from git tags (npm run stats), Aug 2026.
 const stats = [
-  { value: contributions.total.toLocaleString(), label: 'commits shipped' },
-  { value: '7', label: 'production repositories' },
-  { value: '500+', label: 'tagged deploys & releases' },
-  { value: '2', label: 'full stacks built — Laravel & Rails' },
+  { value: '4,000+', label: 'personnel served in production' },
+  { value: '600+', label: 'tagged production deploys' },
+  { value: '7', label: 'production systems shipped' },
+  { value: '2', label: 'full stacks — Laravel & Rails' },
 ];
 
 const projects = [
   {
     name: 'UPLB-TKS · Timekeeping System',
-    role: 'Lead developer · 3,528 of 3,623 commits (97%)',
+    role: 'Lead developer · primary author',
     featured: true,
-    desc: 'University-wide timekeeping platform for University of the Philippines Los Baños personnel — daily time records, leave, performance reviews, certificates of service, and schedules, served through dual Filament panels (HR admin + employee self-service).',
+    desc: 'The backbone of timekeeping for 4,000+ University of the Philippines Los Baños personnel — daily time records, leave, performance reviews, certificates of service, travel requests, and schedules, served through dual Filament panels (HR admin + employee self-service). It replaced the university\'s paper-based processes, and it\'s the system the rest of the ecosystem orbits.',
+    // Real production figures from the system's own Usage Analytics page. Windowed; not extrapolated.
+    impact: {
+      window: '180 days to Aug 2026',
+      metrics: [
+        { value: '156,926', label: 'attendance punches logged' },
+        { value: '82.3%', label: 'captured directly — not keyed in' },
+        { value: '1,274', label: 'active personnel (30-day)' },
+        { value: '219', label: 'peak concurrent users' },
+      ],
+    },
     highlights: [
       'DTR engine: flexible periods, biometric + manual attendance merge, grace-period undertime computation, IP-based clock-in validation',
       'Leave management that acts as the canonical balance source for the whole ecosystem — consumed over REST by the HR system-of-record',
       'Reusable approval-workflow state machine (draft → approved) with per-transition audit logging, later extracted into its own app',
       'Kafka consumers with data-contract enforcement, plus RBAC across 30+ models with office-scoped, self-only, and unscoped role tiers',
-      'Release pipeline with AI-drafted, human-reviewed changelogs feeding a personnel-facing "What\'s New" page — 531 deploy & version tags to date, covered by unit and feature tests',
+      'Ships behind a real release pipeline: 337 tagged production deploys, AI-drafted/human-reviewed changelogs feeding a personnel-facing "What\'s New" page, covered by unit and feature tests',
+      'A small opt-out break-room mini-game on the dashboard, deliberately never joined to attendance data so play can\'t be read as evaluation — a data-ethics call, not just a feature',
     ],
     stack: ['PHP 8.2', 'Laravel 11', 'Filament 3', 'Livewire 3', 'MySQL', 'Apache Kafka', 'Tailwind CSS', 'DomPDF', 'PHPUnit 11', 'GitHub Actions'],
   },
   {
     name: 'PerporManTask · Performance Management',
-    role: 'Sole author · 192/192 commits',
-    desc: 'Dedicated performance-management service (IPCR) deliberately extracted from the timekeeping monolith into its own app, sharing data over Kafka — a real modularization story, not a greenfield toy.',
+    role: 'Sole author',
+    desc: 'A dedicated performance-management service (IPCR) deliberately carved out of the timekeeping monolith into its own app, sharing data over Kafka — a real modularization decision, not a greenfield toy.',
     highlights: [
       'IPCR module: semestral rating periods, weighted target distribution validated to 100%, UP SPMS-compliant landscape PDFs',
-      'Production AI feature: task logs exported as structured bundles → LLM clusters them → tolerant JSON import transactionally builds draft reviews. Human-in-the-loop by design',
+      'Production AI feature: task logs exported as structured bundles → an LLM clusters them → tolerant JSON import transactionally builds draft reviews. Human-in-the-loop by design',
       'Cross-app import with stable identity resolution (uuid → email → employee number) and a dry-run preview mode built on rolled-back transactions',
     ],
     stack: ['Laravel 12', 'Filament 5', 'Kafka', 'MySQL', 'Tailwind CSS 4', 'PHPUnit 11'],
   },
   {
     name: 'DAME UPLB · Department Website + CMS',
-    role: 'Lead developer · 286 of 293 commits (98%)',
-    desc: 'Public website and admin CMS for UPLB\'s Department of Agribusiness Management and Entrepreneurship — faculty profiles, academic programs, research areas, and news, on the newest stack in this portfolio.',
+    role: 'Lead developer',
+    desc: 'Public website and admin CMS for UPLB\'s Department of Agribusiness Management and Entrepreneurship — faculty profiles, academic programs, research areas, and news, built on the newest stack in this portfolio.',
     highlights: [
       'Personnel module with typed roles, designations, and slug-routed public profile pages',
       'Post/category CMS with publication statuses and soft deletes',
@@ -49,33 +68,66 @@ const projects = [
   },
   {
     name: 'UPLB HR Ecosystem · Shared Systems',
-    role: 'Contributor · 1,005 commits across 4 team repos',
-    desc: 'The ecosystem\'s shared apps — HR system-of-record, SALN asset-disclosure e-filing, and salary document submission — where I built specific, traceable layers within team codebases.',
+    role: 'Core contributor · 4 shared team repos',
+    desc: 'The ecosystem\'s shared apps — HR system-of-record, SALN asset-disclosure e-filing, salary-document submission, and the submission portal — where I owned specific, load-bearing layers inside team codebases.',
     highlights: [
-      'SALN e-filing — largest single contributor (620 of 1,330 commits): Kafka consumer layer with transactional staging, UUID standardization across core models, and coordinate-mapped PDF generation onto official government forms (FPDI)',
-      'HR system-of-record: bulk employee-number importer with selective field mapping, composite user+personnel+appointment creation flow, model change-detection logic',
-      'Submission portal: submission-window control gating user submissions behind an admin toggle',
+      'SALN e-filing — largest single contributor: Kafka consumer layer with transactional staging, UUID standardization across core models, and coordinate-mapped PDF generation onto official government forms (FPDI)',
+      'HR system-of-record: bulk employee-number importer with selective field mapping, composite user+personnel+appointment creation flow, and model change-detection logic',
+      'Submission portal: submission-window controls gating user uploads behind an admin toggle, plus versioned salary-document handling',
     ],
     stack: ['Laravel 11', 'Filament 3', 'PostgreSQL', 'MariaDB', 'Kafka', 'RabbitMQ', 'FPDI/FPDF', 'Vue 3'],
   },
 ];
 
+const experience = [
+  {
+    role: 'Full-Stack Developer · Senior ICT Assistant',
+    org: 'University of the Philippines Los Baños',
+    period: 'Oct 2025 – Present',
+    note: 'Building and running the university\'s Kafka-linked ecosystem of HR & compliance systems.',
+  },
+  {
+    role: 'Full-Stack Developer · Programmer',
+    org: 'University of the Philippines Los Baños',
+    period: 'Jan – Oct 2025',
+    note: 'Primary developer of UPLB-TKS and largest single contributor to SALN e-filing.',
+  },
+  {
+    role: 'Web Developer Intern',
+    org: 'ChatGenie',
+    period: 'Nov 2024 – Jan 2025',
+    note: 'Rails 8 + GraphQL and Vue across a reservation system and the samyang dating app (public source).',
+  },
+  {
+    role: 'Web Developer · On-the-Job Trainee',
+    org: 'DILG — Cluster A, Laguna',
+    period: 'Jan – May 2024',
+    note: 'Built the E-Justice System for barangay case recording, rolled out across Cluster A.',
+  },
+];
+
+const education = {
+  school: 'Laguna State Polytechnic University — Los Baños',
+  degree: 'B.S. Information Technology · Web & Mobile Application Development',
+  period: '2020 – 2024',
+};
+
 const aiPractices = [
   {
-    title: '190+ agent skill files',
-    desc: 'Structured domain knowledge across every repo — YAML-triggered deep-dives, DRY tables cataloguing reusable traits and services, gotcha docs. Progressive-disclosure knowledge architecture so AI agents work accurately in each codebase.',
+    title: 'Agent skill libraries',
+    desc: 'Structured domain knowledge across every repo — YAML-triggered deep-dives, DRY tables cataloguing reusable traits and services, gotcha docs. A progressive-disclosure knowledge architecture so AI agents work accurately in each codebase.',
   },
   {
     title: 'Executable specifications',
-    desc: 'Self-contained spec documents a fresh agent can run: full context payloads, per-deliverable requirements, execution checklists, and bash verification scripts — with explicit "do not invent" guardrails. Prompt engineering as an engineering practice.',
+    desc: 'Self-contained spec documents a fresh agent can run: full context payloads, per-deliverable requirements, execution checklists, and bash verification scripts — with explicit "do not invent" guardrails. Prompt engineering treated as an engineering practice.',
   },
   {
     title: 'AI features in production',
-    desc: 'Two human-in-the-loop pipelines shipped: an IPCR drafting flow that clusters task logs into performance functions, and an AI changelog generator behind a human review gate — both guarded by tests.',
+    desc: 'Two human-in-the-loop pipelines shipped: an IPCR drafting flow that clusters task logs into performance functions, and an AI changelog generator behind a human-review gate — both guarded by tests.',
   },
   {
-    title: 'Discipline around the workflow',
-    desc: 'Conventional commits across thousands of commits, documented Kafka integration contracts, automated commit reports, and CI/CD on self-hosted runners. The boring parts that make AI leverage compound.',
+    title: 'Discipline that compounds',
+    desc: 'Conventional commits, documented Kafka integration contracts, automated commit reports, and CI/CD on self-hosted runners. The boring parts that make AI leverage actually compound instead of decay.',
   },
 ];
 
@@ -90,7 +142,7 @@ const stackGroups = [
   },
   {
     label: 'Data & Messaging',
-    items: ['MySQL', 'MariaDB', 'PostgreSQL', 'Apache Kafka', 'RabbitMQ'],
+    items: ['MySQL', 'MariaDB', 'PostgreSQL', 'Redis', 'Apache Kafka', 'RabbitMQ'],
   },
   {
     label: 'Frontend',
@@ -98,7 +150,7 @@ const stackGroups = [
   },
   {
     label: 'Quality & Delivery',
-    items: ['PHPUnit 11', 'Pest 4', 'GitHub Actions', 'Kamal', 'Cloudinary', 'Conventional Commits'],
+    items: ['PHPUnit 11', 'Pest 4', 'Docker', 'GitHub Actions', 'Bitbucket', 'Jira', 'Conventional Commits'],
   },
   {
     label: 'Domain Depth',
@@ -108,15 +160,15 @@ const stackGroups = [
 
 const navLinks = [
   { href: '#projects', label: 'Projects' },
+  { href: '#experience', label: 'Experience' },
   { href: '#ai', label: 'AI Engineering' },
   { href: '#stack', label: 'Stack' },
-  { href: '#contact', label: 'Contact' },
 ];
 ---
 
 <Layout
   title="Carl Janzell Oropesa — Full-Stack Software Engineer"
-  description="Full-stack software engineer. Deepest in Laravel — an integrated ecosystem of government-grade HR systems exchanging data over Kafka — but not tied to it: also shipped a Ruby on Rails 8 GraphQL API with a Vue + Vuex client, plus the AI agent infrastructure that helps ship it all."
+  description="Full-stack software engineer. I build the backbone of a university's HR operations — Laravel systems serving 4,000+ personnel and exchanging data over Kafka — and I'm not tied to the stack: also shipped a Ruby on Rails 8 GraphQL API with a Vue client, plus the AI agent infrastructure that helps ship it all."
 >
   <!-- nav -->
   <header class="fixed top-0 inset-x-0 z-50 border-b border-white/5 bg-[#030014]/70 backdrop-blur-md">
@@ -124,16 +176,18 @@ const navLinks = [
       <a href="#top" class="font-display text-sm font-semibold tracking-wide text-white">
         <span class="gradient-text">✦</span> Carl Janzell
       </a>
-      <div class="flex items-center gap-5 text-sm text-slate-400 sm:gap-7">
+      <div class="flex items-center gap-4 text-sm text-slate-400 sm:gap-6">
         {navLinks.map((link) => (
-          <a href={link.href} class="hidden transition hover:text-white sm:block">{link.label}</a>
+          <a href={link.href} class="hidden transition hover:text-white md:block">{link.label}</a>
         ))}
+        <a href={linkedin} target="_blank" rel="noopener" class="hidden transition hover:text-white sm:block">LinkedIn</a>
+        <a href={github} target="_blank" rel="noopener" class="hidden transition hover:text-white sm:block">GitHub</a>
         <a
-          href="https://github.com/carljanzell"
+          href={cvHref}
           target="_blank"
           rel="noopener"
           class="rounded-full border border-white/15 px-3.5 py-1.5 text-xs font-medium text-slate-200 transition hover:border-violet-400/60 hover:text-white"
-        >GitHub</a>
+        >Résumé</a>
       </div>
     </nav>
   </header>
@@ -141,24 +195,30 @@ const navLinks = [
   <main id="top" class="relative mx-auto max-w-6xl px-6">
     <!-- hero -->
     <section class="flex min-h-screen flex-col justify-center pt-24 pb-16">
-      <p class="role-tag mb-5" data-reveal>Full-Stack Software Engineer</p>
+      <p class="role-tag mb-5" data-reveal>Full-Stack Software Engineer · Los Baños, Philippines</p>
       <h1 class="font-display max-w-4xl text-4xl font-bold leading-tight text-white sm:text-6xl lg:text-7xl" data-reveal>
-        Production-grade software,<br />
-        <span class="gradient-text">whatever the stack.</span>
+        I build systems<br />
+        <span class="gradient-text">people depend on.</span>
       </h1>
       <p class="mt-7 max-w-2xl text-lg leading-relaxed text-slate-400" data-reveal>
-        I'm Carl Janzell Oropesa, a full-stack software engineer. My deepest production work is a
-        constellation of government-grade HR systems for the University of the Philippines Los Baños —
-        integrated Laravel applications exchanging data over Kafka — but the through-line isn't a
-        framework. I've also shipped a full GraphQL API in Ruby on Rails with a Vue + Vuex client to
-        match, and I reach for whatever stack the problem needs — plus the AI agent infrastructure that
-        helps a small team move like a big one.
+        I'm Carl Janzell Oropesa. My deepest work is the backbone of a university's HR operations — a
+        constellation of integrated Laravel systems that serve 4,000+ UP Los Baños personnel, exchange
+        data over Apache Kafka, and replaced the paper-based processes behind time, leave, performance
+        reviews, and government-compliance forms. The through-line isn't a framework: I've shipped a
+        full Ruby on Rails 8 + GraphQL app with a Vue client solo, and I build the AI-agent
+        infrastructure that lets a small team move like a big one.
       </p>
       <div class="mt-9 flex flex-wrap items-center gap-4" data-reveal>
         <a
           href="#projects"
           class="rounded-full bg-gradient-to-r from-violet-600 to-fuchsia-600 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-violet-900/40 transition hover:from-violet-500 hover:to-fuchsia-500"
         >Explore the work</a>
+        <a
+          href={cvHref}
+          target="_blank"
+          rel="noopener"
+          class="rounded-full border border-white/15 px-6 py-3 text-sm font-semibold text-slate-200 transition hover:border-cyan-300/50 hover:text-white"
+        >Download résumé</a>
         <a
           href="mailto:carl.oropesa11@gmail.com"
           class="rounded-full border border-white/15 px-6 py-3 text-sm font-semibold text-slate-200 transition hover:border-cyan-300/50 hover:text-white"
@@ -174,18 +234,16 @@ const navLinks = [
       </dl>
     </section>
 
-    <!-- contribution heatmap -->
-    <ContributionHeatmap />
-
     <!-- projects -->
     <section id="projects" class="scroll-mt-24 py-20">
       <p class="role-tag" data-reveal>The Constellation</p>
       <h2 class="font-display mt-3 text-3xl font-bold text-white sm:text-4xl" data-reveal>Projects</h2>
       <p class="mt-4 max-w-2xl text-slate-400" data-reveal>
-        The production flagships — internal university systems doing compliance-heavy, real-world work:
-        civil-service forms, multi-stage approval chains, audit trails, and encrypted PII. All Laravel
-        here; for range beyond that stack, see the toolkit below. Attribution is exact — every claim
-        traces to commit history.
+        Internal university systems doing compliance-heavy, real-world work: civil-service forms,
+        multi-stage approval chains, audit trails, and encrypted PII. These are private government
+        codebases, so I can't hand you a live demo — instead I've described the architecture, the
+        decisions, and (where I can measure it) the real usage. Roles reflect commit ownership as of
+        August 2026.
       </p>
       <div class="mt-12 grid gap-6 lg:grid-cols-2">
         {projects.map((p) => (
@@ -195,6 +253,21 @@ const navLinks = [
               <span class="text-xs font-medium tracking-wide text-fuchsia-300/90">{p.role}</span>
             </div>
             <p class="mt-3 text-sm leading-relaxed text-slate-400">{p.desc}</p>
+            {p.impact && (
+              <div class="mt-6 rounded-xl border border-white/8 bg-white/[0.02] p-5">
+                <p class="text-[11px] font-semibold uppercase tracking-wider text-cyan-300/80">
+                  Real production usage · {p.impact.window}
+                </p>
+                <dl class="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-4">
+                  {p.impact.metrics.map((m) => (
+                    <div>
+                      <dd class="font-display text-2xl font-bold text-white">{m.value}</dd>
+                      <dt class="mt-1 text-xs leading-snug text-slate-500">{m.label}</dt>
+                    </div>
+                  ))}
+                </dl>
+              </div>
+            )}
             <ul class="mt-5 space-y-2.5">
               {p.highlights.map((h) => (
                 <li class="flex gap-2.5 text-sm leading-relaxed text-slate-300">
@@ -208,6 +281,35 @@ const navLinks = [
             </div>
           </article>
         ))}
+      </div>
+    </section>
+
+    <!-- experience -->
+    <section id="experience" class="scroll-mt-24 py-20">
+      <p class="role-tag" data-reveal>The Trajectory</p>
+      <h2 class="font-display mt-3 text-3xl font-bold text-white sm:text-4xl" data-reveal>Experience</h2>
+      <p class="mt-4 max-w-2xl text-slate-400" data-reveal>
+        Two years from on-the-job trainee to Senior ICT Assistant, shipping the whole way.
+        The <a href={cvHref} target="_blank" rel="noopener" class="text-cyan-300 underline decoration-cyan-300/30 underline-offset-4 transition hover:text-cyan-200">full résumé</a> has the rest.
+      </p>
+      <div class="mt-12 space-y-4">
+        {experience.map((job) => (
+          <article class="card flex flex-col gap-1 p-6 sm:flex-row sm:items-baseline sm:justify-between sm:gap-6" data-reveal>
+            <div>
+              <h3 class="font-display text-base font-semibold text-white">{job.role}</h3>
+              <p class="mt-0.5 text-sm text-fuchsia-300/80">{job.org}</p>
+              <p class="mt-2 text-sm leading-relaxed text-slate-400">{job.note}</p>
+            </div>
+            <span class="shrink-0 text-xs font-medium uppercase tracking-wider text-slate-500">{job.period}</span>
+          </article>
+        ))}
+        <div class="card flex flex-col gap-1 p-6 sm:flex-row sm:items-baseline sm:justify-between sm:gap-6" data-reveal>
+          <div>
+            <h3 class="font-display text-base font-semibold text-white">{education.school}</h3>
+            <p class="mt-0.5 text-sm text-cyan-300/80">{education.degree}</p>
+          </div>
+          <span class="shrink-0 text-xs font-medium uppercase tracking-wider text-slate-500">{education.period}</span>
+        </div>
       </div>
     </section>
 
@@ -229,12 +331,15 @@ const navLinks = [
       </div>
     </section>
 
+    <!-- shipping cadence -->
+    <ContributionHeatmap />
+
     <!-- stack -->
     <section id="stack" class="scroll-mt-24 py-20">
       <p class="role-tag" data-reveal>The Toolkit</p>
       <h2 class="font-display mt-3 text-3xl font-bold text-white sm:text-4xl" data-reveal>Stack</h2>
       <p class="mt-4 max-w-2xl text-slate-400" data-reveal>
-        Laravel is where I go deepest, but I'm not tied to it. I built
+        Laravel is where I go deepest, but I'm not tied to it. To prove it, here's public code: I built
         <span class="text-slate-200">samyang</span> — a full dating app — solo: a Ruby on Rails 8
         GraphQL API (<a
           href="https://github.com/Darkify19/samyang-back"
@@ -267,8 +372,8 @@ const navLinks = [
         Let's build something <span class="gradient-text">stellar.</span>
       </h2>
       <p class="mx-auto mt-5 max-w-xl text-slate-400" data-reveal>
-        Open to opportunities where systems thinking, event-driven architecture, and an AI-native
-        workflow matter more than any single framework.
+        Open to software-engineering roles where systems thinking, event-driven architecture, and an
+        AI-native workflow matter more than any single framework. Based in Los Baños, Philippines.
       </p>
       <div class="mt-9 flex flex-wrap items-center justify-center gap-4" data-reveal>
         <a
@@ -276,11 +381,23 @@ const navLinks = [
           class="rounded-full bg-gradient-to-r from-violet-600 to-fuchsia-600 px-7 py-3 text-sm font-semibold text-white shadow-lg shadow-violet-900/40 transition hover:from-violet-500 hover:to-fuchsia-500"
         >carl.oropesa11@gmail.com</a>
         <a
-          href="https://github.com/carljanzell"
+          href={linkedin}
           target="_blank"
           rel="noopener"
           class="rounded-full border border-white/15 px-7 py-3 text-sm font-semibold text-slate-200 transition hover:border-cyan-300/50 hover:text-white"
-        >github.com/carljanzell</a>
+        >LinkedIn</a>
+        <a
+          href={github}
+          target="_blank"
+          rel="noopener"
+          class="rounded-full border border-white/15 px-7 py-3 text-sm font-semibold text-slate-200 transition hover:border-cyan-300/50 hover:text-white"
+        >GitHub</a>
+        <a
+          href={cvHref}
+          target="_blank"
+          rel="noopener"
+          class="rounded-full border border-white/15 px-7 py-3 text-sm font-semibold text-slate-200 transition hover:border-cyan-300/50 hover:text-white"
+        >Résumé</a>
       </div>
     </section>
   </main>
