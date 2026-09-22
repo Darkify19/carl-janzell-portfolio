@@ -26,7 +26,12 @@ const base = import.meta.env.BASE_URL.endsWith('/')
 // Absolute URLs for canonical + social cards. Astro.url.pathname already carries
 // the configured `base`, so this stays correct if the site ever moves to a domain root.
 const siteUrl = Astro.site ?? new URL('https://darkify19.github.io');
-const canonical = new URL(Astro.url.pathname, siteUrl).href;
+// Normalize the trailing slash ourselves: Astro versions differ on whether
+// `pathname` keeps it, and canonical must match the sitemap byte for byte.
+const pathname = Astro.url.pathname.endsWith('/')
+  ? Astro.url.pathname
+  : Astro.url.pathname + '/';
+const canonical = new URL(pathname, siteUrl).href;
 const ogImage = new URL(image ?? `${base}og.png`, siteUrl).href;
 const cvUrl = new URL(`${base}OropesaCarlJanzell-CV.pdf`, siteUrl).href;
 
