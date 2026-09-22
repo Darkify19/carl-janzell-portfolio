@@ -84,6 +84,46 @@ const personSchema = {
   sameAs: [linkedin, github, 'https://github.com/Darkify19'],
 };
 
+// The public repos, declared as code so search engines can attach them to the
+// person above rather than treating them as loose outbound links.
+const repoSchemas = [
+  {
+    name: 'samyang-back',
+    description:
+      'GraphQL API for a dating app — Ruby on Rails 8 and PostgreSQL, with swipe/match, messaging and photo management.',
+    repo: 'https://github.com/Darkify19/samyang-back',
+    languages: ['Ruby', 'GraphQL', 'SQL'],
+    runtime: 'Ruby on Rails 8',
+  },
+  {
+    name: 'samyang-front',
+    description:
+      'Vue 2 and Vuex single-page client for a dating app, talking to a Rails GraphQL API through Apollo Client.',
+    repo: 'https://github.com/Darkify19/samyang-front',
+    languages: ['JavaScript'],
+    runtime: 'Vue 2',
+  },
+  {
+    name: 'filament-page-builder',
+    description:
+      'Drag-and-drop visual page builder for Filament — nested layout canvas, document outline, token style inspector and undo/redo.',
+    repo: 'https://github.com/carljanzell/filament-page-builder',
+    languages: ['PHP', 'JavaScript'],
+    runtime: 'Laravel / Filament',
+  },
+].map((r) => ({
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareSourceCode',
+  name: r.name,
+  description: r.description,
+  codeRepository: r.repo,
+  url: r.repo,
+  programmingLanguage: r.languages,
+  runtimePlatform: r.runtime,
+  author: { '@id': canonical + '#person' },
+  isAccessibleForFree: true,
+}));
+
 const profilePageSchema = {
   '@context': 'https://schema.org',
   '@type': 'ProfilePage',
@@ -174,6 +214,11 @@ const profilePageSchema = {
       type="application/ld+json"
       set:html={JSON.stringify(profilePageSchema)}
     />
+    {
+      repoSchemas.map((repo) => (
+        <script is:inline type="application/ld+json" set:html={JSON.stringify(repo)} />
+      ))
+    }
   </head>
   <body class="antialiased">
     <!-- galaxy backdrop -->
