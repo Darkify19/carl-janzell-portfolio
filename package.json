@@ -11,7 +11,7 @@
     "stats": "node .claude/skills/carl-dev-portfolio/scripts/collect-stats.mjs"
   },
   "dependencies": {
-    "astro": "^5.12.0"
+    "astro": "^7.3.3"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.1.11",
