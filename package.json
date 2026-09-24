@@ -7,6 +7,7 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
+    "cv": "node cv/build.mjs",
     "refresh-data": "node .claude/skills/carl-dev-portfolio/scripts/refresh-contributions.mjs",
     "stats": "node .claude/skills/carl-dev-portfolio/scripts/collect-stats.mjs"
   },

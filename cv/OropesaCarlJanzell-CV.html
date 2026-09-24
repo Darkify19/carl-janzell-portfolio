@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Carl Janzell Oropesa · Résumé</title>
+<meta name="author" content="Carl Janzell Oropesa">
+<meta name="description" content="Full-stack developer · Laravel, Filament, Kafka">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,600;1,400&family=Barlow+Semi+Condensed:wght@600;700&display=swap">
+<style>
+  /* Source for public/OropesaCarlJanzell-CV.pdf. Rebuild with `npm run cv`.
+     Every figure carries its window; re-derive them with `npm run stats` before changing one. */
+  @page { size: letter; margin: 0.4in 0.5in; }
+  :root { --ink: #1A1D21; --ink-2: #3F4751; --muted: #69727D; --rule: #E2E5E9; --accent: #C98F12; }
+  * { box-sizing: border-box; }
+  html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body { margin: 0; color: var(--ink); font: 400 9.6pt/1.3 "Barlow", "Helvetica Neue", Arial, sans-serif; }
+  a { color: inherit; text-decoration: none; }
+  p { margin: 0; }
+
+  .name { font: 700 21pt/1 "Barlow Semi Condensed", "Arial Narrow", sans-serif; letter-spacing: .01em; margin: 0; }
+  .headline { font-size: 10.5pt; color: var(--ink-2); margin-top: 3pt; }
+  .contact { font-size: 8.8pt; color: var(--muted); margin-top: 2.5pt; }
+  .contact span + span::before { content: "·"; color: var(--accent); padding: 0 5pt; }
+  .mark { width: 34pt; height: 1.5pt; background: var(--accent); margin-top: 9pt; }
+
+  section { margin-top: 7pt; }
+  h2 { font: 600 8.6pt/1 "Barlow Semi Condensed", "Arial Narrow", sans-serif; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); border-bottom: .75pt solid var(--rule); padding-bottom: 2.5pt; margin: 0 0 4pt; }
+  .summary { color: var(--ink-2); }
+
+  .row { display: flex; justify-content: space-between; align-items: baseline; gap: 10pt; }
+  .org { font-weight: 600; }
+  .title { color: var(--ink-2); font-size: 9.4pt; }
+  .dates { font-size: 8.8pt; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .job + .job { margin-top: 5pt; }
+  ul { margin: 2pt 0 0; padding-left: 11pt; }
+  li { margin: 1pt 0; padding-left: 1.5pt; }
+  li::marker { color: var(--accent); }
+
+  .proj + .proj { margin-top: 5pt; }
+  .proj p { margin-top: 1pt; }
+  .stack { font-size: 8.8pt; color: var(--muted); }
+
+  .skills { display: grid; grid-template-columns: max-content 1fr; gap: .5pt 10pt; margin: 0; }
+  .skills dt { font-weight: 600; }
+  .skills dd { margin: 0; color: var(--ink-2); }
+  .edu p + p { margin-top: 1.5pt; color: var(--ink-2); }
+</style>
+</head>
+<body>
+
+<header>
+  <h1 class="name">Carl Janzell Oropesa</h1>
+  <p class="headline">Full-stack developer · Laravel, Filament, Kafka</p>
+  <p class="contact"><span>Los Baños, Laguna, PH</span><span><a href="mailto:carl.oropesa11@gmail.com">carl.oropesa11@gmail.com</a></span><span>(+63) 921 836 1337</span></p>
+  <p class="contact"><span><a href="https://darkify19.github.io/carl-janzell-portfolio/">darkify19.github.io/carl-janzell-portfolio</a></span><span><a href="https://github.com/carljanzell">github.com/carljanzell</a></span><span><a href="https://www.linkedin.com/in/carl-janzell-764399179/">linkedin.com/in/carl-janzell-764399179</a></span></p>
+  <div class="mark"></div>
+</header>
+
+<section>
+  <p class="summary">I build and run the HR systems UP Los Baños staff use every day, mostly Laravel and Filament apps that talk to each other over Kafka. The timekeeping app is mine, from the code to the server it runs on.</p>
+</section>
+
+<section>
+  <h2>Experience</h2>
+
+  <div class="job">
+    <div class="row"><span class="org">University of the Philippines Los Baños</span><span class="dates">Jan 2025 – Present</span></div>
+    <div class="row"><span class="title">Full-Stack Developer (Senior ICT Assistant)</span><span class="dates">Oct 2025 – Present</span></div>
+    <div class="row"><span class="title">Full-Stack Developer (Programmer)</span><span class="dates">Jan 2025 – Oct 2025</span></div>
+    <ul>
+      <li>Lead developer of UPLB-TKS, the university’s timekeeping system. It replaced paper time records and leave forms, and 876 people use it on an average workday (Aug–Sep 2026).</li>
+      <li>Built the attendance rules: merging biometric and manual punches, grace periods, undertime and network checks.</li>
+      <li>Built offline-first clock-in kiosks for staff without a desk. They handled 20.1% of all punches in the 180 days to Sep 2026.</li>
+      <li>Built a demo mode with made-up employees, so the live system can be shown without exposing anyone’s real data.</li>
+      <li>Wrote the Kafka consumers that keep the timekeeping, performance and SALN apps in sync with the HR system of record.</li>
+      <li>Set up role-based access across 30+ models, from HR-wide down to office-only and self-only views.</li>
+      <li>Moved performance reviews into their own app, with an AI step that drafts reviews from task logs for a person to check.</li>
+      <li>Deploy and run what I build: self-hosted CI runners, 810 tagged production deploys since Jan 2025, and a production audit that found 12 issues, each with a fix.</li>
+      <li>Every release ships a plain-language “What’s New” page for staff, drafted by AI and signed off by a person.</li>
+      <li>Also: largest contributor to SALN asset-disclosure e-filing, holiday-pay rules in the new payroll system, and the DAME website.</li>
+    </ul>
+  </div>
+
+  <div class="job">
+    <div class="row"><span class="org">ChatGenie</span><span class="dates">Nov 2024 – Jan 2025</span></div>
+    <div class="title">Web Developer (probationary)</div>
+    <ul>
+      <li>Got in through their developer evaluation: learn Rails, GraphQL and Vue from zero, then ship real apps on them.</li>
+      <li>Built samyang, a dating app, solo (see Projects).</li>
+      <li>Worked the team’s way: daily stand-ups, Jira tickets and Bitbucket pull requests.</li>
+    </ul>
+  </div>
+
+  <div class="job">
+    <div class="row"><span class="org">DILG Cluster A, Laguna</span><span class="dates">Jan 2024 – May 2024</span></div>
+    <div class="title">Web Developer (on-the-job trainee)</div>
+    <ul>
+      <li>Built the E-Justice System for barangay case records across Cluster A, and owned its database, API and user onboarding.</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <h2>Projects</h2>
+
+  <div class="proj">
+    <div class="row"><span><span class="org">filament-page-builder</span> <span class="stack">· <a href="https://github.com/carljanzell/filament-page-builder">github.com/carljanzell/filament-page-builder</a></span></span><span class="dates">Aug 2026 – Present</span></div>
+    <p>A drag-and-drop page builder plugin for Filament: nested columns, on-page text editing, undo and redo, 113 passing tests. It runs the page editor on the DAME website. Source and docs are public.</p>
+    <p class="stack">PHP 8.3 · Filament 5 · Livewire · Pest 4 · docs at carljanzell.github.io/filament-page-builder</p>
+  </div>
+
+  <div class="proj">
+    <div class="row"><span><span class="org">samyang</span> <span class="stack">· <a href="https://github.com/Darkify19/samyang-back">github.com/Darkify19/samyang-back</a>, <a href="https://github.com/Darkify19/samyang-front">samyang-front</a></span></span><span class="dates">Nov 2024 – Dec 2024</span></div>
+    <p>A dating app I built solo in under two weeks for ChatGenie’s evaluation: swipe and match, photos, messaging and an admin panel.</p>
+    <p class="stack">API: Ruby 3.3 · Rails 8 (API mode) · GraphQL · PostgreSQL · bcrypt sessions · Brakeman and RuboCop in CI · Render</p>
+    <p class="stack">Client: Vue 2.7 · Vuex · Vue Router · Apollo Client with file uploads · Cloudinary</p>
+  </div>
+</section>
+
+<section>
+  <h2>Skills</h2>
+  <dl class="skills">
+    <dt>Backend</dt><dd>PHP, Laravel, Filament, Livewire, Ruby on Rails, REST, GraphQL</dd>
+    <dt>Frontend</dt><dd>JavaScript, TypeScript, Vue, Vuex, Apollo, Alpine.js, Tailwind CSS</dd>
+    <dt>Data</dt><dd>MySQL and MariaDB, PostgreSQL, Redis, Kafka, RabbitMQ</dd>
+    <dt>Ops and testing</dt><dd>Linux, Nginx, Supervisor, GitHub Actions, Docker, PHPUnit, Pest</dd>
+    <dt>AI tooling</dt><dd>Claude Code, Cursor agents, agent skill files, human-in-the-loop features</dd>
+  </dl>
+</section>
+
+<section class="edu">
+  <h2>Education and training</h2>
+  <div class="row"><span><span class="org">B.S. Information Technology</span>, Laguna State Polytechnic University, Los Baños</span><span class="dates">2020 – 2024</span></div>
+  <p>UP ITDC 2025: IT project management, ICT governance, enterprise architecture, software testing, IS strategic planning. AUN/UP 2025: Identity Federation hackathon workshop.</p>
+</section>
+
+</body>
+</html>
