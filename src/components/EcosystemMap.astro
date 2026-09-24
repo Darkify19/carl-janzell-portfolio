@@ -1,0 +1,560 @@
+---
+// The UPLB HR ecosystem as a schematic. Every node, edge and label here is
+// real and checked against the repos (22 Sep 2026), so keep it that way when
+// the ecosystem changes: the map is only worth showing while it's accurate.
+// It shows the main data paths, not every topic (PerporManTask also reads
+// uplb-personnel directly, for instance).
+
+type Owner = 'mine' | 'team' | 'up';
+type Via = 'kafka' | 'http' | 'db';
+
+interface Sys {
+  name: string;
+  sub: string;
+  hi?: string;
+  owner: Owner;
+  core?: boolean;
+  href?: string;
+}
+
+const systems: Record<string, Sys> = {
+  uda: { name: 'UPLB_UDA', sub: 'university directory', owner: 'up' },
+  hr: { name: 'uplb-personnel', sub: 'HR system of record', owner: 'team', href: '#shared' },
+  tks: { name: 'UPLB-TKS', sub: 'timekeeping, leave', hi: '4,000+ personnel', owner: 'mine', core: true, href: '#tks' },
+  pmt: { name: 'PerporManTask', sub: 'performance · IPCR', owner: 'mine', href: '#pmt' },
+  saln: { name: 'uplb-saln', sub: 'SALN e-filing', owner: 'team', href: '#shared' },
+  kiosk: { name: 'UPLB Kiosk', sub: '20.1% of punches', owner: 'mine', href: '#kiosk' },
+  portal: { name: 'UPLB Portal', sub: 'single sign-on', owner: 'up' },
+};
+
+interface Link {
+  from: string;
+  to: string;
+  via: Via;
+  label: string;
+  /** Plain-language version for screen readers. */
+  says: string;
+  /** Event stream rhythm: one dot leaves `from` at each start, every period ms. */
+  period: number;
+  starts: number[];
+}
+
+// Order matters: layouts below list one path per link, in this order.
+const links: Link[] = [
+  { from: 'uda', to: 'hr', via: 'kafka', label: 'Person', says: 'UPLB_UDA publishes Person records to uplb-personnel over Kafka.', period: 2800, starts: [0] },
+  { from: 'hr', to: 'tks', via: 'kafka', label: 'records', says: 'uplb-personnel publishes personnel, appointment, office and position records to UPLB-TKS over Kafka.', period: 2800, starts: [900] },
+  { from: 'hr', to: 'tks', via: 'http', label: 'REST: leave', says: 'uplb-personnel reads leave balances from UPLB-TKS over REST.', period: 6400, starts: [3100] },
+  { from: 'hr', to: 'saln', via: 'kafka', label: 'appointments', says: 'uplb-personnel publishes appointment records to uplb-saln over Kafka.', period: 4200, starts: [1100] },
+  { from: 'tks', to: 'pmt', via: 'kafka', label: 'records', says: 'UPLB-TKS publishes personnel, appointment and signature records to PerporManTask over Kafka.', period: 3600, starts: [1900] },
+  { from: 'kiosk', to: 'tks', via: 'db', label: 'punches', says: 'UPLB Kiosk writes attendance punches straight into the UPLB-TKS database.', period: 3000, starts: [0, 700, 1900] },
+  { from: 'portal', to: 'tks', via: 'http', label: 'one-time-token SSO', says: 'UPLB Portal signs people in to UPLB-TKS with a one-time token.', period: 5200, starts: [300] },
+];
+
+type Box = [x: number, y: number, w: number, h: number];
+type Anchor = 'start' | 'middle' | 'end';
+
+interface Layout {
+  key: 'wide' | 'tall';
+  viewBox: string;
+  pad: number;
+  boxes: Record<string, Box>;
+  paths: string[];
+  labels: [x: number, y: number, anchor: Anchor][];
+  legend: [x: number, y: number][];
+}
+
+const layouts: Layout[] = [
+  {
+    key: 'wide',
+    viewBox: '0 0 720 390',
+    pad: 12,
+    boxes: {
+      uda: [0, 158, 130, 52],
+      hr: [182, 158, 140, 52],
+      tks: [386, 140, 156, 88],
+      pmt: [600, 158, 120, 52],
+      saln: [182, 310, 140, 52],
+      kiosk: [389, 332, 150, 52],
+      portal: [389, 0, 150, 52],
+    },
+    paths: [
+      'M130,184 H182',
+      'M322,174 H386',
+      'M322,198 H386',
+      'M252,210 V310',
+      'M542,184 H600',
+      'M464,332 V228',
+      'M464,52 V140',
+    ],
+    labels: [
+      [156, 174, 'middle'],
+      [354, 165, 'middle'],
+      [354, 214, 'middle'],
+      [260, 264, 'start'],
+      [571, 174, 'middle'],
+      [472, 286, 'start'],
+      [472, 100, 'start'],
+    ],
+    legend: [[0, 270], [0, 290], [0, 310], [0, 330], [0, 350], [0, 370]],
+  },
+  {
+    key: 'tall',
+    viewBox: '0 0 360 500',
+    pad: 10,
+    boxes: {
+      uda: [8, 8, 136, 48],
+      hr: [8, 118, 136, 48],
+      saln: [224, 118, 128, 48],
+      tks: [8, 228, 136, 80],
+      pmt: [224, 244, 128, 48],
+      kiosk: [8, 370, 136, 48],
+      portal: [224, 370, 128, 48],
+    },
+    paths: [
+      'M76,56 V118',
+      'M56,166 V228',
+      'M96,166 V228',
+      'M144,142 H224',
+      'M144,268 H224',
+      'M56,370 V308',
+      'M288,370 V340 H116 V308',
+    ],
+    labels: [
+      [84, 91, 'start'],
+      [50, 201, 'end'],
+      [102, 201, 'start'],
+      [184, 135, 'middle'],
+      [184, 261, 'middle'],
+      [50, 343, 'end'],
+      [202, 333, 'middle'],
+    ],
+    legend: [[8, 450], [8, 470], [8, 490], [206, 450], [206, 470], [206, 490]],
+  },
+];
+
+const neighbours = (key: string) =>
+  links.flatMap((l) => (l.from === key ? [l.to] : l.to === key ? [l.from] : [])).join(' ');
+
+const legendRows: { kind: string; text: string }[] = [
+  { kind: 'mine', text: 'mine: lead or sole author' },
+  { kind: 'team', text: 'team app, I built layers' },
+  { kind: 'up', text: 'upstream' },
+  { kind: 'kafka', text: 'Kafka event' },
+  { kind: 'http', text: 'HTTP request' },
+  { kind: 'db', text: 'database write' },
+];
+---
+
+<figure class="eco-map" data-eco-map>
+  {
+    layouts.map((lay) => (
+      <svg class={`map-${lay.key}`} viewBox={lay.viewBox} role="group" aria-label="Schematic of the UPLB HR ecosystem. Each connection is also listed in words after the caption." data-map>
+        {links.map((l, i) => (
+          <path class={`ed ${l.via}`} d={lay.paths[i]} data-edge={i} data-a={l.from} data-b={l.to} />
+        ))}
+        <g aria-hidden="true">
+          {links.map((l, i) => (
+            <text class="el" x={lay.labels[i][0]} y={lay.labels[i][1]} text-anchor={lay.labels[i][2]} data-edge={i}>
+              {l.label}
+            </text>
+          ))}
+        </g>
+        <g class="evs" aria-hidden="true">
+          {links.map((l, i) => (
+            <g class="evg" data-edge={i} data-via={l.via} data-period={l.period} data-starts={l.starts.join(' ')} />
+          ))}
+        </g>
+        {Object.entries(systems).map(([key, s]) => {
+          const [x, y, w, h] = lay.boxes[key];
+          const p = lay.pad;
+          const cls = `nd ${s.owner}${s.core ? ' core' : ''}`;
+          const body = (
+            <>
+              <rect x={x} y={y} width={w} height={h} rx="3" />
+              <text class={`nm${s.core ? ' big' : ''}`} x={x + p} y={y + (s.core ? 27 : 22)}>{s.name}</text>
+              <text class="sb" x={x + p} y={y + (s.core ? 46 : 38)}>{s.sub}</text>
+              {s.hi && <text class="sb hi" x={x + p} y={y + 64}>{s.hi}</text>}
+            </>
+          );
+          const label = `${s.name}, ${s.sub}${s.hi ? `, ${s.hi}` : ''}`;
+          return s.href ? (
+            <a class={cls} href={s.href} data-node={key} data-links={neighbours(key)} aria-label={`${label}. Jump to the project.`}>
+              {body}
+            </a>
+          ) : (
+            <g class={cls} data-node={key} data-links={neighbours(key)} role="img" aria-label={label}>
+              {body}
+            </g>
+          );
+        })}
+        <g class="legend" aria-hidden="true">
+          {legendRows.map((row, i) => {
+            const [lx, ly] = lay.legend[i];
+            return (
+              <>
+                {row.kind === 'kafka' ? (
+                  <circle class="ev" cx={lx + 13} cy={ly - 3} r="3.5" />
+                ) : row.kind === 'http' ? (
+                  <rect class="ev http" x={lx + 10.5} y={ly - 5.5} width="5" height="5" />
+                ) : row.kind === 'db' ? (
+                  <circle class="ev db" cx={lx + 13} cy={ly - 3} r="3.2" />
+                ) : (
+                  <line class={`lg-${row.kind}`} x1={lx} y1={ly - 3} x2={lx + 26} y2={ly - 3} />
+                )}
+                <text class="lg" x={lx + 34} y={ly}>{row.text}</text>
+              </>
+            );
+          })}
+        </g>
+      </svg>
+    ))
+  }
+  <figcaption class="eco-cap">
+    The UPLB HR ecosystem is team architecture. Solid boxes are mine; dashed ones are team apps where I built specific layers. Main data paths only; the kiosk share covers the 180 days to 22 Sep 2026.
+    <button type="button" class="eco-toggle label" data-events-toggle aria-pressed="false">pause events</button>
+  </figcaption>
+  <ul class="sr-only">
+    {links.map((l) => <li>{l.says}</li>)}
+  </ul>
+</figure>
+
+<style is:global>
+  .eco-map {
+    margin: 0;
+  }
+  .eco-map svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+  .eco-map .map-tall {
+    display: none;
+  }
+  @media (max-width: 759px) {
+    .eco-map .map-wide {
+      display: none;
+    }
+    .eco-map .map-tall {
+      display: block;
+    }
+  }
+
+  .eco-map .nd rect {
+    fill: var(--color-panel);
+    stroke: var(--color-ink);
+    stroke-width: 1.5;
+    transition: stroke 0.2s ease;
+  }
+  .eco-map .nd.core rect {
+    stroke-width: 2.5;
+  }
+  .eco-map .nd.team rect {
+    stroke: var(--color-muted);
+    stroke-dasharray: 5 4;
+  }
+  .eco-map .nd.up rect {
+    fill: var(--color-graphite);
+    stroke: var(--color-upstream);
+  }
+  .eco-map .nm {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 16px;
+    fill: var(--color-ink);
+  }
+  .eco-map .nm.big {
+    font-size: 21px;
+  }
+  .eco-map .nd.up .nm {
+    fill: var(--color-muted);
+  }
+  .eco-map .sb,
+  .eco-map .el,
+  .eco-map .lg {
+    font-family: var(--font-mono);
+    font-stretch: 75%;
+    font-size: 9px;
+    fill: var(--color-muted);
+  }
+  .eco-map .sb.hi {
+    fill: var(--color-ink);
+  }
+  .eco-map .lg {
+    font-size: 9.5px;
+  }
+  /* the tall layout renders near 1:1 on a phone, so it can afford larger type */
+  .eco-map .map-tall .nm {
+    font-size: 15px;
+  }
+  .eco-map .map-tall .nm.big {
+    font-size: 19px;
+  }
+  .eco-map .map-tall .sb,
+  .eco-map .map-tall .el,
+  .eco-map .map-tall .lg {
+    font-size: 10px;
+  }
+
+  .eco-map .ed {
+    fill: none;
+    stroke: var(--color-wire);
+    stroke-width: 1.5;
+  }
+  .eco-map .ed.http {
+    stroke-dasharray: 2 4;
+  }
+  .eco-map .ev {
+    fill: var(--color-signal);
+  }
+  .eco-map .ev.http {
+    fill: var(--color-ink);
+  }
+  .eco-map .ev.db {
+    fill: none;
+    stroke: var(--color-ink);
+    stroke-width: 1.4;
+  }
+  .eco-map .lg-mine {
+    stroke: var(--color-ink);
+    stroke-width: 1.5;
+  }
+  .eco-map .lg-team {
+    stroke: var(--color-muted);
+    stroke-width: 1.5;
+    stroke-dasharray: 5 4;
+  }
+  .eco-map .lg-up {
+    stroke: var(--color-upstream);
+    stroke-width: 1.5;
+  }
+
+  /* trace connections */
+  .eco-map .nd,
+  .eco-map .ed,
+  .eco-map .el,
+  .eco-map .evg {
+    transition: opacity 0.2s ease, stroke 0.2s ease;
+  }
+  .eco-map svg.dim .nd:not(.lit),
+  .eco-map svg.dim .el:not(.lit) {
+    opacity: 0.3;
+  }
+  .eco-map svg.dim .ed:not(.lit),
+  .eco-map svg.dim .evg:not(.lit) {
+    opacity: 0.15;
+  }
+  .eco-map .ed.lit,
+  .eco-map .nd.lit rect {
+    stroke: var(--color-signal);
+  }
+  .eco-map .el.lit {
+    fill: var(--color-ink);
+  }
+  .eco-map a.nd {
+    cursor: pointer;
+  }
+  .eco-map a.nd:focus {
+    outline: none;
+  }
+  .eco-map a.nd:focus-visible rect {
+    stroke: var(--color-signal);
+    stroke-width: 3;
+  }
+
+  .eco-cap {
+    max-width: 62ch;
+    margin-top: 14px;
+    font-size: 15px;
+    line-height: 1.45;
+    color: var(--color-muted);
+  }
+  .eco-toggle {
+    margin-left: 6px;
+    padding: 0;
+    border: 0;
+    border-bottom: 1px solid var(--color-upstream);
+    background: none;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .eco-toggle:hover {
+    color: var(--color-ink);
+    border-color: var(--color-ink);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .eco-map .nd,
+    .eco-map .ed,
+    .eco-map .el,
+    .eco-map .evg,
+    .eco-map .nd rect {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  const NS = 'http://www.w3.org/2000/svg';
+  const w = window as any;
+  w.__motion = true;
+
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // ---------- trace connections ----------
+  function lightUp(svg: SVGSVGElement, key: string) {
+    const node = svg.querySelector<SVGElement>(`[data-node="${key}"]`);
+    if (!node) return;
+    svg.classList.add('dim');
+    node.classList.add('lit');
+    for (const k of (node.dataset.links ?? '').split(' ')) {
+      svg.querySelector(`[data-node="${k}"]`)?.classList.add('lit');
+    }
+    svg.querySelectorAll<SVGPathElement>('.ed').forEach((ed) => {
+      if (ed.dataset.a !== key && ed.dataset.b !== key) return;
+      svg.querySelectorAll(`[data-edge="${ed.dataset.edge}"]`).forEach((el) => el.classList.add('lit'));
+    });
+  }
+
+  function lightOff(svg: SVGSVGElement) {
+    svg.classList.remove('dim');
+    svg.querySelectorAll('.lit').forEach((el) => el.classList.remove('lit'));
+  }
+
+  function bindTrace(svg: SVGSVGElement) {
+    svg.querySelectorAll<SVGElement>('.nd').forEach((node) => {
+      const on = () => {
+        lightOff(svg);
+        lightUp(svg, node.dataset.node ?? '');
+      };
+      const off = () => lightOff(svg);
+      node.addEventListener('pointerenter', on);
+      node.addEventListener('pointerleave', off);
+      node.addEventListener('focus', on);
+      node.addEventListener('blur', off);
+    });
+  }
+
+  // ---------- event stream ----------
+  interface Dot {
+    el: SVGElement;
+    path: SVGPathElement;
+    len: number;
+    dur: number;
+    period: number;
+    start: number;
+  }
+
+  const SPEED = 0.11; // px per ms, in viewBox units
+  const FADE = 90;
+
+  function buildDots(svg: SVGSVGElement): Dot[] {
+    const dots: Dot[] = [];
+    svg.querySelectorAll<SVGGElement>('.evg').forEach((g) => {
+      const path = svg.querySelector<SVGPathElement>(`.ed[data-edge="${g.dataset.edge}"]`);
+      if (!path) return;
+      const len = path.getTotalLength();
+      const dur = Math.max(550, len / SPEED);
+      const period = Number(g.dataset.period);
+      const via = g.dataset.via;
+      for (const start of (g.dataset.starts ?? '0').split(' ').map(Number)) {
+        let el: SVGElement;
+        if (via === 'http') {
+          el = document.createElementNS(NS, 'rect');
+          el.setAttribute('x', '-2.5');
+          el.setAttribute('y', '-2.5');
+          el.setAttribute('width', '5');
+          el.setAttribute('height', '5');
+        } else {
+          el = document.createElementNS(NS, 'circle');
+          el.setAttribute('r', via === 'db' ? '3.2' : '3.5');
+        }
+        el.setAttribute('class', `ev ${via}`);
+        el.setAttribute('opacity', '0');
+        g.appendChild(el);
+        dots.push({ el, path, len, dur, period, start });
+      }
+    });
+    return dots;
+  }
+
+  function place(d: Dot, t: number) {
+    const local = t - d.start;
+    const p = local < 0 ? -1 : local % d.period;
+    if (p < 0 || p >= d.dur) {
+      d.el.setAttribute('opacity', '0');
+      return;
+    }
+    const pt = d.path.getPointAtLength((d.len * p) / d.dur);
+    d.el.setAttribute('transform', `translate(${pt.x.toFixed(1)} ${pt.y.toFixed(1)})`);
+    d.el.setAttribute('opacity', Math.min(1, p / FADE, (d.dur - p) / FADE).toFixed(2));
+  }
+
+  function setupMap(fig: HTMLElement) {
+    const svgs = [...fig.querySelectorAll<SVGSVGElement>('svg[data-map]')];
+    svgs.forEach(bindTrace);
+
+    const dots = new Map(svgs.map((svg) => [svg, buildDots(svg)]));
+    const onScreen = new Set<SVGSVGElement>();
+    const toggle = fig.querySelector<HTMLButtonElement>('[data-events-toggle]');
+
+    // Events wait for the punch-in to finish, and for reduced-motion
+    // visitors they wait for an explicit press of the toggle.
+    let wanted = !reduced;
+    let clock = 0;
+    let last = 0;
+    let raf = 0;
+
+    const shouldRun = () => wanted && onScreen.size > 0 && document.visibilityState === 'visible';
+
+    function frame(now: number) {
+      raf = 0;
+      if (!shouldRun()) return;
+      const wait = (w.__punchUntil ?? 0) - now;
+      if (wait > 0) {
+        last = 0;
+        raf = requestAnimationFrame(frame);
+        return;
+      }
+      clock += last ? Math.min(now - last, 100) : 0;
+      last = now;
+      onScreen.forEach((svg) => dots.get(svg)?.forEach((d) => place(d, clock)));
+      raf = requestAnimationFrame(frame);
+    }
+
+    function sync() {
+      if (shouldRun()) {
+        if (!raf) {
+          last = 0;
+          raf = requestAnimationFrame(frame);
+        }
+      } else if (raf) {
+        cancelAnimationFrame(raf);
+        raf = 0;
+      }
+      if (toggle) {
+        toggle.textContent = wanted ? 'pause events' : 'play events';
+        toggle.setAttribute('aria-pressed', String(!wanted));
+      }
+    }
+
+    toggle?.addEventListener('click', () => {
+      wanted = !wanted;
+      sync();
+    });
+    document.addEventListener('visibilitychange', sync);
+    // only the displayed layout ever intersects; the hidden one has no box
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((en) => {
+        const svg = en.target as SVGSVGElement;
+        if (en.isIntersecting) onScreen.add(svg);
+        else onScreen.delete(svg);
+      });
+      sync();
+    });
+    svgs.forEach((svg) => io.observe(svg));
+    sync();
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-eco-map]').forEach(setupMap);
+</script>

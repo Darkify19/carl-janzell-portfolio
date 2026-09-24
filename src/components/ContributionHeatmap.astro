@@ -6,16 +6,11 @@ const total = contributions.total;
 const busiest = contributions.busiest ?? days.reduce((m, d) => (d.count > m.count ? d : m), days[0]);
 const activeDays = contributions.activeDays ?? days.filter((d) => d.count > 0).length;
 
-const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-const WEEKDAYS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-
-const LEVEL_COLORS = [
-  'rgba(255,255,255,0.04)',
-  'rgba(124,58,237,0.35)',
-  'rgba(167,139,250,0.55)',
-  'rgba(217,70,239,0.72)',
-  'rgba(34,211,238,0.9)',
-];
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const fmt = (iso: string) => {
+  const [y, m, d] = iso.split('-');
+  return `${Number(d)} ${MONTHS[Number(m) - 1]} ${y}`;
+};
 
 function level(c: number): number {
   if (c <= 0) return 0;
@@ -25,105 +20,239 @@ function level(c: number): number {
   return 4;
 }
 
-// Rebuild GitHub-style weeks (Sunday-first columns of 7 days)
-const pad = new Date(days[0].date + 'T00:00:00').getUTCDay();
-const grid: ({ date: string; count: number } | null)[] = [];
-let week: ({ date: string; count: number } | null)[] = new Array(pad).fill(null);
-for (const d of days) {
-  week.push(d);
-  if (week.length === 7) {
-    grid.push(...week);
-    week = [];
-  }
-}
-if (week.length) {
-  while (week.length < 7) week.push(null);
-  grid.push(...week);
-}
-const weeks: (({ date: string; count: number } | null)[])[] = [];
-for (let i = 0; i < grid.length; i += 7) weeks.push(grid.slice(i, i + 7));
+// Sunday-first weeks, as on GitHub. Parse as UTC so a build in UTC+8 doesn't
+// shift the first day back into Monday.
+const pad = new Date(days[0].date + 'T00:00:00Z').getUTCDay();
+const CELL = 10;
+const STEP = 12;
+const BAND_GAP = 16;
 
-// Month labels aligned to week columns (show when the month first appears)
-const monthLabels: string[] = weeks.map((w) => {
-  const first = w.find((d) => d);
-  if (!first) return '';
-  return first.date.slice(5, 7); // MM
-});
-let lastMonth = -1;
-const monthLabelText: string[] = weeks.map((w, i) => {
-  const first = w.find((d) => d);
-  if (!first) return '';
-  const m = parseInt(first.date.slice(5, 7), 10) - 1;
-  if (m !== lastMonth) {
-    lastMonth = m;
-    return MONTHS[m];
-  }
-  return '';
-});
+// One long band for wide screens, three stacked bands for phones.
+function grid(bands: number) {
+  const weeks = Math.ceil((pad + days.length) / 7);
+  const per = Math.ceil(weeks / bands);
+  const bandH = 7 * STEP - (STEP - CELL);
+  const cells = days.map((d, i) => {
+    const g = i + pad;
+    const wk = Math.floor(g / 7);
+    const b = Math.floor(wk / per);
+    return {
+      x: (wk - b * per) * STEP,
+      y: b * (bandH + BAND_GAP) + (g % 7) * STEP,
+      lv: level(d.count),
+      top: d.date === busiest.date,
+      title: `${fmt(d.date)}: ${d.count} commit${d.count === 1 ? '' : 's'}`,
+    };
+  });
+  return {
+    width: per * STEP - (STEP - CELL),
+    height: bands * bandH + (bands - 1) * BAND_GAP,
+    cells,
+  };
+}
 
-const firstDate = days[0].date;
-const lastDate = days[days.length - 1].date;
+const variants = [
+  { key: 'wide', ...grid(1) },
+  { key: 'tall', ...grid(3) },
+];
+
+// Year tick on the wide band
+const newYear = days.findIndex((d) => d.date.endsWith('-01-01'));
+const newYearPct = newYear < 0 ? null : ((Math.floor((newYear + pad) / 7) * STEP) / variants[0].width) * 100;
+const newYearLabel = newYear < 0 ? '' : days[newYear].date.slice(0, 4);
+
+const firstDate = fmt(days[0].date);
+const lastDate = fmt(days[days.length - 1].date);
 ---
 
-<section id="activity" class="scroll-mt-24 py-20">
-  <p class="role-tag" data-reveal>The Gravity Well</p>
-  <h2 class="font-display mt-3 text-3xl font-bold text-white sm:text-4xl" data-reveal>
-    Shipping cadence
-  </h2>
-  <p class="mt-4 max-w-2xl text-slate-400" data-reveal>
-    Not a scoreboard — just the shape of showing up. Every square is a day of work,
-    rebuilt from the full git history of every repository I've committed to
-    ({firstDate} → {lastDate}): {activeDays} active days across
-    {total.toLocaleString()} commits, tracking the build-out of the UPLB HR
-    ecosystem, busiest on {busiest.date} ({busiest.count} in a day).
-  </p>
+<section id="cadence" class="section">
+  <div class="sec-head">
+    <h2>Shipping cadence</h2>
+    <p class="label">{total.toLocaleString('en-US')} commits · {activeDays} active days · {firstDate} to {lastDate}</p>
+  </div>
+  <p class="sec-lede">Every square is a day, rebuilt from the full git history of every repository I've committed to while the UPLB HR ecosystem was built out.</p>
 
-  <div class="card mt-10 overflow-hidden p-6 sm:p-8" data-reveal>
-    <div class="flex gap-3 overflow-x-auto pb-2">
-      <!-- weekday gutter -->
-      <div class="mt-6 flex shrink-0 flex-col gap-[3px] pr-1 text-[9px] leading-none text-slate-600">
-        {WEEKDAYS.map((d, i) => <span class="h-[11px]">{i % 2 === 1 ? d.slice(0, 2) : ''}</span>)}
-      </div>
-
-      <div class="shrink-0">
-        <!-- month labels -->
-        <div class="flex gap-[3px]">
-          {weeks.map((_, i) => (
-            <span class="w-[11px] text-[9px] leading-none text-slate-500">{monthLabelText[i]}</span>
+  <div class="cad">
+    {
+      variants.map((v) => (
+        <svg
+          class={`heat heat-${v.key}`}
+          viewBox={`0 0 ${v.width} ${v.height}`}
+          role="img"
+          aria-label={`Commits per day, ${firstDate} to ${lastDate}. Busiest day ${fmt(busiest.date)}, ${busiest.count} commits.`}
+          data-ripple
+        >
+          {v.cells.map((c) => (
+            <rect x={c.x} y={c.y} width={CELL} height={CELL} rx="2" class={`lv${c.lv}${c.top ? ' top' : ''}`}>
+              {v.key === 'wide' && <title>{c.title}</title>}
+            </rect>
           ))}
-        </div>
-        <!-- grid -->
-        <div class="mt-1 flex gap-[3px]">
-          {weeks.map((w) => (
-            <div class="flex flex-col gap-[3px]">
-              {w.map((d) => (
-                <div
-                  class="h-[11px] w-[11px] rounded-[2px]"
-                  style={`background:${d ? LEVEL_COLORS[level(d.count)] : LEVEL_COLORS[0]}`}
-                  title={d ? `${d.date}: ${d.count} contribution${d.count === 1 ? '' : 's'}` : 'No contributions'}
-                ></div>
-              ))}
-            </div>
-          ))}
-        </div>
-      </div>
+        </svg>
+      ))
+    }
+    <div class="cad-axis label" aria-hidden="true">
+      <span>{firstDate}</span>
+      {newYearPct !== null && <span class="cad-year" style={`left:${newYearPct.toFixed(2)}%`}>{newYearLabel}</span>}
+      <span>{lastDate}</span>
     </div>
-
-    <!-- legend -->
-    <div class="mt-5 flex items-center justify-end gap-2 text-[10px] text-slate-500">
-      <span>Less</span>
-      {LEVEL_COLORS.map((c) => <span class="h-[11px] w-[11px] rounded-[2px]" style={`background:${c}`}></span>)}
-      <span>More</span>
+    <div class="cad-foot">
+      <p class="label">outlined: {fmt(busiest.date)}, the busiest day, {busiest.count} commits</p>
+      <p class="cad-legend label" aria-hidden="true">
+        less
+        {[0, 1, 2, 3, 4].map((lv) => <i class={`lv${lv}`} />)}
+        more
+      </p>
     </div>
   </div>
 </section>
 
-<style>
-  .card { border: 1px solid rgba(255,255,255,0.06); background: rgba(255,255,255,0.02); border-radius: 1rem; }
-  [style*="background"] { transition: transform 0.15s ease, box-shadow 0.15s ease; }
-  [style*="background"]:hover {
-    transform: scale(1.35);
-    box-shadow: 0 0 8px rgba(217,70,239,0.6);
-    outline: 1px solid rgba(255,255,255,0.25);
+<style is:global>
+  .cad {
+    margin-top: 28px;
+  }
+  .heat {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+  .heat-tall {
+    display: none;
+  }
+  .heat rect {
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+  /* one hue, so a busier day always reads as more of the same colour */
+  .heat .lv0,
+  .cad-legend .lv0 {
+    fill: rgba(228, 231, 235, 0.06);
+    background: rgba(228, 231, 235, 0.06);
+  }
+  .heat .lv1,
+  .cad-legend .lv1 {
+    fill: rgba(244, 183, 64, 0.2);
+    background: rgba(244, 183, 64, 0.2);
+  }
+  .heat .lv2,
+  .cad-legend .lv2 {
+    fill: rgba(244, 183, 64, 0.4);
+    background: rgba(244, 183, 64, 0.4);
+  }
+  .heat .lv3,
+  .cad-legend .lv3 {
+    fill: rgba(244, 183, 64, 0.66);
+    background: rgba(244, 183, 64, 0.66);
+  }
+  .heat .lv4,
+  .cad-legend .lv4 {
+    fill: rgba(244, 183, 64, 0.96);
+    background: rgba(244, 183, 64, 0.96);
+  }
+  .heat .top {
+    stroke: var(--color-ink);
+    stroke-width: 2;
+  }
+  /* held back until the ripple reaches them; see the script below */
+  .motion .heat[data-ripple]:not(.is-done) rect {
+    opacity: 0;
+  }
+
+  .cad-axis {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+  }
+  .cad-year {
+    position: absolute;
+    top: 0;
+    padding-left: 5px;
+    border-left: 1px solid var(--color-upstream);
+  }
+  .cad-foot {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 8px 24px;
+    margin-top: 14px;
+  }
+  .cad-legend {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .cad-legend i {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+  }
+  .cad-legend i:first-of-type {
+    margin-left: 4px;
+  }
+  .cad-legend i:last-of-type {
+    margin-right: 4px;
+  }
+  /* phones get the three-band grid; the axis only fits the single band */
+  @media (max-width: 759px) {
+    .heat-wide,
+    .cad-axis {
+      display: none;
+    }
+    .heat-tall {
+      display: block;
+    }
   }
 </style>
+
+<script>
+  // Ripple from the busiest day: once, the first time the grid is on screen.
+  const w = window as any;
+  w.__motion = true;
+
+  const root = document.documentElement;
+  const grids = [...document.querySelectorAll<SVGSVGElement>('svg.heat[data-ripple]')];
+  const release = () => grids.forEach((g) => g.classList.add('is-done'));
+
+  function ripple(svg: SVGSVGElement) {
+    const rects = [...svg.querySelectorAll<SVGRectElement>('rect')];
+    const top = svg.querySelector<SVGRectElement>('rect.top') ?? rects[0];
+    const at = (r: SVGRectElement, a: 'x' | 'y') => Number(r.getAttribute(a));
+    const dist = rects.map((r) => Math.hypot(at(r, 'x') - at(top, 'x'), at(r, 'y') - at(top, 'y')));
+    const far = Math.max(...dist) || 1;
+    rects.forEach((r, i) => {
+      r.animate(
+        [
+          { opacity: 0, transform: 'scale(0)' },
+          { opacity: 1, transform: 'scale(1)' },
+        ],
+        {
+          duration: 420,
+          delay: (dist[i] / far) * 1500,
+          easing: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
+          fill: 'backwards',
+        },
+      );
+    });
+  }
+
+  if (root.classList.contains('motion') && grids.length) {
+    const io = new IntersectionObserver(
+      (entries) => {
+        const hit = entries.find((en) => en.isIntersecting && en.intersectionRatio >= 0.35);
+        if (!hit) return;
+        io.disconnect();
+        try {
+          ripple(hit.target as SVGSVGElement);
+        } finally {
+          // the animations now hold the hidden state themselves
+          release();
+        }
+      },
+      { threshold: [0, 0.35] },
+    );
+    grids.forEach((g) => io.observe(g));
+  } else {
+    release();
+  }
+</script>

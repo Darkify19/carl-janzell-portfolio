@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import EcosystemMap from '../components/EcosystemMap.astro';
 import ContributionHeatmap from '../components/ContributionHeatmap.astro';
 
 const base = import.meta.env.BASE_URL.endsWith('/')
@@ -8,204 +9,209 @@ const base = import.meta.env.BASE_URL.endsWith('/')
 const cvHref = `${base}OropesaCarlJanzell-CV.pdf`;
 const linkedin = 'https://www.linkedin.com/in/carl-janzell-764399179/';
 const github = 'https://github.com/carljanzell';
+const email = 'carl.oropesa11@gmail.com';
 
-// Headline metrics chosen to signal shipped impact, not raw activity.
-// Scale from the platform's own usage analytics + CV; deploys re-derived from `deploy-*`
-// git tags across every repo with real authorship (npm run stats), 22 Sep 2026.
-const stats = [
-  { value: '4,000+', label: 'personnel served in production' },
-  { value: '795', label: 'tagged production deploys' },
-  { value: '8', label: 'production systems shipped' },
-  { value: '2', label: 'full stacks — Laravel & Rails' },
+// Hero figures. Deploys re-derived from `deploy-*` git tags across every repo with
+// real authorship (npm run stats); usage from UPLB-TKS's own Usage Analytics page.
+// Each one carries its window. Windowed; never extrapolated.
+const facts = [
+  { value: '795', label: 'tagged production deploys, to 22\u00a0Sep\u00a02026' },
+  { value: '224,490', label: 'attendance punches, 180 days to 22\u00a0Sep\u00a02026' },
+  { value: '238', label: 'concurrent users at the 8\u00a0AM rush, 22\u00a0Sep\u00a02026' },
 ];
 
-const projects = [
+interface Project {
+  id: string;
+  name: string;
+  kind: string;
+  role: string;
+  desc: string;
+  spec?: [string, string][];
+  highlights: string[];
+  stack: string[];
+}
+
+const projects: Project[] = [
   {
-    name: 'UPLB-TKS · Timekeeping System',
-    role: 'Lead developer · primary author',
-    featured: true,
-    desc: 'The backbone of timekeeping for 4,000+ University of the Philippines Los Baños personnel — daily time records, leave, performance reviews, certificates of service, travel requests, and schedules, served through dual Filament panels (HR admin + employee self-service). It replaced the university\'s paper-based processes, and it\'s the system the rest of the ecosystem orbits.',
-    // Real production figures from the system's own Usage Analytics page. Windowed; not extrapolated.
-    impact: {
-      window: '180 days to 22 Sep 2026',
-      metrics: [
-        { value: '224,490', label: 'attendance punches logged' },
-        { value: '79.9%', label: 'captured directly — not keyed in' },
-        { value: '1,486', label: 'active personnel (30-day)' },
-        { value: '567', label: 'personnel timed in per working day' },
-      ],
-      note: 'Presence metrics run on a shorter 44-day window (to 22 Sep 2026): 183,765 page views, 10,369 logins, 876 unique users on an average working day, and 238 concurrent at the 8\u202fAM clock-in rush. Direct capture is trending up, not down — 96.1% of punches over the trailing 7 days against 79.9% across the full 180.',
-    },
+    id: 'tks',
+    name: 'UPLB-TKS',
+    kind: 'Timekeeping system',
+    role: 'lead developer · primary author',
+    desc: "Daily time records, leave, performance reviews, certificates of service, travel requests and schedules for 4,000+ UP Los Baños personnel, served through two Filament panels: HR admin and employee self-service. It replaced the university's paper processes, and the rest of the ecosystem is built around it.",
+    // Real production figures from the system's own Usage Analytics page.
+    spec: [
+      ['serves', '4,000+ UP Los Baños personnel. 1,486 timed in within the 30 days to 22 Sep 2026, and 567 on an average working day.'],
+      ['replaced', 'paper daily time records, leave forms and certificates of service'],
+      ['captured', '224,490 attendance punches over the 180 days to 22 Sep 2026: 79.9% directly (web 59.7%, kiosk 20.1%) and 20.1% keyed in by hand. Direct capture is rising: 96.1% over the trailing 7 days.'],
+      ['traffic', '183,765 page views and 10,369 logins over the 44 days to 22 Sep 2026; 876 unique users on an average working day, and 238 concurrent at the 8 AM clock-in rush on 22 Sep.'],
+      ['shipped', "431 tagged production deploys to 22 Sep 2026, each release with a “What's New” page written for personnel"],
+    ],
     highlights: [
-      'DTR engine: flexible periods, biometric + manual attendance merge, grace-period undertime computation, IP-based clock-in validation',
-      'Leave management that acts as the canonical balance source for the whole ecosystem — consumed over REST by the HR system-of-record',
-      'Scheduling shaped by how the university actually works: split shifts with a configurable break end, a request-and-approve flow for assignments and new shifts, schedules suggested from a person\'s own attendance history, and whole-roster fit triage in one pass',
-      'Reusable approval-workflow state machine (draft → approved) with per-transition audit logging, later extracted into its own app',
-      'Kafka consumers with data-contract enforcement, plus RBAC across 30+ models with office-scoped, self-only, and unscoped role tiers',
-      'Identity and context: one-time-token SSO from the UPLB Portal, Google One Tap locked to the up.edu.ph domain, and a read-only Calendar sync that tags where someone is working — VPN-aware punch-origin classification puts work-from-home markers straight onto the DTR',
-      'Guest mode: a fabricated tenant so the system can be demoed to a room without projecting a real employee\'s name, birthdate, or leave balance. Office scope pinned to an empty override (10 visible personnel out of 5,089), Kafka muted for the session so invented people never reach the live bus, writes denied on anything scoping can\'t confine, and off by default',
-      'Ships behind a real release pipeline: 431 tagged production deploys, AI-drafted/human-reviewed changelogs feeding a personnel-facing "What\'s New" page, covered by unit and feature tests',
-      'A small opt-out break-room mini-game on the dashboard, deliberately never joined to attendance data so play can\'t be read as evaluation — a data-ethics call, not just a feature',
+      'DTR engine: flexible periods, biometric and manual attendance merged, grace-period undertime, IP-based clock-in validation.',
+      'Leave management that is the canonical balance source for the whole ecosystem; the HR system of record reads it over REST.',
+      "Scheduling shaped by how the university actually works: split shifts with a configurable break end, a request-and-approve flow for assignments and new shifts, schedules suggested from a person's own attendance history, and whole-roster fit triage in one pass.",
+      'A reusable approval-workflow state machine (draft to approved) with per-transition audit logging, later extracted into its own app.',
+      'Kafka consumers with data-contract enforcement, and RBAC across 30+ models with office-scoped, self-only and unscoped role tiers.',
+      'Identity and context: one-time-token SSO from the UPLB Portal, Google One Tap locked to the up.edu.ph domain, and a read-only Calendar sync that tags where someone is working. VPN-aware punch-origin classification puts work-from-home markers straight onto the DTR.',
+      "Guest mode: a fabricated tenant, so the system can be demoed to a room without projecting a real employee's name, birthdate or leave balance. Office scope is pinned to an empty override (10 visible personnel out of 5,089), Kafka is muted for the session so invented people never reach the live bus, writes are denied on anything scoping can't confine, and it's off by default.",
+      "A real release pipeline: AI-drafted, human-reviewed changelogs feed the personnel-facing “What's New” page, covered by unit and feature tests.",
+      "A small opt-out break-room mini-game on the dashboard, deliberately never joined to attendance data so play can't be read as evaluation.",
     ],
     stack: ['PHP 8.2', 'Laravel 11', 'Filament 3', 'Livewire 3', 'MySQL', 'Apache Kafka', 'Tailwind CSS', 'DomPDF', 'PHPUnit 11', 'GitHub Actions'],
   },
   {
-    name: 'PerporManTask · Performance Management',
-    role: 'Sole author',
-    desc: 'A dedicated performance-management service (IPCR) deliberately carved out of the timekeeping monolith into its own app, sharing data over Kafka — a real modularization decision, not a greenfield toy.',
+    id: 'pmt',
+    name: 'PerporManTask',
+    kind: 'Performance management',
+    role: 'sole author',
+    desc: 'A performance-management service (IPCR) carved out of the timekeeping monolith into its own app on purpose, sharing data over Kafka: a modularization decision made on a live system.',
     highlights: [
-      'IPCR module: semestral rating periods, weighted target distribution validated to 100%, UP SPMS-compliant landscape PDFs',
-      'Production AI feature: task logs exported as structured bundles → an LLM clusters them → tolerant JSON import transactionally builds draft reviews. Human-in-the-loop by design',
-      'Cross-app import with stable identity resolution (uuid → email → employee number) and a dry-run preview mode built on rolled-back transactions',
+      'IPCR module: semestral rating periods, weighted target distribution validated to 100%, and UP SPMS-compliant landscape PDFs.',
+      'Production AI feature: task logs are exported as structured bundles, an LLM clusters them, and a tolerant JSON import transactionally builds draft reviews. Human in the loop by design.',
+      'Cross-app import with stable identity resolution (uuid, then email, then employee number) and a dry-run preview built on rolled-back transactions.',
     ],
     stack: ['Laravel 12', 'Filament 5', 'Kafka', 'MySQL', 'Tailwind CSS 4', 'PHPUnit 11'],
   },
   {
-    name: 'UPLB Kiosk · Offline-First Attendance Terminal',
-    role: 'Lead developer · primary author',
-    desc: 'Shared walk-up terminals for personnel who don\'t sit at a desk — the capture channel that carried 20.1% of every punch in the 180 days to 22 Sep 2026, and over 1,200 a day by late September. Built offline-first because a building\'s network is not a given, and every punch it fails to take is one a timekeeper has to key in later.',
+    id: 'kiosk',
+    name: 'UPLB Kiosk',
+    kind: 'Offline-first attendance terminal',
+    role: 'lead developer · primary author',
+    desc: "Shared walk-up terminals for personnel who don't sit at a desk, writing punches straight into the TKS database. The kiosks carried 20.1% of every punch in the 180 days to 22 Sep 2026, and over 1,200 a day by late September. They're offline-first because a building's network is not a given, and every punch a kiosk fails to take is one a timekeeper has to key in later.",
     highlights: [
-      'Offline-first punching: a dropped network doesn\'t drop the punch — attendance is stored locally and replayed through a sync endpoint, and the UI says plainly that the punch is saved either way',
-      'Machine identity that survives a cleared browser: a device token issued once and mirrored across cookie and localStorage, so one physical kiosk stays one row instead of spawning a new device every session',
-      'Punch hygiene at the door: configurable cooldown windows and same-status rescan suppression, so a second tap in the queue can\'t become a second punch',
-      'CIDR-aware network validation that sorts candidate ranges by size, so overlapping IP configs resolve by specificity rather than by whichever row was inserted first',
+      "Offline-first punching: a dropped network doesn't drop the punch. Attendance is stored locally and replayed through a sync endpoint, and the screen says plainly that the punch is saved either way.",
+      'Machine identity that survives a cleared browser: a device token issued once and mirrored across cookie and localStorage, so one physical kiosk stays one row instead of spawning a new device every session.',
+      "Punch hygiene at the door: configurable cooldown windows and same-status rescan suppression, so a second tap in the queue can't become a second punch.",
+      'CIDR-aware network validation that sorts candidate ranges by size, so overlapping IP configs resolve by specificity rather than by whichever row was inserted first.',
     ],
     stack: ['PHP 8.2', 'Laravel 12', 'Filament 4', 'Livewire', 'Tailwind CSS 4', 'Vite 7'],
   },
   {
+    id: 'payroll',
     name: 'UPLB Payroll Control System',
-    role: 'Core contributor · holiday-pay entitlement + delivery pipeline',
-    desc: 'An audit-first payroll application — integer-centavo computation, effective-dated authorities, segregation of duties, and immutable hashed register snapshots. Deliberately not authorized to run live payroll yet: the build names its own go-live gates (HRDO, Accounting, the resident COA auditor, BIR, the servicing bank) instead of implying sign-off it doesn\'t have.',
+    kind: 'Audit-first payroll',
+    role: 'core contributor · holiday-pay entitlement and delivery pipeline',
+    desc: "Integer-centavo computation, effective-dated authorities, segregation of duties and immutable hashed register snapshots. It is deliberately not authorized to run live payroll yet: the build names its own go-live gates (HRDO, Accounting, the resident COA auditor, BIR, the servicing bank) instead of implying sign-off it doesn't have.",
     highlights: [
-      'Holiday-pay entitlement end to end: an effective-dated HolidayPayAuthority, a resolver returning a HolidayPayVerdict value object rather than a bare boolean, contract-level wiring, Gate policies, and the Filament resource around it',
-      'Owned the delivery pipeline: dev→main auto-merge with deployment tagging, a local git-reset deploy replacing brittle SSH updates, and deployer-safe filesystem and log permissions',
-      'Wrote the production-environment documentation the next person needs — configuration, permissions, known issues, and the COS/ICS holiday-pay rules',
+      'Holiday-pay entitlement end to end: an effective-dated HolidayPayAuthority, a resolver that returns a HolidayPayVerdict value object instead of a bare boolean, contract-level wiring, Gate policies and the Filament resource around it.',
+      'Owned the delivery pipeline: dev-to-main auto-merge with deployment tagging, a local git-reset deploy replacing brittle SSH updates, and deployer-safe filesystem and log permissions.',
+      'Wrote the production-environment documentation the next person needs: configuration, permissions, known issues, and the COS/ICS holiday-pay rules.',
     ],
     stack: ['Laravel 13', 'Filament 5', 'PostgreSQL', 'Livewire', 'Tailwind CSS', 'GitHub Actions'],
   },
   {
-    name: 'DAME UPLB · Department Website + CMS',
-    role: 'Lead developer',
-    desc: 'Public website and admin CMS for UPLB\'s Department of Agribusiness Management and Entrepreneurship — faculty profiles, academic programs, research areas, and news, built on the newest stack in this portfolio.',
+    id: 'dame',
+    name: 'DAME UPLB',
+    kind: 'Department website and CMS',
+    role: 'lead developer',
+    desc: "Public website and admin CMS for UPLB's Department of Agribusiness Management and Entrepreneurship: faculty profiles, academic programs, research areas and news, on the newest stack in this portfolio.",
     highlights: [
-      'Personnel module with typed roles, designations, and slug-routed public profile pages',
-      'Post/category CMS with publication statuses and soft deletes',
-      'Filament 5 admin using delegated Form/Table/Infolist schema classes; public Blade site with Tailwind v4 design tokens',
+      'Personnel module with typed roles, designations, and slug-routed public profile pages.',
+      'Post and category CMS with publication statuses and soft deletes.',
+      'Filament 5 admin using delegated Form, Table and Infolist schema classes; a public Blade site with Tailwind v4 design tokens.',
     ],
     stack: ['PHP 8.3', 'Laravel 13', 'Filament 5', 'Livewire 4', 'PostgreSQL', 'Tailwind CSS 4', 'Pest 4'],
   },
   {
-    name: 'UPLB HR Ecosystem · Shared Systems',
-    role: 'Core contributor · 4 shared team repos',
-    desc: 'The ecosystem\'s shared apps — HR system-of-record, SALN asset-disclosure e-filing, salary-document submission, and the submission portal — where I owned specific, load-bearing layers inside team codebases.',
+    id: 'shared',
+    name: 'UPLB HR Ecosystem',
+    kind: 'Shared systems',
+    role: 'core contributor · 4 shared team repos',
+    desc: "The ecosystem's shared apps: the HR system of record, SALN asset-disclosure e-filing, salary-document submission and the submission portal. In these team codebases I owned specific, load-bearing layers.",
     highlights: [
-      'SALN e-filing — largest single contributor: Kafka consumer layer with transactional staging, UUID standardization across core models, and coordinate-mapped PDF generation onto official government forms (FPDI)',
-      'HR system-of-record: bulk employee-number importer with selective field mapping, composite user+personnel+appointment creation flow, and model change-detection logic',
-      'Submission portal: submission-window controls gating user uploads behind an admin toggle, plus versioned salary-document handling',
+      'SALN e-filing, as largest single contributor: the Kafka consumer layer with transactional staging, UUID standardization across core models, and coordinate-mapped PDF generation onto official government forms (FPDI).',
+      'HR system of record: a bulk employee-number importer with selective field mapping, a composite user, personnel and appointment creation flow, and model change-detection logic.',
+      'Submission portal: submission-window controls that gate user uploads behind an admin toggle, and versioned salary-document handling.',
     ],
     stack: ['Laravel 11', 'Filament 3', 'PostgreSQL', 'MariaDB', 'Kafka', 'RabbitMQ', 'FPDI/FPDF', 'Vue 3'],
   },
 ];
 
-const experience = [
+const ownership = [
   {
-    role: 'Full-Stack Developer · Senior ICT Assistant',
-    org: 'University of the Philippines Los Baños',
-    period: 'Oct 2025 – Present',
-    note: 'Building and running the university\'s Kafka-linked ecosystem of HR & compliance systems.',
+    title: 'I run what I ship',
+    desc: 'Self-hosted CI/CD runners as systemd services, least-privilege deploy keys, setgid permission models, PHP-FPM tuning, and a full production audit: 12 findings ranked by severity, each with evidence and a fix. The pipeline and the servers under it are mine to keep healthy.',
   },
   {
+    title: 'Changelogs in plain language',
+    desc: "Every release ships a personnel-facing “What's New” page in the words of the people who use it. AI drafts it, a human reviews it behind an approval gate, and tests guard the pipeline. Four thousand people shouldn't have to guess what changed.",
+  },
+  {
+    title: 'Verification over “it works”',
+    desc: 'I treat “done” as a claim to test: re-check the service, diff expected against actual, and bounce the Kafka consumers so a release never serves stale code. When something breaks, it comes back to me, and it shapes the next release.',
+  },
+];
+
+const experience = [
+  {
+    from: 'Oct 2025',
+    to: 'present',
+    role: 'Full-Stack Developer · Senior ICT Assistant',
+    org: 'University of the Philippines Los Baños',
+    note: "Building and running the university's Kafka-linked ecosystem of HR and compliance systems.",
+  },
+  {
+    from: 'Jan 2025',
+    to: 'Oct 2025',
     role: 'Full-Stack Developer · Programmer',
     org: 'University of the Philippines Los Baños',
-    period: 'Jan – Oct 2025',
     note: 'Primary developer of UPLB-TKS and largest single contributor to SALN e-filing.',
   },
   {
+    from: 'Nov 2024',
+    to: 'Jan 2025',
     role: 'Web Developer Intern',
     org: 'ChatGenie',
-    period: 'Nov 2024 – Jan 2025',
-    note: 'Rails 8 + GraphQL and Vue across a reservation system and the samyang dating app (public source).',
+    note: 'Learned Rails 8, GraphQL and Vue for the developer evaluation, and shipped a reservation system and the samyang dating app on them.',
   },
   {
+    from: 'Jan 2024',
+    to: 'May 2024',
     role: 'Web Developer · On-the-Job Trainee',
-    org: 'DILG — Cluster A, Laguna',
-    period: 'Jan – May 2024',
+    org: 'DILG Cluster A, Laguna',
     note: 'Built the E-Justice System for barangay case recording, rolled out across Cluster A.',
   },
 ];
 
 const education = {
-  school: 'Laguna State Polytechnic University — Los Baños',
-  degree: 'B.S. Information Technology · Web & Mobile Application Development',
-  period: '2020 – 2024',
+  from: '2020',
+  to: '2024',
+  degree: 'B.S. Information Technology · Web and Mobile Application Development',
+  school: 'Laguna State Polytechnic University, Los Baños',
 };
-
-const ownership = [
-  {
-    title: 'I run what I ship',
-    desc: 'Self-hosted CI/CD runners as systemd services, least-privilege deploy keys, setgid permission models, PHP-FPM tuning, and a full production audit — 12 findings ranked by severity, each with evidence and a fix. The pipeline and the servers under it are mine to keep healthy, not someone else\'s problem.',
-  },
-  {
-    title: 'Changelogs in plain language',
-    desc: 'Every release ships a personnel-facing "What\'s New" page written in users\' language, not developer-speak — AI-drafted, human-reviewed behind an approval gate, guarded by tests. Four thousand people shouldn\'t have to guess what changed.',
-  },
-  {
-    title: 'Verification over "it works"',
-    desc: 'I treat "done" as a claim to test: re-check the service, diff expected-vs-actual, bounce the Kafka consumers so a release never serves stale code. When something breaks, it comes back to me — and it shapes the next release.',
-  },
-];
 
 const aiPractices = [
   {
     title: 'Agent skill libraries',
-    desc: 'Structured domain knowledge across every repo — YAML-triggered deep-dives, DRY tables cataloguing reusable traits and services, gotcha docs. A progressive-disclosure knowledge architecture so AI agents work accurately in each codebase.',
+    desc: 'Structured domain knowledge across every repo: YAML-triggered deep-dives, DRY tables cataloguing reusable traits and services, and gotcha docs. A progressive-disclosure knowledge architecture, so AI agents work accurately in each codebase.',
   },
   {
     title: 'Executable specifications',
-    desc: 'Self-contained spec documents a fresh agent can run: full context payloads, per-deliverable requirements, execution checklists, and bash verification scripts — with explicit "do not invent" guardrails. Prompt engineering treated as an engineering practice.',
+    desc: 'Self-contained spec documents a fresh agent can run: full context payloads, per-deliverable requirements, execution checklists and bash verification scripts, with explicit “do not invent” guardrails. Prompt engineering treated as an engineering practice.',
   },
   {
     title: 'AI features in production',
-    desc: 'Two human-in-the-loop pipelines shipped: an IPCR drafting flow that clusters task logs into performance functions, and an AI changelog generator behind a human-review gate — both guarded by tests.',
+    desc: 'Two human-in-the-loop pipelines shipped: an IPCR drafting flow that clusters task logs into performance functions, and an AI changelog generator behind a human-review gate. Both are guarded by tests.',
   },
   {
     title: 'Discipline that compounds',
-    desc: 'Conventional commits, documented Kafka integration contracts, automated commit reports, and CI/CD on self-hosted runners. The boring parts that make AI leverage actually compound instead of decay.',
+    desc: 'Conventional commits, documented Kafka integration contracts, automated commit reports, and CI/CD on self-hosted runners. The boring parts that make AI leverage compound instead of decay.',
   },
 ];
 
 const stackGroups = [
-  {
-    label: 'Languages',
-    items: ['PHP 8.2–8.4', 'Ruby 3.3', 'JavaScript / TypeScript', 'SQL'],
-  },
-  {
-    label: 'Backend',
-    items: ['Laravel 11/12/13', 'Filament 3–5', 'Livewire 3/4', 'Ruby on Rails 8', 'REST & GraphQL APIs'],
-  },
-  {
-    label: 'Data & Messaging',
-    items: ['MySQL', 'MariaDB', 'PostgreSQL', 'Redis', 'Apache Kafka', 'RabbitMQ'],
-  },
-  {
-    label: 'Frontend',
-    items: ['Tailwind CSS 3/4', 'Vue 2 & 3', 'Vuex', 'Apollo Client', 'Alpine.js', 'Vite', 'Blade'],
-  },
-  {
-    label: 'Quality & Delivery',
-    items: ['PHPUnit 11', 'Pest 4', 'Docker', 'GitHub Actions', 'Bitbucket', 'Jira', 'Conventional Commits'],
-  },
-  {
-    label: 'Domain Depth',
-    items: ['RBAC (Shield + Spatie)', 'Approval workflows', 'PDF generation (DomPDF/FPDI)', 'PII encryption', 'Gov-compliance forms'],
-  },
+  { label: 'languages', items: ['PHP 8.2–8.4', 'Ruby 3.3', 'JavaScript / TypeScript', 'SQL'] },
+  { label: 'backend', items: ['Laravel 11/12/13', 'Filament 3–5', 'Livewire 3/4', 'Ruby on Rails 8', 'REST and GraphQL APIs'] },
+  { label: 'data, messaging', items: ['MySQL', 'MariaDB', 'PostgreSQL', 'Redis', 'Apache Kafka', 'RabbitMQ'] },
+  { label: 'frontend', items: ['Tailwind CSS 3/4', 'Vue 2 and 3', 'Vuex', 'Apollo Client', 'Alpine.js', 'Vite', 'Blade'] },
+  { label: 'quality, delivery', items: ['PHPUnit 11', 'Pest 4', 'Docker', 'GitHub Actions', 'Bitbucket', 'Jira', 'Conventional Commits'] },
+  { label: 'domain depth', items: ['RBAC (Shield + Spatie)', 'Approval workflows', 'PDF generation (DomPDF/FPDI)', 'PII encryption', 'Government compliance forms'] },
 ];
 
 const navLinks = [
-  { href: '#projects', label: 'Projects' },
-  { href: '#experience', label: 'Experience' },
-  { href: '#ai', label: 'AI Engineering' },
-  { href: '#stack', label: 'Stack' },
+  { href: '#work', label: 'work' },
+  { href: '#experience', label: 'experience' },
+  { href: '#cadence', label: 'cadence' },
 ];
 ---
 
@@ -213,277 +219,730 @@ const navLinks = [
   title="Carl Janzell Oropesa — Full-Stack Software Engineer"
   description="Full-stack software engineer in Los Baños, Philippines. I build Laravel and Filament systems serving 4,000+ university personnel, wired together over Apache Kafka."
 >
-  <!-- nav -->
-  <header class="fixed top-0 inset-x-0 z-50 border-b border-white/5 bg-[#030014]/70 backdrop-blur-md">
-    <nav class="mx-auto flex max-w-6xl items-center justify-between px-6 py-3.5">
-      <a href="#top" class="font-display text-sm font-semibold tracking-wide text-white">
-        <span class="gradient-text">✦</span> Carl Janzell
-      </a>
-      <div class="flex items-center gap-4 text-sm text-slate-400 sm:gap-6">
-        {navLinks.map((link) => (
-          <a href={link.href} class="hidden transition hover:text-white md:block">{link.label}</a>
-        ))}
-        <a href={linkedin} target="_blank" rel="noopener" class="hidden transition hover:text-white sm:block">LinkedIn</a>
-        <a href={github} target="_blank" rel="noopener" class="hidden transition hover:text-white sm:block">GitHub</a>
-        <a
-          href={cvHref}
-          target="_blank"
-          rel="noopener"
-          class="rounded-full border border-white/15 px-3.5 py-1.5 text-xs font-medium text-slate-200 transition hover:border-violet-400/60 hover:text-white"
-        >Résumé</a>
-      </div>
-    </nav>
-  </header>
+  <div id="top" class="wrap">
+    <!-- top bar: identity typed in on first load -->
+    <header class="topbar mono">
+      <a href="#top" class="topbar-name"><b data-punch="type">carl janzell oropesa</b></a>
+      <span class="topbar-role" data-punch="type">full-stack software engineer · los baños, ph</span>
+      <nav class="topbar-nav" aria-label="Sections">
+        {navLinks.map((l) => <a href={l.href}>{l.label}</a>)}
+        <a href={cvHref} target="_blank" rel="noopener">résumé ↗</a>
+      </nav>
+    </header>
 
-  <main id="top" class="relative mx-auto max-w-6xl px-6">
-    <!-- hero -->
-    <section class="flex min-h-screen flex-col justify-center pt-24 pb-16">
-      <p class="role-tag mb-5" data-reveal>Full-Stack Software Engineer · Los Baños, Philippines</p>
-      <h1 class="font-display max-w-4xl text-4xl font-bold leading-tight text-white sm:text-6xl lg:text-7xl" data-reveal>
-        I build systems<br />
-        <span class="gradient-text">people depend on.</span>
-      </h1>
-      <p class="mt-7 max-w-2xl text-lg leading-relaxed text-slate-400" data-reveal>
-        I'm Carl Janzell Oropesa. My deepest work is the backbone of a university's HR operations — a
-        constellation of integrated Laravel systems that serve 4,000+ UP Los Baños personnel, exchange
-        data over Apache Kafka, and replaced the paper-based processes behind time, leave, performance
-        reviews, and government-compliance forms. The through-line isn't a framework: I've shipped a
-        full Ruby on Rails 8 + GraphQL app with a Vue client solo, and I build the AI-agent
-        infrastructure that lets a small team move like a big one.
-      </p>
-      <div class="mt-9 flex flex-wrap items-center gap-4" data-reveal>
-        <a
-          href="#projects"
-          class="rounded-full bg-gradient-to-r from-violet-600 to-fuchsia-600 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-violet-900/40 transition hover:from-violet-500 hover:to-fuchsia-500"
-        >Explore the work</a>
-        <a
-          href={cvHref}
-          target="_blank"
-          rel="noopener"
-          class="rounded-full border border-white/15 px-6 py-3 text-sm font-semibold text-slate-200 transition hover:border-cyan-300/50 hover:text-white"
-        >Download résumé</a>
-        <a
-          href="mailto:carl.oropesa11@gmail.com"
-          class="rounded-full border border-white/15 px-6 py-3 text-sm font-semibold text-slate-200 transition hover:border-cyan-300/50 hover:text-white"
-        >Get in touch</a>
-      </div>
-      <dl class="mt-16 grid grid-cols-2 gap-6 sm:grid-cols-4" data-reveal>
-        {stats.map((s) => (
-          <div class="card px-5 py-4">
-            <dt class="order-2 mt-1 text-xs uppercase tracking-wider text-slate-500">{s.label}</dt>
-            <dd class="font-display text-2xl font-bold text-white sm:text-3xl">{s.value}</dd>
-          </div>
-        ))}
-      </dl>
-    </section>
-
-    <!-- projects -->
-    <section id="projects" class="scroll-mt-24 py-20">
-      <p class="role-tag" data-reveal>The Constellation</p>
-      <h2 class="font-display mt-3 text-3xl font-bold text-white sm:text-4xl" data-reveal>Projects</h2>
-      <p class="mt-4 max-w-2xl text-slate-400" data-reveal>
-        Internal university systems doing compliance-heavy, real-world work: civil-service forms,
-        multi-stage approval chains, audit trails, and encrypted PII. These are private government
-        codebases, so I can't hand you a live demo — instead I've described the architecture, the
-        decisions, and (where I can measure it) the real usage. Roles reflect commit ownership as of
-        22 September 2026.
-      </p>
-      <div class="mt-12 grid gap-6 lg:grid-cols-2">
-        {projects.map((p) => (
-          <article class={`card p-7 ${p.featured ? 'lg:col-span-2' : ''}`} data-reveal>
-            <div class="flex flex-wrap items-baseline justify-between gap-2">
-              <h3 class="font-display text-xl font-semibold text-white">{p.name}</h3>
-              <span class="text-xs font-medium tracking-wide text-fuchsia-300/90">{p.role}</span>
-            </div>
-            <p class="mt-3 text-sm leading-relaxed text-slate-400">{p.desc}</p>
-            {p.impact && (
-              <div class="mt-6 rounded-xl border border-white/8 bg-white/[0.02] p-5">
-                <p class="text-[11px] font-semibold uppercase tracking-wider text-cyan-300/80">
-                  Real production usage · {p.impact.window}
+    <main>
+      <!-- hero: the ecosystem is the picture -->
+      <section class="hero" data-hero>
+        <div class="hero-text">
+          <h1>I build systems people depend on.</h1>
+          <p class="hero-lede">Most of my work is the backbone of UP Los Baños' HR operations: Laravel systems that exchange data over Apache Kafka and serve 4,000+ personnel.</p>
+          <div class="facts" data-facts>
+            <i class="rule" data-punch="rule"></i>
+            {
+              facts.map((f) => (
+                <p class="fact">
+                  <span class="fact-v" data-punch="count">{f.value}</span>
+                  <span class="fact-k" data-punch="type">{f.label}</span>
+                  <i class="rule rule-b" data-punch="rule" />
                 </p>
-                <dl class="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-4">
-                  {p.impact.metrics.map((m) => (
-                    <div>
-                      <dd class="font-display text-2xl font-bold text-white">{m.value}</dd>
-                      <dt class="mt-1 text-xs leading-snug text-slate-500">{m.label}</dt>
-                    </div>
-                  ))}
-                </dl>
-                {p.impact.note && (
-                  <p class="mt-4 border-t border-white/8 pt-4 text-xs leading-relaxed text-slate-500">
-                    {p.impact.note}
-                  </p>
-                )}
-              </div>
-            )}
-            <ul class="mt-5 space-y-2.5">
-              {p.highlights.map((h) => (
-                <li class="flex gap-2.5 text-sm leading-relaxed text-slate-300">
-                  <span class="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-gradient-to-r from-violet-400 to-cyan-300"></span>
-                  {h}
-                </li>
-              ))}
-            </ul>
-            <div class="mt-6 flex flex-wrap gap-2">
-              {p.stack.map((tech) => <span class="chip">{tech}</span>)}
-            </div>
-          </article>
-        ))}
-      </div>
-    </section>
-
-    <!-- ownership -->
-    <section id="ownership" class="scroll-mt-24 py-20">
-      <p class="role-tag" data-reveal>Ground Control</p>
-      <h2 class="font-display mt-3 text-3xl font-bold text-white sm:text-4xl" data-reveal>I stay with what I ship.</h2>
-      <p class="mt-4 max-w-2xl text-slate-400" data-reveal>
-        The part that matters to me isn't the commit — it's the person clocking in at 8&nbsp;AM who needs
-        it to just work. So I don't hand a feature off and walk away: I deploy it, keep the servers under
-        it healthy, fix it when it breaks, and write the release note the way I'd want it written.
-      </p>
-      <div class="mt-12 grid gap-6 sm:grid-cols-3">
-        {ownership.map((item) => (
-          <article class="card p-7" data-reveal>
-            <h3 class="font-display text-lg font-semibold text-white">{item.title}</h3>
-            <p class="mt-3 text-sm leading-relaxed text-slate-400">{item.desc}</p>
-          </article>
-        ))}
-      </div>
-    </section>
-
-    <!-- experience -->
-    <section id="experience" class="scroll-mt-24 py-20">
-      <p class="role-tag" data-reveal>The Trajectory</p>
-      <h2 class="font-display mt-3 text-3xl font-bold text-white sm:text-4xl" data-reveal>Experience</h2>
-      <p class="mt-4 max-w-2xl text-slate-400" data-reveal>
-        Two years from on-the-job trainee to Senior ICT Assistant, shipping the whole way.
-        The <a href={cvHref} target="_blank" rel="noopener" class="text-cyan-300 underline decoration-cyan-300/30 underline-offset-4 transition hover:text-cyan-200">full résumé</a> has the rest.
-      </p>
-      <div class="mt-12 space-y-4">
-        {experience.map((job) => (
-          <article class="card flex flex-col gap-1 p-6 sm:flex-row sm:items-baseline sm:justify-between sm:gap-6" data-reveal>
-            <div>
-              <h3 class="font-display text-base font-semibold text-white">{job.role}</h3>
-              <p class="mt-0.5 text-sm text-fuchsia-300/80">{job.org}</p>
-              <p class="mt-2 text-sm leading-relaxed text-slate-400">{job.note}</p>
-            </div>
-            <span class="shrink-0 text-xs font-medium uppercase tracking-wider text-slate-500">{job.period}</span>
-          </article>
-        ))}
-        <div class="card flex flex-col gap-1 p-6 sm:flex-row sm:items-baseline sm:justify-between sm:gap-6" data-reveal>
-          <div>
-            <h3 class="font-display text-base font-semibold text-white">{education.school}</h3>
-            <p class="mt-0.5 text-sm text-cyan-300/80">{education.degree}</p>
+              ))
+            }
+            <p class="stamp-wrap">
+              <span class="stamp" data-punch="stamp"><b>Verified</b> <small>22 Sep 2026</small></span>
+            </p>
           </div>
-          <span class="shrink-0 text-xs font-medium uppercase tracking-wider text-slate-500">{education.period}</span>
+          <p class="hero-cta mono">
+            <a class="link" href={cvHref} target="_blank" rel="noopener">résumé.pdf</a>
+            <a class="link" href={github} target="_blank" rel="noopener">github</a>
+            <a class="link" href={linkedin} target="_blank" rel="noopener">linkedin</a>
+            <a class="link" href={`mailto:${email}`}>{email}</a>
+          </p>
         </div>
-      </div>
-    </section>
+        <EcosystemMap />
+      </section>
 
-    <!-- ai engineering -->
-    <section id="ai" class="scroll-mt-24 py-20">
-      <p class="role-tag" data-reveal>The Dark Matter</p>
-      <h2 class="font-display mt-3 text-3xl font-bold text-white sm:text-4xl" data-reveal>AI-Native Engineering</h2>
-      <p class="mt-4 max-w-2xl text-slate-400" data-reveal>
-        I don't just use AI coding tools — I build the infrastructure that makes them effective.
-        I treat AI agents as team members that need onboarding docs, so I write them.
-      </p>
-      <div class="mt-12 grid gap-6 sm:grid-cols-2">
-        {aiPractices.map((item) => (
-          <article class="card p-7" data-reveal>
-            <h3 class="font-display text-lg font-semibold text-white">{item.title}</h3>
-            <p class="mt-3 text-sm leading-relaxed text-slate-400">{item.desc}</p>
-          </article>
-        ))}
-      </div>
-    </section>
+      <!-- work -->
+      <section id="work" class="section">
+        <div class="sec-head">
+          <h2>Work</h2>
+          <p class="label">roles reflect commit ownership as of 22 Sep 2026</p>
+        </div>
+        <p class="sec-lede">Internal university systems doing compliance-heavy work: civil-service forms, multi-stage approval chains, audit trails and encrypted personal data. These are private government codebases, so I can't hand you a live demo. Instead, each entry gives the architecture, the decisions and, where I can measure it, the real usage.</p>
+        {
+          projects.map((p) => (
+            <article id={p.id} class="project">
+              <header class="project-head">
+                <h3>
+                  {p.name}{' '}<span class="project-kind">{p.kind}</span>
+                </h3>
+                <p class="label">{p.role}</p>
+              </header>
+              <div class="project-body">
+                <p class="project-desc">{p.desc}</p>
+                {p.spec && (
+                  <dl class="spec">
+                    {p.spec.map(([k, v]) => (
+                      <>
+                        <dt class="label">{k}</dt>
+                        <dd>{v}</dd>
+                      </>
+                    ))}
+                  </dl>
+                )}
+                <ul class="project-list">
+                  {p.highlights.map((h) => <li>{h}</li>)}
+                </ul>
+                <p class="project-stack label">{p.stack.join(' · ')}</p>
+              </div>
+            </article>
+          ))
+        }
+      </section>
 
-    <!-- shipping cadence -->
-    <ContributionHeatmap />
+      <!-- ownership -->
+      <section id="practice" class="section practice">
+        <div class="practice-lead">
+          <h2>I stay with what I ship.</h2>
+          <p class="practice-8am">The part that matters to me isn't the commit — it's the person clocking in at 8&nbsp;AM who needs it to just work.</p>
+          <p class="sec-lede">So I deploy what I build, keep the servers under it healthy, fix it when it breaks, and write the release note the way I'd want to read it.</p>
+        </div>
+        <ol class="pillars">
+          {
+            ownership.map((item, i) => (
+              <li>
+                <span class="label">0{i + 1}</span>
+                <h3>{item.title}</h3>
+                <p>{item.desc}</p>
+              </li>
+            ))
+          }
+        </ol>
+      </section>
 
-    <!-- stack -->
-    <section id="stack" class="scroll-mt-24 py-20">
-      <p class="role-tag" data-reveal>The Toolkit</p>
-      <h2 class="font-display mt-3 text-3xl font-bold text-white sm:text-4xl" data-reveal>Stack</h2>
-      <p class="mt-4 max-w-2xl text-slate-400" data-reveal>
-        Laravel is where I go deepest, but I'm not tied to it. To prove it, here's public code: I built
-        <span class="text-slate-200">samyang</span> — a full dating app — solo: a Ruby on Rails 8
-        GraphQL API (<a
-          href="https://github.com/Darkify19/samyang-back"
-          target="_blank"
-          rel="noopener"
-          class="text-cyan-300 underline decoration-cyan-300/30 underline-offset-4 transition hover:text-cyan-200"
-        >samyang-back</a>) and a Vue 2 + Vuex SPA (<a
-          href="https://github.com/Darkify19/samyang-front"
-          target="_blank"
-          rel="noopener"
-          class="text-cyan-300 underline decoration-cyan-300/30 underline-offset-4 transition hover:text-cyan-200"
-        >samyang-front</a>) with Apollo, Cloudinary uploads, swipe/match mechanics, and an admin panel.
-        Source is public; the demo backend is retired. More recently I've been building
-        <span class="text-slate-200">filament-page-builder</span> in public — a drag-and-drop page
-        builder for Filament with a nested layout canvas, document outline, token style inspector, and
-        undo/redo, all persisting to the same JSON column the form editor already writes, so neither
-        surface owns the content (<a
-          href="https://github.com/carljanzell/filament-page-builder"
-          target="_blank"
-          rel="noopener"
-          class="text-cyan-300 underline decoration-cyan-300/30 underline-offset-4 transition hover:text-cyan-200"
-        >source</a> · <a
-          href="https://carljanzell.github.io/filament-page-builder/"
-          target="_blank"
-          rel="noopener"
-          class="text-cyan-300 underline decoration-cyan-300/30 underline-offset-4 transition hover:text-cyan-200"
-        >docs</a>).
-      </p>
-      <div class="mt-12 space-y-8">
-        {stackGroups.map((group) => (
-          <div class="flex flex-col gap-3 sm:flex-row sm:items-baseline" data-reveal>
-            <h3 class="w-44 shrink-0 text-sm font-semibold uppercase tracking-wider text-slate-500">{group.label}</h3>
-            <div class="flex flex-wrap gap-2">
-              {group.items.map((item) => <span class="chip chip-cyan">{item}</span>)}
+      <ContributionHeatmap />
+
+      <!-- experience -->
+      <section id="experience" class="section">
+        <div class="sec-head">
+          <h2>Experience</h2>
+          <p class="label">two years from on-the-job trainee to senior ICT assistant</p>
+        </div>
+        <p class="sec-lede">Shipping the whole way. The <a class="link" href={cvHref} target="_blank" rel="noopener">full résumé</a> has the rest.</p>
+        <ol class="record">
+          {
+            experience.map((job) => (
+              <li>
+                <span class="record-when mono">{job.from} – {job.to}</span>
+                <div>
+                  <h3>{job.role}</h3>
+                  <p class="record-org">{job.org}</p>
+                </div>
+                <p class="record-note">{job.note}</p>
+              </li>
+            ))
+          }
+          <li>
+            <span class="record-when mono">{education.from} – {education.to}</span>
+            <div>
+              <h3>{education.degree}</h3>
+              <p class="record-org">{education.school}</p>
             </div>
-          </div>
-        ))}
-      </div>
-    </section>
+            <p class="record-note"></p>
+          </li>
+        </ol>
+      </section>
 
-    <!-- contact -->
-    <section id="contact" class="scroll-mt-24 py-24 text-center">
-      <h2 class="font-display text-3xl font-bold text-white sm:text-5xl" data-reveal>
-        Let's build something <span class="gradient-text">stellar.</span>
-      </h2>
-      <p class="mx-auto mt-5 max-w-xl text-slate-400" data-reveal>
-        Open to software-engineering roles where systems thinking, event-driven architecture, and an
-        AI-native workflow matter more than any single framework. Based in Los Baños, Philippines.
-      </p>
-      <div class="mt-9 flex flex-wrap items-center justify-center gap-4" data-reveal>
-        <a
-          href="mailto:carl.oropesa11@gmail.com"
-          class="rounded-full bg-gradient-to-r from-violet-600 to-fuchsia-600 px-7 py-3 text-sm font-semibold text-white shadow-lg shadow-violet-900/40 transition hover:from-violet-500 hover:to-fuchsia-500"
-        >carl.oropesa11@gmail.com</a>
-        <a
-          href={linkedin}
-          target="_blank"
-          rel="noopener"
-          class="rounded-full border border-white/15 px-7 py-3 text-sm font-semibold text-slate-200 transition hover:border-cyan-300/50 hover:text-white"
-        >LinkedIn</a>
-        <a
-          href={github}
-          target="_blank"
-          rel="noopener"
-          class="rounded-full border border-white/15 px-7 py-3 text-sm font-semibold text-slate-200 transition hover:border-cyan-300/50 hover:text-white"
-        >GitHub</a>
-        <a
-          href={cvHref}
-          target="_blank"
-          rel="noopener"
-          class="rounded-full border border-white/15 px-7 py-3 text-sm font-semibold text-slate-200 transition hover:border-cyan-300/50 hover:text-white"
-        >Résumé</a>
-      </div>
-    </section>
-  </main>
+      <!-- ai engineering -->
+      <section id="ai" class="section">
+        <div class="sec-head">
+          <h2>AI-native engineering</h2>
+        </div>
+        <p class="sec-lede">I build the infrastructure that makes AI coding tools effective. I treat agents as team members who need onboarding docs, so I write the docs.</p>
+        <div class="practices">
+          {
+            aiPractices.map((item) => (
+              <article>
+                <h3>{item.title}</h3>
+                <p>{item.desc}</p>
+              </article>
+            ))
+          }
+        </div>
+      </section>
 
-  <footer class="border-t border-white/5 py-8 text-center text-xs text-slate-600">
-    <p>© 2026 Carl Janzell Oropesa · Built with Astro &amp; Tailwind CSS · Deployed on GitHub Pages</p>
-  </footer>
+      <!-- public code and stack -->
+      <section id="stack" class="section">
+        <div class="sec-head">
+          <h2>Public code and stack</h2>
+        </div>
+        <p class="sec-lede">Laravel is where I go deepest, but I'm not tied to it. Two pieces of code you can read:</p>
+        <div class="public">
+          <article>
+            <h3>samyang</h3>
+            <p class="label">ruby on rails 8 · graphql · vue 2</p>
+            <p>A full dating app I built solo during ChatGenie's developer evaluation: a Ruby on Rails 8 GraphQL API and a Vue 2 + Vuex SPA with Apollo, Cloudinary uploads, swipe-and-match mechanics and an admin panel. The source is public; the demo backend is retired.</p>
+            <p class="public-links mono">
+              <a class="link" href="https://github.com/Darkify19/samyang-back" target="_blank" rel="noopener">samyang-back ↗</a>
+              <a class="link" href="https://github.com/Darkify19/samyang-front" target="_blank" rel="noopener">samyang-front ↗</a>
+            </p>
+          </article>
+          <article>
+            <h3>filament-page-builder</h3>
+            <p class="label">laravel · filament · built in public</p>
+            <p>A drag-and-drop page builder for Filament with a nested layout canvas, document outline, token style inspector and undo/redo. It all persists to the same JSON column the form editor already writes, so neither surface owns the content.</p>
+            <p class="public-links mono">
+              <a class="link" href="https://github.com/carljanzell/filament-page-builder" target="_blank" rel="noopener">source ↗</a>
+              <a class="link" href="https://carljanzell.github.io/filament-page-builder/" target="_blank" rel="noopener">docs ↗</a>
+            </p>
+          </article>
+        </div>
+        <dl class="spec stack">
+          {
+            stackGroups.map((g) => (
+              <>
+                <dt class="label">{g.label}</dt>
+                <dd>{g.items.join(' · ')}</dd>
+              </>
+            ))
+          }
+        </dl>
+      </section>
+
+      <!-- contact -->
+      <section id="contact" class="section contact">
+        <h2>Get in touch</h2>
+        <p class="sec-lede">Open to software engineering roles where systems thinking, event-driven architecture and an AI-native workflow matter more than any single framework. Based in Los Baños, Philippines.</p>
+        <p class="contact-links mono">
+          <a class="link" href={`mailto:${email}`}>{email}</a>
+          <a class="link" href={linkedin} target="_blank" rel="noopener">linkedin ↗</a>
+          <a class="link" href={github} target="_blank" rel="noopener">github ↗</a>
+          <a class="link" href={cvHref} target="_blank" rel="noopener">résumé.pdf ↗</a>
+        </p>
+      </section>
+    </main>
+
+    <footer class="footer label">
+      <p>© 2026 Carl Janzell Oropesa · built with Astro and Tailwind CSS · deployed on GitHub Pages</p>
+    </footer>
+  </div>
 </Layout>
+
+<style is:global>
+  .wrap {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+  @media (max-width: 600px) {
+    .wrap {
+      padding: 0 16px;
+    }
+  }
+
+  /* ---------- top bar ---------- */
+  .topbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 6px 18px;
+    padding: 22px 0 14px;
+    border-bottom: 1px solid var(--color-rule);
+    font-size: 12px;
+    color: var(--color-muted);
+  }
+  .topbar-name {
+    color: var(--color-ink);
+    text-decoration: none;
+  }
+  .topbar-name b {
+    font-weight: 500;
+  }
+  .topbar-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 22px;
+    margin-left: auto;
+  }
+  .topbar-nav a {
+    color: var(--color-muted);
+    text-decoration: none;
+    transition: color 0.15s ease;
+  }
+  .topbar-nav a:hover {
+    color: var(--color-ink);
+  }
+  @media (max-width: 759px) {
+    .topbar-role {
+      flex-basis: 100%;
+    }
+    .topbar-nav {
+      gap: 6px 16px;
+      margin-left: 0;
+    }
+  }
+
+  /* ---------- hero ---------- */
+  .hero {
+    display: grid;
+    gap: 40px;
+    padding: 40px 0 64px;
+  }
+  .hero .eco-map {
+    max-width: 820px;
+  }
+  @media (min-width: 1280px) {
+    .hero {
+      grid-template-columns: 420px minmax(0, 1fr);
+      gap: 48px;
+      align-items: start;
+    }
+    .hero .eco-map {
+      max-width: none;
+      margin-top: 4px;
+    }
+  }
+  .hero h1 {
+    font-size: clamp(40px, 5.4vw, 54px);
+    font-weight: 600;
+    line-height: 0.98;
+    letter-spacing: -0.01em;
+  }
+  .hero-lede {
+    max-width: 44ch;
+    margin-top: 18px;
+    font-size: 19px;
+    font-weight: 500;
+    line-height: 1.45;
+    color: var(--color-soft);
+  }
+
+  .facts {
+    position: relative;
+    max-width: 460px;
+    margin-top: 58px;
+  }
+  .facts .rule {
+    display: block;
+    height: 1px;
+    background: var(--color-rule);
+    transform-origin: 0 50%;
+  }
+  .fact {
+    position: relative;
+    display: grid;
+    grid-template-columns: 100px minmax(0, 1fr);
+    gap: 14px;
+    align-items: baseline;
+    padding: 10px 0;
+  }
+  .fact .rule-b {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+  .fact-v {
+    font-family: var(--font-mono);
+    font-stretch: 87.5%;
+    font-size: 19px;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .fact-k {
+    font-size: 15.5px;
+    line-height: 1.35;
+    color: var(--color-muted);
+    text-wrap: pretty;
+  }
+  /* sits just above the table, its lower edge on the top rule */
+  .stamp-wrap {
+    position: absolute;
+    right: 0;
+    top: -48px;
+    transform: rotate(-7deg);
+    pointer-events: none;
+  }
+  .stamp {
+    display: grid;
+    justify-items: center;
+    padding: 6px 13px 7px;
+    border: 2px solid var(--color-signal);
+    border-radius: 4px;
+    outline: 1px solid var(--color-signal);
+    outline-offset: -6px;
+    color: var(--color-signal);
+    line-height: 1;
+  }
+  .stamp b {
+    font-weight: 700;
+    font-size: 17px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-right: -0.2em;
+  }
+  .stamp small {
+    margin-top: 4px;
+    font-family: var(--font-mono);
+    font-stretch: 87.5%;
+    font-size: 9.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .hero-cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 18px;
+    margin-top: 24px;
+    font-size: 12.5px;
+  }
+
+  /* ---------- sections ---------- */
+  .section {
+    padding: 44px 0 64px;
+    border-top: 1px solid var(--color-rule);
+  }
+  .sec-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 4px 18px;
+  }
+  .section h2 {
+    font-size: clamp(28px, 3vw, 34px);
+    font-weight: 600;
+    line-height: 1.1;
+  }
+  .sec-lede {
+    max-width: 68ch;
+    margin-top: 14px;
+    font-size: 18px;
+    line-height: 1.5;
+    color: var(--color-soft);
+  }
+
+  /* ---------- work ---------- */
+  .project {
+    display: grid;
+    gap: 14px 40px;
+    margin-top: 40px;
+    padding-top: 24px;
+    border-top: 1px solid var(--color-rule);
+    scroll-margin-top: 24px;
+  }
+  @media (min-width: 1024px) {
+    .project {
+      grid-template-columns: 300px minmax(0, 1fr);
+    }
+  }
+  .project h3 {
+    font-size: 26px;
+    font-weight: 600;
+    line-height: 1.1;
+  }
+  .project-kind {
+    display: block;
+    margin-top: 2px;
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--color-soft);
+  }
+  .project-head .label {
+    margin-top: 8px;
+  }
+  .project-body {
+    max-width: 760px;
+  }
+  .project-desc {
+    font-size: 18px;
+    line-height: 1.5;
+    color: var(--color-body);
+  }
+  .spec {
+    display: grid;
+    grid-template-columns: 92px minmax(0, 1fr);
+    gap: 10px 18px;
+    margin-top: 18px;
+    padding: 14px 0;
+    border-block: 1px solid var(--color-rule);
+    font-size: 16.5px;
+    line-height: 1.45;
+  }
+  .spec dt {
+    padding-top: 3px;
+  }
+  .spec dd {
+    color: var(--color-body);
+  }
+  @media (max-width: 480px) {
+    .spec {
+      grid-template-columns: 1fr;
+      gap: 2px;
+    }
+    .spec dd + dt {
+      margin-top: 10px;
+    }
+  }
+  .project-list {
+    display: grid;
+    gap: 9px;
+    margin-top: 18px;
+  }
+  .project-list li {
+    position: relative;
+    padding-left: 20px;
+    font-size: 16.5px;
+    line-height: 1.5;
+    color: var(--color-body);
+  }
+  .project-list li::before {
+    content: '';
+    position: absolute;
+    left: 2px;
+    top: 0.62em;
+    width: 7px;
+    height: 7px;
+    border: 1.5px solid var(--color-wire);
+    border-radius: 1px;
+  }
+  .project-stack {
+    margin-top: 16px;
+  }
+
+  /* ---------- practice ---------- */
+  .practice {
+    display: grid;
+    gap: 32px 56px;
+  }
+  @media (min-width: 1024px) {
+    .practice {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    }
+  }
+  .practice-8am {
+    max-width: 30ch;
+    margin-top: 20px;
+    font-size: 25px;
+    font-weight: 500;
+    line-height: 1.3;
+  }
+  .pillars li {
+    display: grid;
+    grid-template-columns: 40px minmax(0, 1fr);
+    column-gap: 12px;
+    padding: 18px 0;
+    border-top: 1px solid var(--color-rule);
+  }
+  .pillars li:last-child {
+    border-bottom: 1px solid var(--color-rule);
+  }
+  .pillars .label {
+    grid-row: span 2;
+    padding-top: 5px;
+  }
+  .pillars h3 {
+    font-size: 21px;
+    font-weight: 600;
+  }
+  .pillars p {
+    margin-top: 4px;
+    font-size: 16.5px;
+    color: var(--color-body);
+  }
+
+  /* ---------- experience ---------- */
+  .record {
+    margin-top: 28px;
+    border-top: 1px solid var(--color-ink);
+  }
+  .record li {
+    display: grid;
+    gap: 4px 28px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--color-rule);
+  }
+  @media (min-width: 900px) {
+    .record li {
+      grid-template-columns: 190px minmax(0, 1.1fr) minmax(0, 1fr);
+      align-items: baseline;
+    }
+  }
+  .record-when {
+    font-size: 13px;
+    color: var(--color-muted);
+    white-space: nowrap;
+  }
+  .record h3 {
+    font-size: 19px;
+    font-weight: 600;
+    line-height: 1.25;
+  }
+  .record-org {
+    color: var(--color-soft);
+  }
+  .record-note {
+    font-size: 16px;
+    color: var(--color-muted);
+  }
+
+  /* ---------- ai ---------- */
+  .practices {
+    display: grid;
+    gap: 0 48px;
+    margin-top: 12px;
+  }
+  @media (min-width: 900px) {
+    .practices {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  .practices article {
+    padding: 20px 0;
+    border-bottom: 1px solid var(--color-rule);
+  }
+  .practices h3,
+  .public h3 {
+    font-size: 21px;
+    font-weight: 600;
+  }
+  .practices p {
+    margin-top: 6px;
+    font-size: 16.5px;
+    color: var(--color-body);
+  }
+
+  /* ---------- public code, stack ---------- */
+  .public {
+    display: grid;
+    gap: 28px 48px;
+    margin-top: 28px;
+  }
+  @media (min-width: 900px) {
+    .public {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  .public article {
+    padding-top: 18px;
+    border-top: 1px solid var(--color-rule);
+  }
+  .public article > p:not(.label):not(.public-links) {
+    margin-top: 10px;
+    font-size: 16.5px;
+    color: var(--color-body);
+  }
+  .public-links,
+  .contact-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 20px;
+    margin-top: 14px;
+    font-size: 12.5px;
+  }
+  .spec.stack {
+    grid-template-columns: 150px minmax(0, 1fr);
+    margin-top: 40px;
+  }
+  @media (max-width: 480px) {
+    .spec.stack {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* ---------- contact, footer ---------- */
+  .contact-links {
+    margin-top: 22px;
+    font-size: 13px;
+  }
+  .footer {
+    padding: 22px 0 36px;
+    border-top: 1px solid var(--color-rule);
+  }
+</style>
+
+<script>
+  // First load, once: the identity and fact labels type in, the rules draw,
+  // the figures count up, and one stamp lands. About two seconds.
+  const w = window as any;
+  w.__motion = true;
+
+  const root = document.documentElement;
+  const hero = document.querySelector<HTMLElement>('[data-hero]');
+
+  const INOUT = 'cubic-bezier(0.45, 0, 0.55, 1)';
+  const OUT = 'cubic-bezier(0.22, 1, 0.36, 1)';
+
+  function typeIn(el: HTMLElement, at: number, perChar: number) {
+    const text = el.textContent ?? '';
+    el.textContent = '';
+    const chars = [...text].map((ch, i) => {
+      const s = document.createElement('span');
+      s.textContent = ch;
+      el.appendChild(s);
+      s.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 1, delay: at + i * perChar, fill: 'backwards' });
+      return s;
+    });
+    // hand the plain text back once typed, so nothing reads it letter by letter
+    setTimeout(() => {
+      el.textContent = text;
+    }, at + chars.length * perChar + 50);
+  }
+
+  function countUp(el: HTMLElement, at: number, duration: number) {
+    const final = el.textContent ?? '';
+    const target = Number(final.replace(/\D/g, ''));
+    if (!target) return;
+    el.textContent = '0';
+    const t0 = performance.now() + at;
+    const tick = (now: number) => {
+      const t = Math.min(1, Math.max(0, (now - t0) / duration));
+      // ease-out expo
+      const eased = t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
+      el.textContent = t === 1 ? final : Math.round(target * eased).toLocaleString('en-US');
+      if (t < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  }
+
+  function punchIn(scope: HTMLElement) {
+    const q = (sel: string) => [...document.querySelectorAll<HTMLElement>(sel)];
+
+    q('.topbar [data-punch="type"]').forEach((el, k) => typeIn(el, k * 160, 18));
+
+    scope.querySelectorAll<HTMLElement>('[data-punch="rule"]').forEach((el, i) => {
+      el.animate([{ transform: 'scaleX(0)' }, { transform: 'scaleX(1)' }], {
+        duration: 460,
+        delay: i * 110,
+        easing: INOUT,
+        fill: 'backwards',
+      });
+    });
+    scope.querySelectorAll<HTMLElement>('.fact [data-punch="type"]').forEach((el, k) => typeIn(el, 380 + k * 160, 12));
+    scope.querySelectorAll<HTMLElement>('[data-punch="count"]').forEach((el) => countUp(el, 400, 1400));
+
+    scope.querySelector<HTMLElement>('[data-punch="stamp"]')?.animate(
+      [
+        { transform: 'scale(2.1)', opacity: 0 },
+        { transform: 'scale(1)', opacity: 1 },
+      ],
+      { duration: 380, delay: 1500, easing: OUT, fill: 'backwards' },
+    );
+    // the stamp's weight lands on the facts
+    scope.querySelector<HTMLElement>('[data-facts]')?.animate(
+      [{ transform: 'translateY(0)' }, { transform: 'translateY(1.5px)', offset: 0.25 }, { transform: 'translateY(0)' }],
+      { duration: 210, delay: 1840 },
+    );
+  }
+
+  if (root.classList.contains('punch')) {
+    try {
+      // arriving mid-page (restored scroll) means nobody would see it
+      if (hero && window.scrollY < hero.offsetHeight / 2) punchIn(hero);
+      else w.__punchUntil = 0;
+    } catch {
+      w.__punchUntil = 0;
+    } finally {
+      // the animations now hold their own starting states
+      root.classList.remove('punch');
+    }
+  }
+</script>
