@@ -2,11 +2,12 @@
 import Layout from '../layouts/Layout.astro';
 import EcosystemMap from '../components/EcosystemMap.astro';
 import ContributionHeatmap from '../components/ContributionHeatmap.astro';
+import { cvPath } from '../lib/cv';
 
 const base = import.meta.env.BASE_URL.endsWith('/')
   ? import.meta.env.BASE_URL
   : import.meta.env.BASE_URL + '/';
-const cvHref = `${base}OropesaCarlJanzell-CV.pdf`;
+const cvHref = cvPath(base);
 const linkedin = 'https://www.linkedin.com/in/carl-janzell-764399179/';
 const github = 'https://github.com/carljanzell';
 const email = 'carl.oropesa11@gmail.com';

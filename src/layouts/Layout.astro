@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import { cvPath } from '../lib/cv';
 
 interface Props {
   title: string;
@@ -33,7 +34,7 @@ const pathname = Astro.url.pathname.endsWith('/')
   : Astro.url.pathname + '/';
 const canonical = new URL(pathname, siteUrl).href;
 const ogImage = new URL(image ?? `${base}og.png`, siteUrl).href;
-const cvUrl = new URL(`${base}OropesaCarlJanzell-CV.pdf`, siteUrl).href;
+const cvUrl = new URL(cvPath(base), siteUrl).href;
 
 const linkedin = 'https://www.linkedin.com/in/carl-janzell-764399179/';
 const github = 'https://github.com/carljanzell';
