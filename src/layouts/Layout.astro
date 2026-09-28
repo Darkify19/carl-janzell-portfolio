@@ -11,7 +11,8 @@ interface Props {
 
 const { title, description, image } = Astro.props;
 
-// Google Analytics 4 - only emitted in production builds
+// Google Analytics 4 — emitted only in production builds. Event names live in
+// src/lib/analytics.ts. Append ?ga_debug=1 on the live site to use DebugView.
 const GA_ID = 'G-F96KB6L8G6';
 
 // Google Search Console ownership proof. Paste the token from the
@@ -218,9 +219,14 @@ const profilePageSchema = {
             src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
           />
           <script is:inline define:vars={{ GA_ID }}>
-            window.dataLayer = window.dataLayer || []; window.gtag = function
-            gtag() { window.dataLayer.push(arguments); }; gtag('js', new
-            Date()); gtag('config', GA_ID);
+            window.dataLayer = window.dataLayer || [];
+            window.gtag = function gtag() {
+              window.dataLayer.push(arguments);
+            };
+            gtag('js', new Date());
+            var gaConfig = { content_group: 'portfolio' };
+            if (/[?&]ga_debug=1(?:&|$)/.test(location.search)) gaConfig.debug_mode = true;
+            gtag('config', GA_ID, gaConfig);
           </script>
         </>
       )
@@ -243,5 +249,14 @@ const profilePageSchema = {
   </head>
   <body>
     <slot />
+    {
+      enableAnalytics && (
+        <script>
+          import { startPortfolioAnalytics } from '../lib/analytics';
+
+          startPortfolioAnalytics();
+        </script>
+      )
+    }
   </body>
 </html>
