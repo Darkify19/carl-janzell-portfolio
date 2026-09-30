@@ -268,7 +268,7 @@ const navLinks = [
           <h2>Work</h2>
           <p class="label">roles reflect commit ownership as of 24 Sep 2026</p>
         </div>
-        <p class="sec-lede">Internal university systems doing compliance-heavy work: civil-service forms, multi-stage approval chains, audit trails and encrypted personal data. These are private government codebases, so I can't hand you a live demo. Instead, each entry gives the architecture, the decisions and, where I can measure it, the real usage.</p>
+        <p class="sec-lede">Internal university systems doing compliance-heavy work: civil-service forms, multi-stage approval chains, audit trails and encrypted personal data. These are private government codebases, so I can't hand you a live demo. Instead, each entry gives the architecture, the decisions and, where I can measure it, the real usage. The code you can open and install is my <a class="link" href="#page-builder">open-source Filament plugin</a>, further down.</p>
         {
           projects.map((p) => (
             <article id={p.id} class="project">
@@ -378,6 +378,17 @@ const navLinks = [
         </div>
         <p class="sec-lede">Laravel is where I go deepest, but I'm not tied to it. Two pieces of code you can read:</p>
         <div class="public">
+          <article id="page-builder">
+            <h3>filament-page-builder</h3>
+            <p class="label">laravel · filament · open source (mit)</p>
+            <p>A drag-and-drop page builder I maintain for the Filament community, listed in Filament's official plugin directory. You lay a page out on a canvas and it saves to the same JSON column the form editor writes, so neither surface owns the content. One Composer command installs the right release for Filament 3, 4 or 5, and it runs the page editor on the DAME website.</p>
+            <p class="public-links mono">
+              <a class="link" href="https://filamentphp.com/plugins/carl-janzell-page-builder" target="_blank" rel="noopener">plugin directory ↗</a>
+              <a class="link" href="https://github.com/Darkify19/filament-page-builder" target="_blank" rel="noopener">source ↗</a>
+              <a class="link" href="https://darkify19.github.io/filament-page-builder/" target="_blank" rel="noopener">docs ↗</a>
+              <a class="link" href="https://packagist.org/packages/carljanzell/filament-page-builder" target="_blank" rel="noopener">packagist ↗</a>
+            </p>
+          </article>
           <article>
             <h3>samyang</h3>
             <p class="label">ruby on rails 8 · graphql · vue 2</p>
@@ -385,15 +396,6 @@ const navLinks = [
             <p class="public-links mono">
               <a class="link" href="https://github.com/Darkify19/samyang-back" target="_blank" rel="noopener">samyang-back ↗</a>
               <a class="link" href="https://github.com/Darkify19/samyang-front" target="_blank" rel="noopener">samyang-front ↗</a>
-            </p>
-          </article>
-          <article>
-            <h3>filament-page-builder</h3>
-            <p class="label">laravel · filament · built in public</p>
-            <p>A drag-and-drop page builder for Filament with a nested layout canvas, document outline, token style inspector and undo/redo. It all persists to the same JSON column the form editor already writes, so neither surface owns the content.</p>
-            <p class="public-links mono">
-              <a class="link" href="https://github.com/carljanzell/filament-page-builder" target="_blank" rel="noopener">source ↗</a>
-              <a class="link" href="https://carljanzell.github.io/filament-page-builder/" target="_blank" rel="noopener">docs ↗</a>
             </p>
           </article>
         </div>

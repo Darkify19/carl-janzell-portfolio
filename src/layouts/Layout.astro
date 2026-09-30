@@ -108,10 +108,11 @@ const repoSchemas = [
   {
     name: 'filament-page-builder',
     description:
-      'Drag-and-drop visual page builder for Filament — nested layout canvas, document outline, token style inspector and undo/redo.',
-    repo: 'https://github.com/carljanzell/filament-page-builder',
+      'Open-source drag-and-drop page builder for Filament 3, 4 and 5, listed in the Filament plugin directory. Pages are stored as typed blocks in one JSON column.',
+    repo: 'https://github.com/Darkify19/filament-page-builder',
     languages: ['PHP', 'JavaScript'],
     runtime: 'Laravel / Filament',
+    license: 'https://opensource.org/licenses/MIT',
   },
 ].map((r) => ({
   '@context': 'https://schema.org',
@@ -122,6 +123,7 @@ const repoSchemas = [
   url: r.repo,
   programmingLanguage: r.languages,
   runtimePlatform: r.runtime,
+  ...(r.license && { license: r.license }),
   author: { '@id': canonical + '#person' },
   isAccessibleForFree: true,
 }));

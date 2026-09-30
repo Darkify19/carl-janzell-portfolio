@@ -114,7 +114,7 @@ describe('classifyAnchor', () => {
     );
     const docs = classifyAnchor(
       click({
-        href: 'https://carljanzell.github.io/filament-page-builder/',
+        href: 'https://darkify19.github.io/filament-page-builder/',
         text: 'docs ↗',
         target: '_blank',
         uiRegion: 'stack',
