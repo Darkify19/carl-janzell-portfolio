@@ -81,7 +81,7 @@ describe('classifyAnchor', () => {
   it('splits a GitHub profile from a repository', () => {
     const profile = classifyAnchor(
       click({
-        href: 'https://github.com/carljanzell',
+        href: 'https://github.com/Darkify19',
         text: 'github',
         target: '_blank',
         uiRegion: 'hero',
@@ -97,7 +97,7 @@ describe('classifyAnchor', () => {
     );
     assert.equal(profile?.name, 'github_click');
     assert.equal(profile?.params.repository, 'profile');
-    assert.equal(profile?.params.link_url, 'https://github.com/carljanzell');
+    assert.equal(profile?.params.link_url, 'https://github.com/Darkify19');
     assert.equal(repo?.params.repository, 'samyang-back');
     assert.equal(repo?.params.ui_region, 'stack');
     assert.equal(profile?.params.transport_type, undefined);
