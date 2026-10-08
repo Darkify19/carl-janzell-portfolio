@@ -1,9 +1,9 @@
 ---
+import ContributionSkyline from './ui/contribution-skyline';
 import contributions from '../data/contributions.json';
 
 const days = contributions.days;
 const total = contributions.total;
-const busiest = contributions.busiest ?? days.reduce((m, d) => (d.count > m.count ? d : m), days[0]);
 const activeDays = contributions.activeDays ?? days.filter((d) => d.count > 0).length;
 
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -12,57 +12,12 @@ const fmt = (iso: string) => {
   return `${Number(d)} ${MONTHS[Number(m) - 1]} ${y}`;
 };
 
-function level(c: number): number {
-  if (c <= 0) return 0;
-  if (c < 10) return 1;
-  if (c < 20) return 2;
-  if (c < 40) return 3;
-  return 4;
-}
-
-// Sunday-first weeks, as on GitHub. Parse as UTC so a build in UTC+8 doesn't
-// shift the first day back into Monday.
-const pad = new Date(days[0].date + 'T00:00:00Z').getUTCDay();
-const CELL = 10;
-const STEP = 12;
-const BAND_GAP = 16;
-
-// One long band for wide screens, three stacked bands for phones.
-function grid(bands: number) {
-  const weeks = Math.ceil((pad + days.length) / 7);
-  const per = Math.ceil(weeks / bands);
-  const bandH = 7 * STEP - (STEP - CELL);
-  const cells = days.map((d, i) => {
-    const g = i + pad;
-    const wk = Math.floor(g / 7);
-    const b = Math.floor(wk / per);
-    return {
-      x: (wk - b * per) * STEP,
-      y: b * (bandH + BAND_GAP) + (g % 7) * STEP,
-      lv: level(d.count),
-      top: d.date === busiest.date,
-      title: `${fmt(d.date)}: ${d.count} commit${d.count === 1 ? '' : 's'}`,
-    };
-  });
-  return {
-    width: per * STEP - (STEP - CELL),
-    height: bands * bandH + (bands - 1) * BAND_GAP,
-    cells,
-  };
-}
-
-const variants = [
-  { key: 'wide', ...grid(1) },
-  { key: 'tall', ...grid(3) },
-];
-
-// Year tick on the wide band
-const newYear = days.findIndex((d) => d.date.endsWith('-01-01'));
-const newYearPct = newYear < 0 ? null : ((Math.floor((newYear + pad) / 7) * STEP) / variants[0].width) * 100;
-const newYearLabel = newYear < 0 ? '' : days[newYear].date.slice(0, 4);
-
 const firstDate = fmt(days[0].date);
 const lastDate = fmt(days[days.length - 1].date);
+
+// The old grid's amber ramp (signal at 20/40/66/96% over graphite), flattened to
+// solid colours: the skyline reads each colour as opaque RGB and shades the sides.
+const amber = ['#3f3521', '#6c5629', '#a78033', '#ebb13e'];
 ---
 
 <section id="cadence" class="section">
@@ -70,189 +25,20 @@ const lastDate = fmt(days[days.length - 1].date);
     <h2>Shipping cadence</h2>
     <p class="label">{total.toLocaleString('en-US')} commits · {activeDays} active days · {firstDate} to {lastDate}</p>
   </div>
-  <p class="sec-lede">Every square is a day, rebuilt from the full git history of every repository I've committed to while the UPLB HR ecosystem was built out. Commits I wrote only: merges and automated commits are left out.</p>
+  <p class="sec-lede">Every block is a day of the last year, rebuilt from the full git history of every repository I've committed to while the UPLB HR ecosystem was built out. Commits I wrote only: merges and automated commits are left out.</p>
 
   <div class="cad">
-    {
-      variants.map((v) => (
-        <svg
-          class={`heat heat-${v.key}`}
-          viewBox={`0 0 ${v.width} ${v.height}`}
-          role="img"
-          aria-label={`Commits per day, ${firstDate} to ${lastDate}. Busiest day ${fmt(busiest.date)}, ${busiest.count} commits.`}
-          data-ripple
-        >
-          {v.cells.map((c) => (
-            <rect x={c.x} y={c.y} width={CELL} height={CELL} rx="2" class={`lv${c.lv}${c.top ? ' top' : ''}`}>
-              {v.key === 'wide' && <title>{c.title}</title>}
-            </rect>
-          ))}
-        </svg>
-      ))
-    }
-    <div class="cad-axis label" aria-hidden="true">
-      <span>{firstDate}</span>
-      {newYearPct !== null && <span class="cad-year" style={`left:${newYearPct.toFixed(2)}%`}>{newYearLabel}</span>}
-      <span>{lastDate}</span>
-    </div>
-    <div class="cad-foot">
-      <p class="label">outlined: {fmt(busiest.date)}, the busiest day, {busiest.count} commits</p>
-      <p class="cad-legend label" aria-hidden="true">
-        less
-        {[0, 1, 2, 3, 4].map((lv) => <i class={`lv${lv}`} />)}
-        more
-      </p>
-    </div>
+    <ContributionSkyline client:visible data={days} unit="commit" palette={amber} />
   </div>
 </section>
 
-<style is:global>
+<style>
+  /* the skyline reads shadcn's token names; point them at the site's palette */
   .cad {
     margin-top: 28px;
-  }
-  .heat {
-    display: block;
-    width: 100%;
-    height: auto;
-    overflow: visible;
-  }
-  .heat-tall {
-    display: none;
-  }
-  .heat rect {
-    transform-box: fill-box;
-    transform-origin: center;
-  }
-  /* one hue, so a busier day always reads as more of the same colour */
-  .heat .lv0,
-  .cad-legend .lv0 {
-    fill: rgba(228, 231, 235, 0.06);
-    background: rgba(228, 231, 235, 0.06);
-  }
-  .heat .lv1,
-  .cad-legend .lv1 {
-    fill: rgba(244, 183, 64, 0.2);
-    background: rgba(244, 183, 64, 0.2);
-  }
-  .heat .lv2,
-  .cad-legend .lv2 {
-    fill: rgba(244, 183, 64, 0.4);
-    background: rgba(244, 183, 64, 0.4);
-  }
-  .heat .lv3,
-  .cad-legend .lv3 {
-    fill: rgba(244, 183, 64, 0.66);
-    background: rgba(244, 183, 64, 0.66);
-  }
-  .heat .lv4,
-  .cad-legend .lv4 {
-    fill: rgba(244, 183, 64, 0.96);
-    background: rgba(244, 183, 64, 0.96);
-  }
-  .heat .top {
-    stroke: var(--color-ink);
-    stroke-width: 2;
-  }
-  /* held back until the ripple reaches them; see the script below */
-  .motion .heat[data-ripple]:not(.is-done) rect {
-    opacity: 0;
-  }
-
-  .cad-axis {
-    position: relative;
-    display: flex;
-    justify-content: space-between;
-    margin-top: 8px;
-  }
-  .cad-year {
-    position: absolute;
-    top: 0;
-    padding-left: 5px;
-    border-left: 1px solid var(--color-upstream);
-  }
-  .cad-foot {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    gap: 8px 24px;
-    margin-top: 14px;
-  }
-  .cad-legend {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-  }
-  .cad-legend i {
-    width: 10px;
-    height: 10px;
-    border-radius: 2px;
-  }
-  .cad-legend i:first-of-type {
-    margin-left: 4px;
-  }
-  .cad-legend i:last-of-type {
-    margin-right: 4px;
-  }
-  /* phones get the three-band grid; the axis only fits the single band */
-  @media (max-width: 759px) {
-    .heat-wide,
-    .cad-axis {
-      display: none;
-    }
-    .heat-tall {
-      display: block;
-    }
+    --color-background: var(--color-graphite);
+    --color-foreground: var(--color-ink);
+    --color-border: var(--color-rule);
+    --color-muted-foreground: var(--color-muted);
   }
 </style>
-
-<script>
-  // Ripple from the busiest day: once, the first time the grid is on screen.
-  const w = window as any;
-  w.__motion = true;
-
-  const root = document.documentElement;
-  const grids = [...document.querySelectorAll<SVGSVGElement>('svg.heat[data-ripple]')];
-  const release = () => grids.forEach((g) => g.classList.add('is-done'));
-
-  function ripple(svg: SVGSVGElement) {
-    const rects = [...svg.querySelectorAll<SVGRectElement>('rect')];
-    const top = svg.querySelector<SVGRectElement>('rect.top') ?? rects[0];
-    const at = (r: SVGRectElement, a: 'x' | 'y') => Number(r.getAttribute(a));
-    const dist = rects.map((r) => Math.hypot(at(r, 'x') - at(top, 'x'), at(r, 'y') - at(top, 'y')));
-    const far = Math.max(...dist) || 1;
-    rects.forEach((r, i) => {
-      r.animate(
-        [
-          { opacity: 0, transform: 'scale(0)' },
-          { opacity: 1, transform: 'scale(1)' },
-        ],
-        {
-          duration: 420,
-          delay: (dist[i] / far) * 1500,
-          easing: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
-          fill: 'backwards',
-        },
-      );
-    });
-  }
-
-  if (root.classList.contains('motion') && grids.length) {
-    const io = new IntersectionObserver(
-      (entries) => {
-        const hit = entries.find((en) => en.isIntersecting && en.intersectionRatio >= 0.35);
-        if (!hit) return;
-        io.disconnect();
-        try {
-          ripple(hit.target as SVGSVGElement);
-        } finally {
-          // the animations now hold the hidden state themselves
-          release();
-        }
-      },
-      { threshold: [0, 0.35] },
-    );
-    grids.forEach((g) => io.observe(g));
-  } else {
-    release();
-  }
-</script>
