@@ -18,8 +18,8 @@ const email = 'carl.oropesa11@gmail.com';
 // Each one carries its window. Windowed; never extrapolated.
 const facts = [
   { value: '661', label: 'production deploys of my code, 8\u00a0Apr to 1\u00a0Oct\u00a02026' },
-  { value: '224,490', label: 'attendance punches, 180 days to 22\u00a0Sep\u00a02026' },
-  { value: '238', label: 'concurrent users at the 8\u00a0AM rush, 22\u00a0Sep\u00a02026' },
+  { value: '273,195', label: 'attendance punches, 180 days to 13\u00a0Oct\u00a02026' },
+  { value: '264', label: 'concurrent users at the 8\u00a0AM rush, 13\u00a0Oct\u00a02026' },
 ];
 
 interface Project {
@@ -42,10 +42,10 @@ const projects: Project[] = [
     desc: "Daily time records, leave, performance reviews, certificates of service, travel requests and schedules for 4,000+ UP Los Baños personnel, served through two Filament panels: HR admin and employee self-service. It replaced the university's paper processes, and the rest of the ecosystem is built around it.",
     // Real production figures from the system's own Usage Analytics page.
     spec: [
-      ['serves', '4,000+ UP Los Baños personnel. 1,486 timed in within the 30 days to 22 Sep 2026, and 567 on an average working day.'],
+      ['serves', '4,000+ UP Los Baños personnel. 1,586 timed in within the 30 days to 13 Oct 2026, and 1,138 on 13 Oct alone.'],
       ['replaced', 'paper daily time records, leave forms and certificates of service'],
-      ['captured', '224,490 attendance punches over the 180 days to 22 Sep 2026: 79.9% directly (web 59.7%, kiosk 20.1%) and 20.1% keyed in by hand. Direct capture is rising: 96.1% over the trailing 7 days.'],
-      ['traffic', '183,765 page views and 10,369 logins over the 44 days to 22 Sep 2026; 876 unique users on an average working day, and 238 concurrent at the 8 AM clock-in rush on 22 Sep.'],
+      ['captured', '273,195 attendance punches over the 180 days to 13 Oct 2026: 79.4% directly (web 56.6%, kiosk 22.8%) and 20.5% keyed in by hand. Direct capture is rising: 96.8% over the 7 days to 13 Oct.'],
+      ['traffic', '293,334 page views and 18,406 logins over the 65 days to 13 Oct 2026; 921 unique users on an average working day, and 264 concurrent at the 8 AM clock-in rush on 13 Oct.'],
       ['shipped', "441 tagged production deploys from 8 Apr to 24 Sep 2026, each release with a “What's New” page written for personnel"],
     ],
     highlights: [
@@ -79,7 +79,7 @@ const projects: Project[] = [
     name: 'UPLB Kiosk',
     kind: 'Offline-first attendance terminal',
     role: 'lead developer · primary author',
-    desc: "Shared walk-up terminals for personnel who don't sit at a desk, writing punches straight into the TKS database. The kiosks carried 20.1% of every punch in the 180 days to 22 Sep 2026, and over 1,200 a day by late September. They're offline-first because a building's network is not a given, and every punch a kiosk fails to take is one a timekeeper has to key in later.",
+    desc: "Shared walk-up terminals for personnel who don't sit at a desk, writing punches straight into the TKS database. The kiosks carried 22.8% of every punch in the 180 days to 13 Oct 2026, and more than a third of the punches from 1 to 13 Oct. They're offline-first because a building's network is not a given, and every punch a kiosk fails to take is one a timekeeper has to key in later.",
     highlights: [
       "Offline-first punching: a dropped network doesn't drop the punch. Attendance is stored locally and replayed through a sync endpoint, and the screen says plainly that the punch is saved either way.",
       'Machine identity that survives a cleared browser: a device token issued once and mirrored across cookie and localStorage, so one physical kiosk stays one row instead of spawning a new device every session.',
@@ -249,7 +249,7 @@ const navLinks = [
               ))
             }
             <p class="stamp-wrap">
-              <span class="stamp" data-punch="stamp"><b>Verified</b> <small>22 Sep 2026</small></span>
+              <span class="stamp" data-punch="stamp"><b>Verified</b> <small>13 Oct 2026</small></span>
             </p>
           </div>
           <p class="hero-cta mono">
