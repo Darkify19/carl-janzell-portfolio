@@ -17,7 +17,7 @@ const email = 'carl.oropesa11@gmail.com';
 // commits; usage from UPLB-TKS's own Usage Analytics page.
 // Each one carries its window. Windowed; never extrapolated.
 const facts = [
-  { value: '661', label: 'production deploys of my code, to 1\u00a0Oct\u00a02026' },
+  { value: '661', label: 'production deploys of my code, 8\u00a0Apr to 1\u00a0Oct\u00a02026' },
   { value: '224,490', label: 'attendance punches, 180 days to 22\u00a0Sep\u00a02026' },
   { value: '238', label: 'concurrent users at the 8\u00a0AM rush, 22\u00a0Sep\u00a02026' },
 ];
@@ -46,15 +46,15 @@ const projects: Project[] = [
       ['replaced', 'paper daily time records, leave forms and certificates of service'],
       ['captured', '224,490 attendance punches over the 180 days to 22 Sep 2026: 79.9% directly (web 59.7%, kiosk 20.1%) and 20.1% keyed in by hand. Direct capture is rising: 96.1% over the trailing 7 days.'],
       ['traffic', '183,765 page views and 10,369 logins over the 44 days to 22 Sep 2026; 876 unique users on an average working day, and 238 concurrent at the 8 AM clock-in rush on 22 Sep.'],
-      ['shipped', "441 tagged production deploys to 24 Sep 2026, each release with a “What's New” page written for personnel"],
+      ['shipped', "441 tagged production deploys from 8 Apr to 24 Sep 2026, each release with a “What's New” page written for personnel"],
     ],
     highlights: [
-      'DTR engine: flexible periods, biometric and manual attendance merged, grace-period undertime, IP-based clock-in validation.',
+      'DTR engine: flexible periods, biometric and manual attendance merged, grace-period undertime.',
       'Leave management that is the canonical balance source for the whole ecosystem; the HR system of record reads it over REST.',
       "Scheduling shaped by how the university actually works: split shifts with a configurable break end, a request-and-approve flow for assignments and new shifts, schedules suggested from a person's own attendance history, and whole-roster fit triage in one pass.",
       'A reusable approval-workflow state machine (draft to approved) with per-transition audit logging, later extracted into its own app.',
       'Kafka consumers with data-contract enforcement, and RBAC across 30+ models with office-scoped, self-only and unscoped role tiers.',
-      'Identity and context: one-time-token SSO from the UPLB Portal, Google One Tap locked to the up.edu.ph domain, and a read-only Calendar sync that tags where someone is working. VPN-aware punch-origin classification puts work-from-home markers straight onto the DTR.',
+      'Identity and context: one-time-token SSO from the UPLB Portal, Google One Tap locked to the up.edu.ph domain, and a read-only Calendar sync that tags where someone is working. Work-from-home days are marked on the DTR automatically, and the person can change the tag any time.',
       "Guest mode: a fabricated tenant, so the system can be demoed to a room without projecting a real employee's name, birthdate or leave balance. Office scope is pinned to an empty override (10 visible personnel out of 5,089), Kafka is muted for the session so invented people never reach the live bus, writes are denied on anything scoping can't confine, and it's off by default.",
       "A real release pipeline: AI-drafted, human-reviewed changelogs feed the personnel-facing “What's New” page, covered by unit and feature tests.",
       "A small opt-out break-room mini-game on the dashboard, deliberately never joined to attendance data so play can't be read as evaluation.",
@@ -84,7 +84,6 @@ const projects: Project[] = [
       "Offline-first punching: a dropped network doesn't drop the punch. Attendance is stored locally and replayed through a sync endpoint, and the screen says plainly that the punch is saved either way.",
       'Machine identity that survives a cleared browser: a device token issued once and mirrored across cookie and localStorage, so one physical kiosk stays one row instead of spawning a new device every session.',
       "Punch hygiene at the door: configurable cooldown windows and same-status rescan suppression, so a second tap in the queue can't become a second punch.",
-      'CIDR-aware network validation that sorts candidate ranges by size, so overlapping IP configs resolve by specificity rather than by whichever row was inserted first.',
     ],
     stack: ['PHP 8.2', 'Laravel 12', 'Filament 4', 'Livewire', 'Tailwind CSS 4', 'Vite 7'],
   },
