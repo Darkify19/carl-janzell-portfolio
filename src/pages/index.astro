@@ -67,6 +67,11 @@ const projects: Project[] = [
     kind: 'Performance management',
     role: 'lead developer · primary author',
     desc: 'A performance-management service (IPCR) carved out of the timekeeping monolith into its own app on purpose, sharing data over Kafka: a modularization decision made on a live system.',
+    // Distinct users only. Sign-in totals in exports before the Oct 2026
+    // listener fix were doubled by a logging bug, so they stay off the site.
+    spec: [
+      ['used by', '685 people signed in from 23 Jul, when sign-in logging went live, to 14 Oct 2026.'],
+    ],
     highlights: [
       'IPCR module: semestral rating periods, weighted target distribution validated to 100%, and UP SPMS-compliant landscape PDFs.',
       'Production AI feature: task logs are exported as structured bundles, an LLM clusters them, and a tolerant JSON import transactionally builds draft reviews. Human in the loop by design.',
