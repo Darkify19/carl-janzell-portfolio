@@ -8,7 +8,9 @@ Developer portfolio built around a live schematic of the UPLB HR systems ecosyst
 
 - [Astro](https://astro.build): static site framework
 - [Tailwind CSS 4](https://tailwindcss.com): theme tokens and base styles
-- Inline SVG for the ecosystem map and the commit heatmap; vanilla JS for the motion (event stream, first-load punch-in, heatmap ripple), all of it off under `prefers-reduced-motion`
+- Inline SVG and vanilla JS for the ecosystem map and its motion (Kafka event stream, first-load punch-in)
+- [React](https://react.dev) island on canvas for the contribution skyline: the commit heatmap that folds up into a 3D isometric view
+- All motion off under `prefers-reduced-motion`
 - Deployed to GitHub Pages via GitHub Actions
 
 ## Development
