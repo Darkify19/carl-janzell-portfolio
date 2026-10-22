@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
-import { classifyAnchor, classifyControl, sectionView } from './analytics.ts';
+import { caseStudyRead, classifyAnchor, classifyControl, sectionView } from './analytics.ts';
 import type { AnchorClick } from './analytics.ts';
 
 const page = 'https://darkify19.github.io/carl-janzell-portfolio/';
@@ -165,5 +165,38 @@ describe('sectionView', () => {
     const tracked = sectionView('notes', 'Notes');
     assert.equal(tracked.params.section_index, undefined);
     assert.equal(tracked.params.section_id, 'notes');
+  });
+});
+
+describe('case studies', () => {
+  it('records a case-study link as content, not as a docs click', () => {
+    const tracked = classifyAnchor(
+      click({ href: `${page}work/ledger-lite/`, text: 'case study', uiRegion: 'work' }),
+    );
+    assert.deepEqual(tracked, {
+      name: 'select_content',
+      params: { content_type: 'case_study', content_id: 'ledger-lite', ui_region: 'work' },
+    });
+  });
+
+  it('records the way back home as a page link', () => {
+    const tracked = classifyAnchor(
+      click({ href: `${page}#work`, text: 'back to work', pageUrl: `${page}work/aurum/` }),
+    );
+    assert.equal(tracked?.name, 'select_content');
+    assert.equal(tracked?.params.content_type, 'page');
+    assert.equal(tracked?.params.content_id, 'home');
+  });
+
+  it('still treats another github.io site as docs', () => {
+    const tracked = classifyAnchor(click({ href: 'https://darkify19.github.io/filament-page-builder/' }));
+    assert.equal(tracked?.name, 'docs_click');
+  });
+
+  it('names the study that was read to the end', () => {
+    assert.deepEqual(caseStudyRead('aurum'), {
+      name: 'case_study_read',
+      params: { content_type: 'case_study', content_id: 'aurum' },
+    });
   });
 });

@@ -3,6 +3,8 @@ import Layout from './Layout.astro';
 import { cvPath } from '../lib/cv';
 
 interface Props {
+  /** The page's path under /work/, also its id in analytics. */
+  slug: string;
   title: string;
   description: string;
   /** Small mono line above the headline: app · window. */
@@ -13,7 +15,7 @@ interface Props {
   next: { href: string; label: string };
 }
 
-const { title, description, eyebrow, heading, lede, facts, next } = Astro.props;
+const { slug, title, description, eyebrow, heading, lede, facts, next } = Astro.props;
 const base = import.meta.env.BASE_URL.endsWith('/')
   ? import.meta.env.BASE_URL
   : import.meta.env.BASE_URL + '/';
@@ -32,7 +34,7 @@ const base = import.meta.env.BASE_URL.endsWith('/')
       </nav>
     </header>
 
-    <main class="cs">
+    <main class="cs" data-case-study={slug}>
       <header class="cs-head">
         <p class="label">{eyebrow}</p>
         <h1>{heading}</h1>
@@ -49,7 +51,7 @@ const base = import.meta.env.BASE_URL.endsWith('/')
         </dl>
       </header>
       <slot />
-      <nav class="cs-next section" aria-label="More">
+      <nav class="cs-next section" aria-label="More" data-read-end>
         <a class="link" href={`${base}#work`}>← back to work</a>
         <a class="link" href={next.href}>next: {next.label} →</a>
       </nav>

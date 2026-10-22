@@ -1,10 +1,12 @@
 // Portfolio events for the GA4 tag in Layout.astro. The tag loads only in
 // production; open the live site with ?ga_debug=1 to see these in DebugView.
 //
-// Mark as key events: resume_download, email_click, github_click, linkedin_click.
-// Register event-scoped custom dimensions for section_id, section_name,
-// ui_region, repository, content_type, and content_id. Register section_index
-// as a custom metric.
+// Mark as key events: resume_download, email_click, github_click, linkedin_click,
+// case_study_read. Register event-scoped custom dimensions for section_id,
+// section_name, ui_region, repository, content_type, and content_id. Register
+// section_index as a custom metric. Case-study pages report content_group
+// "case_study"; the home page reports "portfolio" (Layout.astro).
+// The setup steps live in .claude/skills/carl-dev-portfolio/COWORK_GA4_PROMPT.md.
 //
 // Names sit beside enhanced measurement (click, file_download) so both can
 // stay on. Nothing here includes the email address or the résumé cache-buster.
@@ -77,6 +79,10 @@ function linkUrl(url: URL): string {
   return clip(url.origin + path);
 }
 
+function firstSegment(url: URL): string {
+  return url.pathname.split('/').filter(Boolean)[0] ?? '';
+}
+
 function leavesPage(target: string): boolean {
   return target.toLowerCase() !== '_blank';
 }
@@ -131,6 +137,18 @@ export function classifyAnchor(click: AnchorClick): TrackedEvent | null {
   if (url.protocol !== 'http:' && url.protocol !== 'https:') return null;
   if (pathKey(url) === pathKey(page)) return null;
 
+  // Another page of this site: same origin and the same first path segment,
+  // which is the site's base (/carl-janzell-portfolio). Without this check a
+  // case-study link would count as a docs_click on *.github.io.
+  if (url.origin === page.origin && firstSegment(url) === firstSegment(page)) {
+    const rest = url.pathname.split('/').filter(Boolean).slice(1).join('/');
+    return event('select_content', {
+      content_type: rest.startsWith('work/') ? 'case_study' : 'page',
+      content_id: clip(rest.replace(/^work\//, '') || 'home'),
+      ui_region: region,
+    });
+  }
+
   const host = url.host;
   const shared = {
     link_url: linkUrl(url),
@@ -167,6 +185,11 @@ export function classifyControl(paused: boolean): TrackedEvent {
     content_id: paused ? 'pause' : 'play',
     ui_region: 'map',
   });
+}
+
+/** A reader reached the end of a case study. */
+export function caseStudyRead(slug: string): TrackedEvent {
+  return event('case_study_read', { content_type: 'case_study', content_id: clip(slug) });
 }
 
 export function sectionView(id: string, name: string): TrackedEvent {
@@ -246,8 +269,22 @@ export function startPortfolioAnalytics(): void {
     );
   });
 
+  if (typeof IntersectionObserver === 'undefined') return;
+
+  // Case studies: one event when the closing links scroll into view.
+  const study = document.querySelector<HTMLElement>('[data-case-study]');
+  const end = document.querySelector('[data-read-end]');
+  if (study?.dataset.caseStudy && end) {
+    const reader = new IntersectionObserver((entries) => {
+      if (!entries.some((entry) => entry.isIntersecting)) return;
+      send(caseStudyRead(study.dataset.caseStudy ?? ''));
+      reader.disconnect();
+    });
+    reader.observe(end);
+  }
+
   const sections = document.querySelectorAll<HTMLElement>('[data-hero], main section[id]');
-  if (sections.length === 0 || typeof IntersectionObserver === 'undefined') return;
+  if (sections.length === 0) return;
 
   const seen = new Set<string>();
   const observer = new IntersectionObserver(

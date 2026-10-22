@@ -61,6 +61,7 @@ const swatches = [
 ---
 
 <CaseStudy
+  slug="ledger-lite"
   title="Ledger Lite · TKS redesign case study · Carl Janzell Oropesa"
   description="How I redesigned the UPLB timekeeping app's personnel side around CS Form No. 48 in three weeks: the directions I explored, what I picked, what shipped and what personnel were told."
   eyebrow="case study · UPLB Timekeeping System · 30 Sep to 22 Oct 2026"
@@ -82,7 +83,7 @@ const swatches = [
   </Fragment>
   <Fragment set:html={icons} />
 
-  <section class="section cs-step" aria-labelledby="s1">
+  <section id="problem" class="section cs-step" aria-labelledby="s1">
     <div class="sec-head"><span class="label">01</span><h2 id="s1">The problem</h2></div>
     <div class="cs-prose">
       <p>Every personnel page was a stock Filament table. Leave, certificates of service, the DTR, travel and trip tickets all looked alike, and each module worded status its own way. A leave list said Office Approved while the record page said Approved, in another colour, and certificates showed “2/3 Signed”.</p>
@@ -96,7 +97,7 @@ const swatches = [
     </div>
   </section>
 
-  <section class="section cs-step" aria-labelledby="s2">
+  <section id="directions" class="section cs-step" aria-labelledby="s2">
     <div class="sec-head"><span class="label">02</span><h2 id="s2">Three directions, then three options per module</h2></div>
     <div class="cs-prose">
       <p>I started with three whole directions, each drawn as a landing page, a personnel home and a phone “today” screen.</p>
@@ -129,7 +130,7 @@ const swatches = [
     </ul>
   </section>
 
-  <section class="section cs-step" aria-labelledby="s3">
+  <section id="system" class="section cs-step" aria-labelledby="s3">
     <div class="sec-head"><span class="label">03</span><h2 id="s3">The system</h2></div>
     <div class="cs-prose">
       <p>The theme file opens with one sentence, and every screen answers to it:</p>
@@ -154,7 +155,7 @@ const swatches = [
     </ul>
   </section>
 
-  <section class="section cs-step" aria-labelledby="s4">
+  <section id="shipped" class="section cs-step" aria-labelledby="s4">
     <div class="sec-head"><span class="label">04</span><h2 id="s4">What shipped</h2></div>
     <div class="cs-figs">
       <Screen html={leaveDocket} label="after · Leave as a docket" tksNav="leave" frag="leave-a">
@@ -179,7 +180,7 @@ const swatches = [
     </ol>
   </section>
 
-  <section class="section cs-step" aria-labelledby="s5">
+  <section id="told" class="section cs-step" aria-labelledby="s5">
     <div class="sec-head"><span class="label">05</span><h2 id="s5">What personnel were told</h2></div>
     <div class="cs-prose">
       <p>A redesign moves buttons people have clicked for a year. So every redesigned page opened with a short note listing what moved, in plain words, with a tour of that page and one searchable list of everything that changed. The note switches itself off after 15 November, so nothing has to be removed later.</p>
@@ -191,7 +192,7 @@ const swatches = [
     </div>
   </section>
 
-  <section class="section cs-step" aria-labelledby="s6">
+  <section id="still-to-fix" class="section cs-step" aria-labelledby="s6">
     <div class="sec-head"><span class="label">06</span><h2 id="s6">What I'd still fix</h2></div>
     <div class="cs-prose">
       <p>A critique I ran on the new landing page on 19 Oct scored it 25 out of 40. Its summary was fair: the layout still reads like a generic editorial template. The personnel screens are where the time went, and the landing is the next thing I'd take on.</p>

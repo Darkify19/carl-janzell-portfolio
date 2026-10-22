@@ -52,6 +52,7 @@ const star = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.9 6
 ---
 
 <CaseStudy
+  slug="aurum"
   title="Aurum · performance app redesign case study · Carl Janzell Oropesa"
   description="How I redesigned UPLB's performance app so every screen says where you stand, what moves you up and what to do next: the rating projection, the token-sheet themes, and the sign-in page rebuilt after a critique."
   eyebrow="case study · UPLB Personnel Performance · 25 Jun to 21 Oct 2026"
@@ -72,7 +73,7 @@ const star = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.9 6
     />
   </Fragment>
 
-  <section class="section cs-step" aria-labelledby="s1">
+  <section id="problem" class="section cs-step" aria-labelledby="s1">
     <div class="sec-head"><span class="label">01</span><h2 id="s1">The problem</h2></div>
     <div class="cs-prose">
       <p>The moment that matters most in this app is a reviewer rating someone's semester. It was a stock repeater of number boxes. A reviewer typed about 21 numbers, one per criterion, with no running total, and the final rating only appeared in a toast after the review had already moved on.</p>
@@ -114,7 +115,7 @@ const star = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.9 6
     </div>
   </section>
 
-  <section class="section cs-step" aria-labelledby="s2">
+  <section id="explored" class="section cs-step" aria-labelledby="s2">
     <div class="sec-head"><span class="label">02</span><h2 id="s2">What I explored</h2></div>
     <div class="cs-prose">
       <p>The rating came first. On 5 Aug I wrote up eleven findings on the rating screen, lettered like the clauses on the form, and a fix in four phases. Phase one was a live projection of the final rating that stays on screen while you rate. Phase two replaced number boxes with five labelled stops. The proposal ended on three questions only the HR process could answer: whether fractional ratings are real practice, whether self-rating should come back, and whether rating should stay in a modal.</p>
@@ -133,7 +134,7 @@ const star = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.9 6
     </ul>
   </section>
 
-  <section class="section cs-step" aria-labelledby="s3">
+  <section id="pick" class="section cs-step" aria-labelledby="s3">
     <div class="sec-head"><span class="label">03</span><h2 id="s3">The pick: keep the gold, change what it's for</h2></div>
     <blockquote class="cs-quote">
       The gold identity stays: UP gold, maroon and forest green on warm cream, charcoal chrome, the laurel and star. What changes is what it is for: every screen now says where you stand, what moves you up, and what to do next.
@@ -186,7 +187,7 @@ const star = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.9 6
     </div>
   </section>
 
-  <section class="section cs-step" aria-labelledby="s4">
+  <section id="shipped" class="section cs-step" aria-labelledby="s4">
     <div class="sec-head"><span class="label">04</span><h2 id="s4">What shipped</h2></div>
     <div class="cs-figs">
       <Screen label="after · the rate sheet">
@@ -250,7 +251,7 @@ const star = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.9 6
     </ol>
   </section>
 
-  <section class="section cs-step" aria-labelledby="s5">
+  <section id="sign-in" class="section cs-step" aria-labelledby="s5">
     <div class="sec-head"><span class="label">05</span><h2 id="s5">The sign-in page, after a critique</h2></div>
     <div class="cs-prose">
       <p>The landing I shipped on 2 Oct didn't hold up. On 21 Oct a critique scored it 24 of 40 and summed it up in four words: specific content, borrowed shell. It used a stock SaaS section order, ran past 7,000 pixels on a phone for what is a sign-in screen, and met a rejected sign-in with vendor error text under a celebratory hero.</p>
