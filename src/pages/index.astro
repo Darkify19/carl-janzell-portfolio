@@ -61,7 +61,7 @@ const projects: Project[] = [
       "A real release pipeline: AI-drafted, human-reviewed changelogs feed the personnel-facing “What's New” page, covered by unit and feature tests.",
       "A small opt-out break-room mini-game on the dashboard, deliberately never joined to attendance data so play can't be read as evaluation.",
     ],
-    stack: ['PHP 8.2', 'Laravel 11', 'Filament 3', 'Livewire 3', 'MySQL', 'Apache Kafka', 'Tailwind CSS', 'DomPDF', 'PHPUnit 11', 'GitHub Actions'],
+    stack: ['PHP 8.2', 'Laravel 12', 'Filament 3', 'Livewire 3', 'MySQL', 'Apache Kafka', 'Tailwind CSS', 'DomPDF', 'PHPUnit 11', 'GitHub Actions'],
     caseStudy: { slug: 'ledger-lite', label: 'the Ledger Lite redesign' },
   },
   {
@@ -77,7 +77,7 @@ const projects: Project[] = [
     ],
     highlights: [
       'IPCR module: semestral rating periods, weighted target distribution validated to 100%, and UP SPMS-compliant landscape PDFs.',
-      'Production AI feature: task logs are exported as structured bundles, an LLM clusters them, and a tolerant JSON import transactionally builds draft reviews. Human in the loop by design.',
+      "Ratings that show the maths: the final rating builds live as a reviewer picks each score, every pick saves itself, and the band's name waits until every target is rated.",
       'Cross-app import with stable identity resolution (uuid, then email, then employee number) and a dry-run preview built on rolled-back transactions.',
     ],
     stack: ['Laravel 12', 'Filament 5', 'Kafka', 'MySQL', 'Tailwind CSS 4', 'PHPUnit 11'],
@@ -200,8 +200,8 @@ const aiPractices = [
     desc: 'Self-contained spec documents a fresh agent can run: full context payloads, per-deliverable requirements, execution checklists and bash verification scripts, with explicit “do not invent” guardrails. Prompt engineering treated as an engineering practice.',
   },
   {
-    title: 'AI features in production',
-    desc: 'Two human-in-the-loop pipelines shipped: an IPCR drafting flow that clusters task logs into performance functions, and an AI changelog generator behind a human-review gate. Both are guarded by tests.',
+    title: 'AI in production',
+    desc: "An AI changelog generator behind a human-review gate feeds every release's “What's New” page, guarded by tests. An earlier flow that drafted performance reviews from task logs was retired in July 2026, once it went unused.",
   },
   {
     title: 'Discipline that compounds',
