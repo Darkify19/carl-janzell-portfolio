@@ -1,0 +1,129 @@
+<style>
+    [data-frag="tripTicket-b"] .hero { display: grid; grid-template-columns: 216px minmax(0, 1fr); padding: 0; gap: 0; overflow: hidden; }
+    [data-frag="tripTicket-b"] .stub { position: relative; display: flex; flex-direction: column; gap: 10px; padding: 22px 20px; background: var(--stage); border-right: 2px dashed var(--rule); }
+    [data-frag="tripTicket-b"] .hero::before, [data-frag="tripTicket-b"] .hero::after { content: ""; position: absolute; left: 205px; width: 22px; height: 22px; border-radius: 50%; background: var(--paper); border: 1px solid var(--rule); }
+    [data-frag="tripTicket-b"] .hero { position: relative; }
+    [data-frag="tripTicket-b"] .hero::before { top: -12px; } [data-frag="tripTicket-b"] .hero::after { bottom: -12px; }
+    [data-frag="tripTicket-b"] .big { font: 500 38px/1 var(--serif); letter-spacing: -.02em; color: var(--ink); }
+    [data-frag="tripTicket-b"] .body { display: flex; flex-direction: column; gap: 16px; padding: 22px 24px; min-width: 0; }
+    [data-frag="tripTicket-b"] .strip { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; }
+    [data-frag="tripTicket-b"] .tile { display: flex; flex-direction: column; gap: 3px; min-height: 58px; padding: 8px 10px; border: 1px solid var(--rule-soft); border-radius: 10px; background: var(--card); font-size: 12.5px; min-width: 0; }
+    [data-frag="tripTicket-b"] .tile b { font: 600 11px/1.2 var(--mono); letter-spacing: .04em; text-transform: uppercase; color: var(--ink-dim); }
+    [data-frag="tripTicket-b"] .tile span { display: inline-flex; align-items: center; gap: 4px; font-weight: 600; white-space: nowrap; }
+    [data-frag="tripTicket-b"] .tile.done { background: var(--green-tint); border-color: transparent; color: var(--green); }
+    [data-frag="tripTicket-b"] .tile.done b { color: var(--green); }
+    [data-frag="tripTicket-b"] .tile.miss { border: 1.5px dashed var(--rule); color: var(--ink-muted); }
+    [data-frag="tripTicket-b"] .tile.today { border-color: var(--green); box-shadow: 0 0 0 1px var(--green); color: var(--green); }
+    [data-frag="tripTicket-b"] .tile.later { background: transparent; color: var(--ink-faint); }
+    [data-frag="tripTicket-b"] .tile.later b { color: var(--ink-faint); }
+    [data-frag="tripTicket-b"] .go { display: flex; align-items: center; gap: 18px; padding-top: 16px; border-top: 1px solid var(--rule); }
+    [data-frag="tripTicket-b"] .go p { margin: 0; flex: 1 1 0; min-width: 0; }
+    [data-frag="tripTicket-b"] .no { font: 600 12px/1 var(--mono); letter-spacing: .06em; color: var(--maroon); }
+    [data-frag="tripTicket-b"] .tk { position: relative; }
+    [data-frag="tripTicket-b"] .perf { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 2px -16px 0; padding: 12px 16px 0; border-top: 1.5px dashed var(--rule); }
+    [data-frag="tripTicket-b"] .aboard { display: flex; align-items: center; gap: 8px; }
+    [data-frag="tripTicket-b"] .aboard .k-avatar + .k-avatar { margin-left: -12px; box-shadow: 0 0 0 2px var(--card); }
+    @container screen (max-width: 600px) {
+      [data-frag="tripTicket-b"] .hero { grid-template-columns: minmax(0, 1fr); }
+      [data-frag="tripTicket-b"] .hero::before, [data-frag="tripTicket-b"] .hero::after { display: none; }
+      [data-frag="tripTicket-b"] .stub { flex-direction: row; flex-wrap: wrap; align-items: center; gap: 6px 12px; padding: 14px 16px; border-right: 0; border-bottom: 2px dashed var(--rule); }
+      [data-frag="tripTicket-b"] .big { font-size: 28px; }
+      [data-frag="tripTicket-b"] .stub .k-hr, [data-frag="tripTicket-b"] .stub .who { display: none; }
+      [data-frag="tripTicket-b"] .body { padding: 16px; gap: 14px; }
+      [data-frag="tripTicket-b"] .wk1 { display: none; }
+      [data-frag="tripTicket-b"] .strip { gap: 4px; }
+      [data-frag="tripTicket-b"] .tile { min-height: 52px; padding: 7px 6px; font-size: 11.5px; align-items: center; text-align: center; }
+      [data-frag="tripTicket-b"] .go { flex-direction: column; align-items: stretch; gap: 10px; }
+      [data-frag="tripTicket-b"] .go .k-btn.primary { width: 100%; order: -1; }
+      [data-frag="tripTicket-b"] .perf .k-btn { flex: 1 1 auto; }
+    }
+  </style>
+
+  <div class="k-page-head">
+    <div class="k-stack xs">
+      <span class="k-eyebrow">Requests · designated driver</span>
+      <p class="k-title">Trip tickets</p>
+    </div>
+    <button type="button" class="k-btn"><svg class="k-i"><use href="#i-plus"></use></svg>File trip ticket</button>
+  </div>
+
+  <nav class="k-tabs" aria-label="Show">
+    <a href="#" class="on">All <span class="k-count">6</span></a>
+    <a href="#"><svg class="k-i sm"><use href="#i-clipboard"></use></svg>To log <span class="k-count maroon">1</span></a>
+    <a href="#"><svg class="k-i sm"><use href="#i-clock"></use></svg>To approve</a>
+  </nav>
+
+  <article class="k-card raised hero" aria-labelledby="b-hero">
+    <div class="stub">
+      <span class="k-eyebrow">Trip ticket No.</span>
+      <span class="big k-num">2026-031</span>
+      <span><span class="k-pill info">Approved</span></span>
+      <hr class="k-hr">
+      <span class="k-row sm"><svg class="k-i sm"><use href="#i-truck"></use></svg><span class="k-strong">SAB 1234</span></span>
+      <span class="k-small who">Toyota Hiace · Van<br>Approved by Ramon Villanueva, 25 Sep</span>
+    </div>
+    <div class="body">
+      <div class="k-stack xs">
+        <span class="k-eyebrow green">Covers today</span>
+        <p class="k-h2" id="b-hero">Mon 28 Sep – Fri 9 Oct</p>
+        <span class="k-row sm k-small"><svg class="k-i sm"><use href="#i-pin"></use></svg>UP System Office, Diliman · DBM Central Office, Manila · Calamba City</span>
+      </div>
+      <div class="aboard">
+        <span class="k-avatar sm">MR</span><span class="k-avatar sm green">PM</span><span class="k-avatar sm">LB</span>
+        <span class="k-small">Maria Reyes, Paolo Mendoza and Liza Bautista may ride</span>
+      </div>
+      <div class="k-stack sm">
+        <div class="k-row k-between"><span class="k-eyebrow">Days on this ticket</span><span class="k-small">4 logged · 386 km</span></div>
+        <div class="strip wk1">
+          <div class="tile done"><b>Mon 28</b><span><svg class="k-i sm"><use href="#i-check"></use></svg>148 km</span></div>
+          <div class="tile done"><b>Tue 29</b><span><svg class="k-i sm"><use href="#i-check"></use></svg>42 km</span></div>
+          <div class="tile done"><b>Wed 30</b><span><svg class="k-i sm"><use href="#i-check"></use></svg>156 km</span></div>
+          <div class="tile done"><b>Thu 1</b><span><svg class="k-i sm"><use href="#i-check"></use></svg>40 km</span></div>
+          <div class="tile miss"><b>Fri 2</b><span>Not logged</span></div>
+        </div>
+        <span class="k-small k-only-phone">Last week: 4 of 5 days logged, 386 km.</span>
+        <div class="strip">
+          <div class="tile today"><b>Mon 5</b><span>Today</span></div>
+          <div class="tile later"><b>Tue 6</b><span>—</span></div>
+          <div class="tile later"><b>Wed 7</b><span>—</span></div>
+          <div class="tile later"><b>Thu 8</b><span>—</span></div>
+          <div class="tile later"><b>Fri 9</b><span>—</span></div>
+        </div>
+      </div>
+      <div class="go">
+        <button type="button" class="k-btn primary lg"><svg class="k-i"><use href="#i-plus"></use></svg>Log today's trip</button>
+        <p class="k-small">Log it when you are back at the garage. Times start from Thursday (out 8:00 AM, back 12:40 PM), so change only what differs. It fills your DTR and the DTRs of everyone aboard.</p>
+        <button type="button" class="k-btn ghost sm k-hide-phone"><svg class="k-i sm"><use href="#i-eye"></use></svg>View PDF</button>
+      </div>
+    </div>
+  </article>
+
+  <section class="k-stack sm" aria-labelledby="b-other">
+    <div class="k-row k-between"><p class="k-h3" id="b-other">Your other tickets</p><a href="#" class="k-link">2 older<svg class="k-i sm"><use href="#i-chev-right"></use></svg></a></div>
+    <div class="k-grid c2">
+      <article class="k-card tight tk">
+        <div class="k-row k-between"><span class="no">No. 2026-034</span><span class="k-pill wait">Awaiting Approval</span></div>
+        <p class="k-h3">Mon 12 Oct · LTO Calamba District Office</p>
+        <p class="k-sub">Waiting for Ramon Villanueva since Fri 2 Oct.</p>
+        <div class="perf"><button type="button" class="k-btn sm ghost"><svg class="k-i sm"><use href="#i-eye"></use></svg>View PDF</button></div>
+      </article>
+      <article class="k-card tight tk">
+        <div class="k-row k-between"><span class="no k-faint">Unnumbered</span><span class="k-pill plain">Draft</span></div>
+        <p class="k-h3">Wed 14 – Thu 15 Oct · UP Manila, Ermita</p>
+        <p class="k-sub">Not sent yet. Submitting gives it a number to write on the paper ticket and fuel slip.</p>
+        <div class="perf"><button type="button" class="k-btn sm"><svg class="k-i sm"><use href="#i-send"></use></svg>Submit</button><button type="button" class="k-btn sm ghost"><svg class="k-i sm"><use href="#i-edit"></use></svg>Edit</button></div>
+      </article>
+      <article class="k-card tight tk">
+        <div class="k-row k-between"><span class="no">No. 2026-033</span><span class="k-pill no">Rejected</span></div>
+        <p class="k-h3">Tue 13 Oct · DOST Calabarzon, Calamba</p>
+        <p class="k-sub k-maroon">Returned by Ramon Villanueva: put the travel order number in Purpose.</p>
+        <div class="perf"><button type="button" class="k-btn sm"><svg class="k-i sm"><use href="#i-edit"></use></svg>Fix and resubmit</button></div>
+      </article>
+      <article class="k-card tight tk">
+        <div class="k-row k-between"><span class="no">No. 2026-027</span><span class="k-pill ok">Completed</span></div>
+        <p class="k-h3">Mon 21 – Thu 24 Sep · UP Manila, Calamba</p>
+        <p class="k-sub">3 days logged, 342 km. Those days stay on the DTR.</p>
+        <div class="perf"><button type="button" class="k-btn sm ghost"><svg class="k-i sm"><use href="#i-download"></use></svg>PDF</button></div>
+      </article>
+    </div>
+  </section>

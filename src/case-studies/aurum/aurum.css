@@ -1,0 +1,157 @@
+/* Aurum, rebuilt for the case study from uplb-perpormantask/DESIGN.md.
+   Tokens are scoped to .pf-scope so they never touch the portfolio. One
+   structural skin reads --pf-*; a theme is only a token sheet (.pf-night,
+   .pf-nebula), which is the point the theme figure makes. */
+
+.pf-scope {
+  --pf-ground: #faf8f2;
+  --pf-card: rgba(255, 254, 251, 0.9);
+  --pf-card-solid: #fffefb;
+  --pf-ink: #1c1610;
+  --pf-ink-dim: #5a4f42;
+  --pf-ink-soft: #6d6152;
+  --pf-line: rgba(124, 95, 30, 0.16);
+  --pf-gold: #f3aa2c;
+  --pf-gold-bright: #ffc247;
+  --pf-gold-text: #946206;
+  --pf-maroon: #7b1113;
+  --pf-green: #014421;
+  --pf-tile: rgba(28, 22, 16, 0.04);
+  --pf-chrome: #2a2014;
+  --pf-chrome-ink: #fdf6e8;
+  --pf-shadow: 0 1px 3px rgba(28, 22, 16, 0.05), 0 4px 16px rgba(28, 22, 16, 0.05);
+  --pf-display: 'Bricolage Grotesque', 'Instrument Sans', ui-sans-serif, system-ui, sans-serif;
+  --pf-body: 'Instrument Sans', Inter, ui-sans-serif, system-ui, sans-serif;
+  --pf-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  background: var(--pf-ground);
+  color: var(--pf-ink);
+  font: 14px/1.45 var(--pf-body);
+  -webkit-font-smoothing: antialiased;
+}
+.pf-scope.pf-night {
+  --pf-ground: #0d0b09;
+  --pf-card: rgba(38, 30, 20, 0.8);
+  --pf-card-solid: #261e14;
+  --pf-ink: #f5efe2;
+  --pf-ink-dim: #c9bda6;
+  --pf-ink-soft: #b3a68e;
+  --pf-line: rgba(243, 170, 44, 0.18);
+  --pf-gold-text: #ffc247;
+  --pf-tile: rgba(245, 239, 226, 0.06);
+  --pf-shadow: 0 1px 3px rgba(0, 0, 0, 0.4), 0 8px 24px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(243, 170, 44, 0.12);
+}
+.pf-scope.pf-nebula {
+  --pf-ground: #0b0a1f;
+  --pf-card: rgba(28, 24, 64, 0.78);
+  --pf-card-solid: #1c1840;
+  --pf-ink: #eeeaff;
+  --pf-ink-dim: #bdb5e6;
+  --pf-ink-soft: #a79fd6;
+  --pf-line: rgba(124, 58, 237, 0.3);
+  --pf-gold: #7c3aed;
+  --pf-gold-bright: #a78bfa;
+  --pf-gold-text: #c4b5fd;
+  --pf-tile: rgba(238, 234, 255, 0.06);
+  --pf-shadow: 0 1px 3px rgba(0, 0, 0, 0.4), 0 8px 24px rgba(30, 10, 80, 0.45);
+  /* the other themes point the display and mono faces back at the body font */
+  --pf-display: Inter, ui-sans-serif, system-ui, sans-serif;
+  --pf-mono: Inter, ui-sans-serif, system-ui, sans-serif;
+}
+
+.pf-pad { padding: 22px 24px 26px; }
+.pf-bar { display: flex; align-items: center; gap: 18px; padding: 11px 22px; background: linear-gradient(90deg, #1a140c, var(--pf-chrome)); box-shadow: inset 0 -2px 0 rgba(243, 170, 44, 0.35); color: var(--pf-chrome-ink); font-weight: 600; font-size: 13.5px; }
+.pf-bar b { font: 700 15px/1 var(--pf-display); letter-spacing: -0.01em; }
+.pf-bar span { opacity: 0.78; }
+.pf-bar .on { opacity: 1; padding: 4px 10px; border-radius: 999px; background: rgba(255, 255, 255, 0.1); box-shadow: inset 0 0 0 1px rgba(243, 170, 44, 0.45); }
+.pf-eyebrow { font: 500 11px/1.3 var(--pf-mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--pf-ink-soft); }
+.pf-title { font: 700 21px/1.2 var(--pf-display); letter-spacing: -0.02em; }
+.pf-card { background: var(--pf-card); border: 1px solid var(--pf-line); border-radius: 10px; box-shadow: var(--pf-shadow); }
+.pf-num { font-family: var(--pf-mono); font-variant-numeric: tabular-nums; }
+.pf-tag { display: inline-flex; align-items: center; height: 22px; padding: 0 8px; border-radius: 999px; border: 1px solid currentColor; font: 600 11px/1 var(--pf-mono); letter-spacing: 0.04em; color: var(--pf-gold-text); }
+.pf-standing .pf-tag { justify-self: start; }
+.pf-stripe { height: 4px; background: linear-gradient(90deg, #f3aa2c, #7b1113 50%, #014421); }
+
+/* standing card */
+.pf-standing { overflow: hidden; }
+.pf-standing .body { display: grid; gap: 14px; padding: 20px 22px 22px; }
+.pf-standing h4 { margin: 0; font: 700 30px/1.05 var(--pf-display); letter-spacing: -0.03em; }
+.pf-standing .role { color: var(--pf-ink-dim); }
+.pf-meter { height: 6px; border-radius: 999px; background: var(--pf-tile); box-shadow: inset 0 0 0 1px var(--pf-line); overflow: hidden; }
+.pf-meter i { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--pf-gold), var(--pf-gold-bright)); }
+.pf-tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr)); gap: 0.75rem; }
+.pf-tile { display: grid; gap: 2px; padding: 0.85rem 1rem; border-radius: 12px; background: var(--pf-tile); box-shadow: inset 0 0 0 1px var(--pf-line); }
+.pf-tile b { font: 600 1.5rem/1.15 var(--pf-mono); font-variant-numeric: tabular-nums; }
+.pf-tile small { font-size: 12.5px; color: var(--pf-ink-soft); }
+.pf-tile.best { background: color-mix(in srgb, var(--pf-gold) 12%, transparent); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--pf-gold) 45%, transparent); }
+
+/* laurel seal: fixed colours on every theme */
+.pf-seal { display: grid; place-items: center; width: 132px; height: 132px; border-radius: 50%; background: #014421; box-shadow: inset 0 0 0 6px #014421, inset 0 0 0 7px #f3cf8a; color: #fdf6e8; text-align: center; }
+.pf-seal div { display: grid; justify-items: center; gap: 2px; }
+.pf-seal svg { width: 26px; height: 26px; fill: #ffc247; }
+.pf-seal b { font: 600 24px/1 'IBM Plex Mono', monospace; }
+.pf-seal small { font: 600 8.5px/1.2 'IBM Plex Mono', monospace; letter-spacing: 0.14em; text-transform: uppercase; max-width: 90px; }
+
+/* rating projection (after) */
+.pf-proj { position: relative; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 16px 28px; align-items: center; padding: 18px 22px; overflow: hidden; }
+.pf-proj .score { display: grid; gap: 2px; }
+.pf-proj .numerical { font: 600 42px/1 var(--pf-mono); font-variant-numeric: tabular-nums; }
+.pf-proj .adj { font-weight: 600; color: var(--pf-ink-dim); }
+.pf-proj .head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 16px; font: 500 12px/1.4 var(--pf-mono); color: var(--pf-ink-soft); }
+.pf-proj .hint { margin-top: 8px; color: var(--pf-ink-dim); }
+.pf-saved { grid-column: 1 / -1; font: 500 11.5px/1 var(--pf-mono); color: #1f7a4a; }
+.pf-target { display: grid; gap: 12px; padding: 16px 20px; }
+.pf-target + .pf-target { border-top: 1px solid var(--pf-line); }
+.pf-target p { margin: 0; }
+.pf-crit { display: grid; gap: 6px; }
+.pf-crit > span { font-weight: 600; font-size: 13px; }
+.pf-crit > span small { font-weight: 400; color: var(--pf-ink-soft); margin-left: 6px; }
+.pf-stops { display: flex; flex-wrap: wrap; gap: 6px; }
+.pf-stops span { padding: 5px 10px; border-radius: 8px; border: 1px solid var(--pf-line); background: var(--pf-card-solid); font-size: 12.5px; font-weight: 500; color: var(--pf-ink-dim); white-space: nowrap; }
+.pf-stops span.on { background: linear-gradient(#ffc247, #b97e0c); border-color: rgba(124, 95, 30, 0.3); color: #1c1610; font-weight: 600; }
+.pf-rowscore { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 13px; color: var(--pf-ink-soft); }
+.pf-rowscore strong { font: 600 14px/1 var(--pf-mono); color: var(--pf-ink); margin-left: 6px; }
+
+/* rating repeater (before): stock Filament, number boxes, no total */
+.fi-stock { background: #f9fafb; color: #030712; font: 14px/1.45 Inter, ui-sans-serif, system-ui, sans-serif; padding: 22px 24px 26px; display: grid; gap: 14px; position: relative; }
+.fi-stock .modal { background: #fff; border-radius: 12px; box-shadow: 0 0 0 1px rgba(3, 7, 18, 0.05), 0 10px 30px rgba(3, 7, 18, 0.08); padding: 18px 20px; display: grid; gap: 12px; }
+.fi-stock .mt { font-weight: 600; font-size: 16px; }
+.fi-stock .rep { display: grid; gap: 10px; }
+.fi-stock .item { border-radius: 10px; box-shadow: 0 0 0 1px rgba(3, 7, 18, 0.08); padding: 12px 14px; display: grid; gap: 8px; }
+.fi-stock .item p { margin: 0; font-weight: 500; font-size: 13.5px; }
+.fi-stock .row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.fi-stock label { display: grid; gap: 4px; font-size: 12.5px; font-weight: 500; color: #374151; }
+.fi-stock .in { height: 34px; padding: 0 10px; border-radius: 8px; box-shadow: 0 0 0 1px rgba(3, 7, 18, 0.1); background: #fff; display: flex; align-items: center; color: #030712; }
+.fi-stock .in.empty { color: #9ca3af; }
+.fi-stock .foot { display: flex; gap: 8px; }
+.fi-stock .btn { padding: 7px 12px; border-radius: 8px; font-size: 13px; font-weight: 600; box-shadow: 0 0 0 1px rgba(3, 7, 18, 0.1); background: #fff; }
+.fi-stock .btn.primary { background: #00573f; color: #fff; box-shadow: none; }
+.fi-stock .toast { justify-self: end; display: grid; gap: 2px; width: min(320px, 100%); padding: 12px 14px; border-radius: 10px; background: #fff; box-shadow: 0 0 0 1px rgba(3, 7, 18, 0.05), 0 12px 28px rgba(3, 7, 18, 0.14); font-size: 13px; }
+.fi-stock .toast b { font-weight: 600; }
+.fi-stock .toast span { color: #4b5563; }
+
+/* meter bridge, on the landing's night rail */
+.pf-rail { padding: 24px 24px 26px; background: radial-gradient(120% 80% at 20% 0%, rgba(243, 170, 44, 0.14), transparent 60%), linear-gradient(#161210, #0d0b09); color: #fdf6e8; display: grid; gap: 16px; }
+.pf-rail .rh { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px; }
+.pf-rail .rh b { font: 700 24px/1.1 var(--pf-display); letter-spacing: -0.03em; }
+.pf-rail .pf-tag { color: #ffc247; border-color: rgba(255, 194, 71, 0.45); }
+.pf-bridge { display: flex; gap: 10px; align-items: stretch; padding: 16px; border-radius: 16px; background: rgba(253, 246, 232, 0.06); box-shadow: inset 0 0 0 1px rgba(253, 246, 232, 0.1); }
+.pf-m { display: grid; grid-template-rows: auto auto 150px auto; gap: 6px; min-width: 0; }
+.pf-m .n { font-size: 11.5px; line-height: 1.25; color: rgba(253, 246, 232, 0.76); min-height: 2.5em; }
+.pf-m .w { font: 600 12px/1 'IBM Plex Mono', monospace; color: #ffc247; }
+.pf-m .tube { position: relative; border-radius: 8px 8px 3px 3px; background: rgba(253, 246, 232, 0.07); overflow: hidden; }
+.pf-m .tube i { position: absolute; left: 0; right: 0; bottom: 0; height: var(--fill); background: linear-gradient(#ffc247, #f3aa2c); box-shadow: 0 0 18px rgba(243, 170, 44, 0.45); }
+.pf-m .s { font: 600 17px/1 'IBM Plex Mono', monospace; font-variant-numeric: tabular-nums; }
+.pf-m .s small { display: block; margin-top: 3px; font-size: 10.5px; font-weight: 500; color: rgba(253, 246, 232, 0.62); }
+.pf-sum { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 14px; color: rgba(253, 246, 232, 0.76); }
+.pf-sum b { font: 600 30px/1 'IBM Plex Mono', monospace; color: #ffc247; }
+@media (max-width: 760px) {
+  .pf-bridge { flex-direction: column; }
+  .pf-m { grid-template-columns: minmax(0, 1fr) 70px; grid-template-rows: auto; align-items: center; }
+  .pf-m .n { min-height: 0; grid-column: 1; }
+  .pf-m .w { grid-column: 2; text-align: right; }
+  .pf-m .tube { grid-column: 1; height: 10px; border-radius: 999px; }
+  .pf-m .tube i { top: 0; right: auto; width: var(--fill); height: auto; }
+  .pf-m .s { grid-column: 2; text-align: right; }
+  .pf-proj { grid-template-columns: minmax(0, 1fr); }
+  .fi-stock .row { grid-template-columns: minmax(0, 1fr); }
+}

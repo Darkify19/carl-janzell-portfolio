@@ -1,0 +1,61 @@
+<style>
+  /* Emerald Codex, rebuilt from resources/css/filament/admin/theme.css (light):
+     glass cards over emerald and maroon orbs, neon-era green, stock Filament table. */
+  .cx { position: relative; overflow: hidden; background: #f2f7f5; color: #0b1b16; font: 14px/1.5 'Inter Tight', system-ui, sans-serif; }
+  .cx::before, .cx::after { content: ''; position: absolute; border-radius: 50%; filter: blur(40px); pointer-events: none; }
+  .cx::before { width: 520px; height: 520px; left: -160px; top: -220px; background: rgba(0, 200, 150, .13); }
+  .cx::after { width: 460px; height: 460px; right: -140px; bottom: -220px; background: rgba(138, 21, 56, .08); }
+  .cx-grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(0, 122, 87, .07) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 122, 87, .07) 1px, transparent 1px); background-size: 32px 32px; pointer-events: none; }
+  .cx-nav { position: relative; display: flex; align-items: center; gap: 22px; padding: 12px 22px; background: linear-gradient(90deg, #03130e, #062a1f 60%, #0a3a2a); color: #e9fff7; }
+  .cx-brand { font-weight: 700; letter-spacing: .02em; }
+  .cx-brand b { color: #00c896; }
+  .cx-links { display: flex; gap: 18px; min-width: 0; overflow: hidden; font-size: 13.5px; color: rgba(233, 255, 247, .72); }
+  .cx-links .on { color: #fff; box-shadow: 0 2px 0 #00c896; padding-bottom: 4px; }
+  .cx-me { margin-left: auto; width: 32px; height: 32px; border-radius: 50%; background: rgba(0, 200, 150, .18); color: #00c896; display: grid; place-items: center; font-weight: 700; font-size: 12px; }
+  .cx-page { position: relative; padding: 24px 26px 30px; display: grid; gap: 16px; }
+  .cx-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; }
+  .cx-head p { font-size: 24px; font-weight: 700; letter-spacing: -.01em; }
+  .cx-btns { display: flex; flex-wrap: wrap; gap: 8px; }
+  .cx-btn { padding: 7px 12px; border-radius: 8px; border: 1px solid rgba(0, 122, 87, .18); background: rgba(255, 255, 255, .8); font-size: 13px; font-weight: 600; color: #3d5248; }
+  .cx-btn.primary { background: #007a57; border-color: #007a57; color: #fff; box-shadow: 0 6px 18px rgba(0, 122, 87, .35); }
+  .cx-card { border-radius: 10px; border: 1px solid rgba(0, 122, 87, .14); background: rgba(255, 255, 255, .88); box-shadow: 0 10px 30px rgba(3, 13, 11, .06); overflow: hidden; }
+  .cx-tools { display: flex; justify-content: flex-end; gap: 8px; padding: 10px 12px; border-bottom: 1px solid rgba(0, 122, 87, .08); }
+  .cx-search { width: 220px; max-width: 50%; padding: 6px 10px; border-radius: 8px; border: 1px solid rgba(0, 122, 87, .14); color: #6b7f78; font-size: 13px; }
+  .cx-filter { padding: 6px 10px; border-radius: 8px; border: 1px solid rgba(0, 122, 87, .14); font-size: 13px; color: #3d5248; }
+  .cx-wrap { overflow-x: auto; }
+  .cx table { width: 100%; min-width: 760px; border-collapse: collapse; font-size: 13px; }
+  .cx th { padding: 10px 12px; text-align: left; font-weight: 600; color: #3d5248; background: rgba(0, 122, 87, .03); border-bottom: 1px solid rgba(0, 122, 87, .08); white-space: nowrap; }
+  .cx td { padding: 10px 12px; border-bottom: 1px solid rgba(0, 122, 87, .08); white-space: nowrap; }
+  .cx-badge { display: inline-block; padding: 2px 8px; border-radius: 6px; font-size: 12px; font-weight: 600; }
+  .cx-badge.draft { background: rgba(11, 27, 22, .07); color: #3d5248; }
+  .cx-badge.sub { background: rgba(243, 170, 44, .16); color: #8a5a00; }
+  .cx-badge.off { background: rgba(70, 124, 146, .14); color: #2f5c6e; }
+  .cx-badge.hr { background: rgba(0, 122, 87, .1); color: #00573f; }
+  .cx-acts { display: flex; gap: 10px; color: #007a57; font-weight: 600; font-size: 12.5px; }
+</style>
+<div class="cx">
+  <div class="cx-grid"></div>
+  <div class="cx-nav"><span class="cx-brand">UPLB · <b>TKS</b></span><span class="cx-links"><span>Dashboard</span><span>Attendance</span><span>DTR</span><span class="on">Leave</span><span>Requests</span></span><span class="cx-me">JD</span></div>
+  <div class="cx-page">
+    <div class="cx-head">
+      <p>Personnel Leaves</p>
+      <div class="cx-btns"><span class="cx-btn">Update Leave Approver</span><span class="cx-btn">View As Signatory</span><span class="cx-btn primary">File Leave</span></div>
+    </div>
+    <div class="cx-card">
+      <div class="cx-tools"><span class="cx-search">Search</span><span class="cx-filter">Filters</span></div>
+      <div class="cx-wrap">
+        <table>
+          <thead><tr><th>Leave Type</th><th>Leave Period</th><th>Days</th><th>Date of Filing</th><th>Commutation</th><th>Status</th><th></th></tr></thead>
+          <tbody>
+            <tr><td>Mandatory/Forced Leave</td><td>Dec 21, 2026 – Dec 23, 2026</td><td>3</td><td>—</td><td>Not Requested</td><td><span class="cx-badge draft">Draft</span></td><td><span class="cx-acts"><span>Submit</span><span>PDF</span><span>Preview</span></span></td></tr>
+            <tr><td>Vacation Leave</td><td>Oct 6, 2026 – Oct 7, 2026</td><td>2</td><td>Oct 1, 2026</td><td>Not Requested</td><td><span class="cx-badge sub">Submitted</span></td><td><span class="cx-acts"><span>PDF</span><span>Preview</span></span></td></tr>
+            <tr><td>Vacation Leave</td><td>Sep 29, 2026</td><td>1</td><td>Sep 22, 2026</td><td>Not Requested</td><td><span class="cx-badge off">Office Approved</span></td><td><span class="cx-acts"><span>PDF</span><span>Preview</span></span></td></tr>
+            <tr><td>Sick Leave</td><td>Sep 22, 2026</td><td>1</td><td>Sep 24, 2026</td><td>Not Requested</td><td><span class="cx-badge hr">HR Approved</span></td><td><span class="cx-acts"><span>PDF</span><span>Preview</span></span></td></tr>
+            <tr><td>Special Privilege Leave</td><td>Sep 11, 2026</td><td>1</td><td>Sep 8, 2026</td><td>Not Requested</td><td><span class="cx-badge hr">HR Approved</span></td><td><span class="cx-acts"><span>PDF</span><span>Preview</span></span></td></tr>
+            <tr><td>Vacation Leave</td><td>Aug 13, 2026 – Aug 14, 2026</td><td>2</td><td>Aug 5, 2026</td><td>Not Requested</td><td><span class="cx-badge hr">HR Approved</span></td><td><span class="cx-acts"><span>PDF</span><span>Preview</span></span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

@@ -7,9 +7,11 @@ interface Props {
   description: string;
   /** Overrides the default social-share card for a given page. */
   image?: string;
+  /** 'article' for a case study; the home page is the profile. */
+  kind?: 'profile' | 'article';
 }
 
-const { title, description, image } = Astro.props;
+const { title, description, image, kind = 'profile' } = Astro.props;
 
 // Google Analytics 4 — emitted only in production builds. Event names live in
 // src/lib/analytics.ts. Append ?ga_debug=1 on the live site to use DebugView.
@@ -34,6 +36,8 @@ const pathname = Astro.url.pathname.endsWith('/')
   ? Astro.url.pathname
   : Astro.url.pathname + '/';
 const canonical = new URL(pathname, siteUrl).href;
+// The person lives on the home page, whichever page declares them.
+const home = new URL(base, siteUrl).href;
 const ogImage = new URL(image ?? `${base}og.png`, siteUrl).href;
 const cvUrl = new URL(cvPath(base), siteUrl).href;
 
@@ -45,10 +49,10 @@ const github = 'https://github.com/Darkify19';
 const personSchema = {
   '@context': 'https://schema.org',
   '@type': 'Person',
-  '@id': canonical + '#person',
+  '@id': home + '#person',
   name: 'Carl Janzell Oropesa',
   alternateName: 'Carl Oropesa',
-  url: canonical,
+  url: home,
   image: ogImage,
   email: 'mailto:carl.oropesa11@gmail.com',
   jobTitle: 'Full-Stack Software Engineer',
@@ -124,7 +128,7 @@ const repoSchemas = [
   programmingLanguage: r.languages,
   runtimePlatform: r.runtime,
   ...(r.license && { license: r.license }),
-  author: { '@id': canonical + '#person' },
+  author: { '@id': home + '#person' },
   isAccessibleForFree: true,
 }));
 
@@ -135,7 +139,7 @@ const profilePageSchema = {
   description,
   url: canonical,
   inLanguage: 'en',
-  mainEntity: { '@id': canonical + '#person' },
+  mainEntity: { '@id': home + '#person' },
 };
 ---
 
@@ -162,7 +166,7 @@ const profilePageSchema = {
     <link rel="alternate" type="application/pdf" title="Resume (PDF)" href={cvUrl} />
 
     <!-- Open Graph -->
-    <meta property="og:type" content="profile" />
+    <meta property="og:type" content={kind} />
     <meta property="og:site_name" content="Carl Janzell Oropesa" />
     <meta property="og:locale" content="en_US" />
     <meta property="og:url" content={canonical} />
@@ -175,8 +179,14 @@ const profilePageSchema = {
       property="og:image:alt"
       content="Carl Janzell Oropesa — full-stack software engineer building Laravel systems for 4,000+ university personnel"
     />
-    <meta property="profile:first_name" content="Carl Janzell" />
-    <meta property="profile:last_name" content="Oropesa" />
+    {
+      kind === 'profile' && (
+        <>
+          <meta property="profile:first_name" content="Carl Janzell" />
+          <meta property="profile:last_name" content="Oropesa" />
+        </>
+      )
+    }
 
     <!-- Twitter / X -->
     <meta name="twitter:card" content="summary_large_image" />
@@ -191,6 +201,8 @@ const profilePageSchema = {
       href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@400;500;600;700&family=Martian+Mono:wdth,wght@75..100,400..500&display=swap"
       rel="stylesheet"
     />
+    <!-- a case study adds the fonts of the product it rebuilds -->
+    <slot name="head" />
 
     <!--
       Motion gate. Runs before first paint so the punch-in can start
@@ -238,11 +250,15 @@ const profilePageSchema = {
       type="application/ld+json"
       set:html={JSON.stringify(personSchema)}
     />
-    <script
-      is:inline
-      type="application/ld+json"
-      set:html={JSON.stringify(profilePageSchema)}
-    />
+    {
+      kind === 'profile' && (
+        <script
+          is:inline
+          type="application/ld+json"
+          set:html={JSON.stringify(profilePageSchema)}
+        />
+      )
+    }
     {
       repoSchemas.map((repo) => (
         <script is:inline type="application/ld+json" set:html={JSON.stringify(repo)} />

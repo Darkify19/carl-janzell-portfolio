@@ -97,3 +97,87 @@ h3 {
     scroll-behavior: auto;
   }
 }
+
+/* ---------- page shell: shared by the home page and the case studies ---------- */
+
+.wrap {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+@media (max-width: 600px) {
+  .wrap {
+    padding: 0 16px;
+  }
+}
+
+/* ---------- top bar ---------- */
+.topbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px 18px;
+  padding: 22px 0 14px;
+  border-bottom: 1px solid var(--color-rule);
+  font-size: 12px;
+  color: var(--color-muted);
+}
+.topbar-name {
+  color: var(--color-ink);
+  text-decoration: none;
+}
+.topbar-name b {
+  font-weight: 500;
+}
+.topbar-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 22px;
+  margin-left: auto;
+}
+.topbar-nav a {
+  color: var(--color-muted);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+.topbar-nav a:hover {
+  color: var(--color-ink);
+}
+@media (max-width: 759px) {
+  .topbar-role {
+    flex-basis: 100%;
+  }
+  .topbar-nav {
+    gap: 6px 16px;
+    margin-left: 0;
+  }
+}
+
+/* ---------- sections ---------- */
+.section {
+  padding: 44px 0 64px;
+  border-top: 1px solid var(--color-rule);
+}
+.sec-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 18px;
+}
+.section h2 {
+  font-size: clamp(28px, 3vw, 34px);
+  font-weight: 600;
+  line-height: 1.1;
+}
+.sec-lede {
+  max-width: 68ch;
+  margin-top: 14px;
+  font-size: 18px;
+  line-height: 1.5;
+  color: var(--color-soft);
+}
+
+.footer {
+  padding: 22px 0 36px;
+  border-top: 1px solid var(--color-rule);
+}

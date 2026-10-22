@@ -1,9 +1,9 @@
 import type { APIRoute } from 'astro';
 
 /**
- * Hand-rolled instead of @astrojs/sitemap: the site is a single page, so the
- * integration would be a dependency for four lines of XML. Add the integration
- * if this ever grows real routes.
+ * Hand-rolled instead of @astrojs/sitemap: three pages don't justify the
+ * dependency. Add a case study here when you add its page; switch to the
+ * integration if the list stops fitting on one screen.
  */
 export const GET: APIRoute = ({ site }) => {
   const origin = site ?? new URL('https://darkify19.github.io');
@@ -11,7 +11,11 @@ export const GET: APIRoute = ({ site }) => {
     ? import.meta.env.BASE_URL
     : import.meta.env.BASE_URL + '/';
 
-  const pages = [{ path: base, changefreq: 'monthly', priority: '1.0' }];
+  const pages = [
+    { path: base, changefreq: 'monthly', priority: '1.0' },
+    { path: `${base}work/ledger-lite/`, changefreq: 'monthly', priority: '0.8' },
+    { path: `${base}work/aurum/`, changefreq: 'monthly', priority: '0.8' },
+  ];
   const lastmod = new Date().toISOString().slice(0, 10);
 
   const body = `<?xml version="1.0" encoding="UTF-8"?>

@@ -1,0 +1,274 @@
+---
+import Layout from './Layout.astro';
+import { cvPath } from '../lib/cv';
+
+interface Props {
+  title: string;
+  description: string;
+  /** Small mono line above the headline: app · window. */
+  eyebrow: string;
+  heading: string;
+  lede: string;
+  facts: [string, string][];
+  next: { href: string; label: string };
+}
+
+const { title, description, eyebrow, heading, lede, facts, next } = Astro.props;
+const base = import.meta.env.BASE_URL.endsWith('/')
+  ? import.meta.env.BASE_URL
+  : import.meta.env.BASE_URL + '/';
+---
+
+<Layout title={title} description={description} kind="article">
+  <slot name="head" slot="head" />
+  <div class="wrap">
+    <header class="topbar mono">
+      <a href={base} class="topbar-name"><b>carl janzell oropesa</b></a>
+      <span class="topbar-role">case study</span>
+      <nav class="topbar-nav" aria-label="Site">
+        <a href={`${base}#work`}>work</a>
+        <a href={next.href}>{next.label}</a>
+        <a href={cvPath(base)} target="_blank" rel="noopener">résumé ↗</a>
+      </nav>
+    </header>
+
+    <main class="cs">
+      <header class="cs-head">
+        <p class="label">{eyebrow}</p>
+        <h1>{heading}</h1>
+        <p class="cs-lede">{lede}</p>
+        <dl class="cs-facts">
+          {
+            facts.map(([k, v]) => (
+              <>
+                <dt class="label">{k}</dt>
+                <dd>{v}</dd>
+              </>
+            ))
+          }
+        </dl>
+      </header>
+      <slot />
+      <nav class="cs-next section" aria-label="More">
+        <a class="link" href={`${base}#work`}>← back to work</a>
+        <a class="link" href={next.href}>next: {next.label} →</a>
+      </nav>
+    </main>
+
+    <footer class="footer label">
+      <p>© 2026 Carl Janzell Oropesa · screens on this page are rebuilt in HTML with invented people, not screenshots</p>
+    </footer>
+  </div>
+</Layout>
+
+<style is:global>
+  .cs-head {
+    display: grid;
+    gap: 16px;
+    padding: 44px 0 56px;
+  }
+  .cs-head h1 {
+    max-width: 22ch;
+    font-size: clamp(36px, 5vw, 54px);
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: -0.01em;
+  }
+  .cs-lede {
+    max-width: 62ch;
+    font-size: 19px;
+    font-weight: 500;
+    line-height: 1.45;
+    color: var(--color-soft);
+  }
+  .cs-facts {
+    display: grid;
+    grid-template-columns: max-content minmax(0, 1fr);
+    gap: 8px 20px;
+    max-width: 760px;
+    margin: 12px 0 0;
+    padding-top: 16px;
+    border-top: 1px solid var(--color-rule);
+  }
+  .cs-facts dt {
+    padding-top: 2px;
+  }
+  .cs-facts dd {
+    margin: 0;
+    color: var(--color-body);
+  }
+
+  /* a step in the trail: number, heading, then prose and figures */
+  .cs-step .sec-head .label {
+    color: var(--color-signal);
+  }
+  .cs-prose {
+    display: grid;
+    gap: 14px;
+    max-width: 68ch;
+    margin-top: 16px;
+    font-size: 18px;
+    color: var(--color-body);
+  }
+  .cs-prose strong {
+    color: var(--color-ink);
+    font-weight: 600;
+  }
+
+  /* directions explored: one row each, the verdict on the right */
+  .cs-options {
+    display: grid;
+    margin: 28px 0 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--color-rule);
+  }
+  .cs-options li {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 4px 28px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--color-rule);
+  }
+  @media (min-width: 860px) {
+    .cs-options li {
+      grid-template-columns: 220px minmax(0, 1fr) 240px;
+    }
+  }
+  .cs-options h3 {
+    font-size: 20px;
+    font-weight: 600;
+  }
+  .cs-options p {
+    color: var(--color-soft);
+  }
+  .cs-options .verdict {
+    font-family: var(--font-mono);
+    font-stretch: 87.5%;
+    font-size: 12px;
+    line-height: 1.55;
+    color: var(--color-muted);
+  }
+  .cs-options li.picked h3::after {
+    content: 'picked';
+    margin-left: 10px;
+    padding: 2px 7px;
+    border: 1px solid var(--color-signal);
+    border-radius: 3px;
+    color: var(--color-signal);
+    font-family: var(--font-mono);
+    font-stretch: 87.5%;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    vertical-align: 3px;
+  }
+
+  /* rebuilt product screens */
+  .cs-figs {
+    display: grid;
+    gap: 28px;
+    margin-top: 32px;
+  }
+  @media (min-width: 1024px) {
+    .cs-figs.pair {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  .cs-fig {
+    margin: 0;
+    min-width: 0;
+  }
+  .cs-frame {
+    overflow: hidden;
+    border: 1px solid var(--color-upstream);
+    border-radius: 6px;
+    background: var(--color-panel);
+  }
+  .cs-frame-bar {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--color-upstream);
+    font-family: var(--font-mono);
+    font-stretch: 87.5%;
+    font-size: 11px;
+    color: var(--color-muted);
+  }
+  .cs-frame-bar::before {
+    content: '';
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--color-upstream);
+    box-shadow: 12px 0 0 var(--color-upstream), 24px 0 0 var(--color-upstream);
+    margin-right: 30px;
+  }
+  .cs-shot {
+    overflow-x: auto;
+  }
+  .cs-fig figcaption {
+    margin-top: 10px;
+    max-width: 68ch;
+    font-size: 15.5px;
+    line-height: 1.45;
+    color: var(--color-muted);
+  }
+  .cs-fig figcaption b {
+    color: var(--color-ink);
+    font-weight: 600;
+  }
+
+  /* shipped timeline */
+  .cs-timeline {
+    display: grid;
+    margin: 28px 0 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--color-rule);
+  }
+  .cs-timeline li {
+    display: grid;
+    grid-template-columns: 110px minmax(0, 1fr);
+    gap: 4px 20px;
+    padding: 11px 0;
+    border-bottom: 1px solid var(--color-rule);
+    color: var(--color-body);
+  }
+  .cs-timeline time {
+    font-family: var(--font-mono);
+    font-stretch: 87.5%;
+    font-size: 12px;
+    line-height: 1.9;
+    color: var(--color-muted);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* what users were told, quoted as it shipped */
+  .cs-quote {
+    max-width: 64ch;
+    margin: 28px 0 0;
+    padding: 4px 0 4px 20px;
+    border-left: 2px solid var(--color-signal);
+    font-size: 19px;
+    line-height: 1.5;
+    color: var(--color-ink);
+  }
+  .cs-quote cite {
+    display: block;
+    margin-top: 10px;
+    font-style: normal;
+  }
+
+  .cs-next {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 12px 24px;
+    font-family: var(--font-mono);
+    font-stretch: 87.5%;
+    font-size: 13px;
+  }
+</style>

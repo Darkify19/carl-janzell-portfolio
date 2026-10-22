@@ -1,0 +1,226 @@
+---
+import CaseStudy from '../../layouts/CaseStudy.astro';
+import Screen from '../../components/Screen.astro';
+import '../../case-studies/ledger/kit.css';
+import icons from '../../case-studies/ledger/icons.html?raw';
+import codexLeave from '../../case-studies/ledger/codex-leave.html?raw';
+import leaveDocket from '../../case-studies/ledger/leave-a.html?raw';
+import dtrSheet from '../../case-studies/ledger/dtr-b.html?raw';
+import tripToday from '../../case-studies/ledger/tripTicket-b.html?raw';
+import movedNote from '../../case-studies/ledger/moved-note.html?raw';
+
+const base = import.meta.env.BASE_URL.endsWith('/')
+  ? import.meta.env.BASE_URL
+  : import.meta.env.BASE_URL + '/';
+
+const directions = [
+  {
+    name: 'A · Daylight',
+    idea: 'The sky follows your shift. A light, simple app whose background tracks the working day, grown out of the shift-tinted background I shipped on 24 Sep.',
+    verdict: 'kept its simplicity: white cards on hairlines and one green action per screen',
+  },
+  {
+    name: 'B · Form 48 Ledger',
+    idea: 'The DTR, made beautiful. Ruled tables, a serif for headings and typewriter labels: the character of the form people already sign.',
+    verdict: 'kept its character',
+    picked: true,
+  },
+  {
+    name: 'C · Aurum Night',
+    idea: "One family with the Performance app: borrow its night look so the two apps match.",
+    verdict: 'not taken',
+  },
+];
+
+const modules = [
+  { name: 'Leave', picked: 'A docket: Needs you, On the way, Done', passed: 'a leave year, a leave card' },
+  { name: 'DTR', picked: 'The register beside the printed sheet', passed: 'a kinsena shelf, a year at a glance' },
+  { name: 'Filing forms', picked: 'One numbered sheet, §1 to §4, with a running tally', passed: 'one question at a time, the form beside the paper' },
+  { name: 'Status', picked: 'One quiet pill: a dot while moving, a check or cross when final', passed: 'pencil and ink, who has it now' },
+  { name: 'Trip ticket', picked: "Today's ticket first, with one big Log trip button", passed: 'a logbook of days, the ticket on paper' },
+];
+
+const shipped = [
+  ['2 Oct', 'Ledger Lite theme. Sign-in becomes the TKS landing page, in Ledger Lite. Personnel home laid out like the design. The write-in and stamp-press motion.'],
+  ['7 Oct', 'Leave as a docket with a paper-form record page and one numbered filing sheet. DTR register beside the sheet, with a one-zip bulk download. Certificates of service in two lanes. Travel as trip cards. Trip ticket with today first. One status pill everywhere.'],
+  ['7 Oct', 'A “what moved” note on every redesigned page, a short tour per page and one searchable list.'],
+  ['13 Oct', 'Landing page fits phones.'],
+  ['15 Oct', 'Tours match each theme and gain step progress and Skip; tour wording rewritten in plain steps. Ledger Lite error and maintenance pages, prerendered so a maintenance window still shows one.'],
+  ['21 Oct', 'Personnel fix a missed punch right on the Form 48 sheet while their office has manual entry open. Leave is filed by picking a leave card and tapping days on a calendar.'],
+  ['22 Oct', 'The activity log reads as a day-by-day ledger, one plain sentence per change.'],
+] as const;
+
+const swatches = [
+  ['#F7F5EF', 'paper'],
+  ['#FFFFFF', 'card'],
+  ['#1C1B17', 'ink'],
+  ['#E4DFD2', 'rule'],
+  ['#00573F', 'UP green · the one action'],
+  ['#8A1538', 'UP maroon · accent'],
+];
+---
+
+<CaseStudy
+  title="Ledger Lite · TKS redesign case study · Carl Janzell Oropesa"
+  description="How I redesigned the UPLB timekeeping app's personnel side around CS Form No. 48 in three weeks: the directions I explored, what I picked, what shipped and what personnel were told."
+  eyebrow="case study · UPLB Timekeeping System · 30 Sep to 22 Oct 2026"
+  heading="Redesigning a timekeeping app around the form people already sign"
+  lede="TKS is where UP Los Baños personnel clock in, file leave and get their Daily Time Record. By September every personnel page was a stock table under a neon glass theme. Over three weeks I redesigned it around the paper it replaced, CS Form No. 48, one module at a time, without moving anyone's records."
+  facts={[
+    ['for', '4,000+ UP Los Baños personnel, on the employee side of the app'],
+    ['role', 'design and build: directions, module options, the theme, every screen'],
+    ['how', 'directions drawn as live HTML boards with an AI coding agent, picked side by side at desktop and phone width, then built in Filament'],
+    ['stack', 'Laravel · Filament · Livewire · Tailwind CSS'],
+  ]}
+  next={{ href: `${base}work/aurum/`, label: 'aurum' }}
+>
+  <Fragment slot="head">
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,600&family=Inter+Tight:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap"
+    />
+  </Fragment>
+  <Fragment set:html={icons} />
+
+  <section class="section cs-step" aria-labelledby="s1">
+    <div class="sec-head"><span class="label">01</span><h2 id="s1">The problem</h2></div>
+    <div class="cs-prose">
+      <p>Every personnel page was a stock Filament table. Leave, certificates of service, the DTR, travel and trip tickets all looked alike, and each module worded status its own way. A leave list said Office Approved while the record page said Approved, in another colour, and certificates showed “2/3 Signed”.</p>
+      <p>The DTR is the one document everyone needs twice a month, and it opened as a PDF inside a wide pop-up that's hard to use on a phone.</p>
+      <p>Under all of it sat Emerald Codex, a theme whose own file called it a “futuristic glassmorphic edition”: neon emerald, glass cards, glowing orbs. Three accessibility fixes landed the day before the new theme shipped: it had been falling back to the system font, keyboard focus showed as a white box, and two badge colours failed contrast.</p>
+    </div>
+    <div class="cs-figs">
+      <Screen html={codexLeave} label="before · Leave in Emerald Codex">
+        <b>Before.</b> The Leave page as a plain table, with Update Leave Approver and View As Signatory as header buttons and a draft that still needed Submit on its row.
+      </Screen>
+    </div>
+  </section>
+
+  <section class="section cs-step" aria-labelledby="s2">
+    <div class="sec-head"><span class="label">02</span><h2 id="s2">Three directions, then three options per module</h2></div>
+    <div class="cs-prose">
+      <p>I started with three whole directions, each drawn as a landing page, a personnel home and a phone “today” screen.</p>
+    </div>
+    <ul class="cs-options">
+      {
+        directions.map((d) => (
+          <li class={d.picked ? 'picked' : ''}>
+            <h3>{d.name}</h3>
+            <p>{d.idea}</p>
+            <p class="verdict">{d.verdict}</p>
+          </li>
+        ))
+      }
+    </ul>
+    <div class="cs-prose">
+      <p>The pick was a blend, named on the final board: <strong>Ledger Lite, Form 48's character with Daylight's simplicity.</strong></p>
+      <p>Then every module got three options of its own. Eleven questions, from list pages to the signature page, each drawn as three real screens with invented people, at desktop and phone width. A separate board did the same for motion: nine moments, from a stamp press on a verified DTR to a sliding bar under the phone tab bar.</p>
+    </div>
+    <ul class="cs-options">
+      {
+        modules.map((m) => (
+          <li>
+            <h3>{m.name}</h3>
+            <p>{m.picked}</p>
+            <p class="verdict">passed on: {m.passed}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <section class="section cs-step" aria-labelledby="s3">
+    <div class="sec-head"><span class="label">03</span><h2 id="s3">The system</h2></div>
+    <div class="cs-prose">
+      <p>The theme file opens with one sentence, and every screen answers to it:</p>
+    </div>
+    <blockquote class="cs-quote">
+      Paper ground, white cards on hairlines, one green action, a serif for headings and a typewriter face for table labels: the character of the form people sign, kept plain.
+      <cite class="label">theme_ledger.css · 2 Oct 2026</cite>
+    </blockquote>
+    <div class="cs-prose">
+      <p>It's built on Filament's stock theme rather than the Codex base, so there was no neon, glow or ambient layer to undo. Headings are Newsreader, the interface is Inter Tight, and form numbers and table labels are IBM Plex Mono in caps, with § marks on sections and a green stamp on a verified DTR. Ledger Lite became the look of the sign-in pages and sits first in the theme picker. Nobody's saved theme was switched for them.</p>
+    </div>
+    <ul class="ll-swatches" aria-label="Ledger Lite colour tokens">
+      {
+        swatches.map(([hex, name]) => (
+          <li>
+            <i style={`background:${hex}`} />
+            <span>{name}</span>
+            <small class="label">{hex}</small>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <section class="section cs-step" aria-labelledby="s4">
+    <div class="sec-head"><span class="label">04</span><h2 id="s4">What shipped</h2></div>
+    <div class="cs-figs">
+      <Screen html={leaveDocket} label="after · Leave as a docket" tksNav="leave" frag="leave-a">
+        <b>After.</b> The same filings as a docket: what needs you, what's on the way and what's done. Credits sit beside it, and every card says who has the leave now and what happens next.
+      </Screen>
+      <Screen html={dtrSheet} label="DTR · register beside the sheet" tksNav="dtr" frag="dtr-b">
+        <b>The DTR.</b> Every period on the left, and the selected one drawn as the Form 48 sheet it prints as, with its QR and In Charge line. This is the 7 Oct version; on 21 Oct the sheet itself became editable, so a missed punch is fixed in its cell.
+      </Screen>
+      <Screen html={tripToday} label="trip ticket · today first" tksNav="requests" frag="tripTicket-b">
+        <b>Trip ticket.</b> For drivers: today's ticket first, with one button to log the trip when they're back at the garage. It fills their DTR and the DTRs of everyone aboard.
+      </Screen>
+    </div>
+    <ol class="cs-timeline">
+      {
+        shipped.map(([when, what]) => (
+          <li>
+            <time>{when} 2026</time>
+            <span>{what}</span>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <section class="section cs-step" aria-labelledby="s5">
+    <div class="sec-head"><span class="label">05</span><h2 id="s5">What personnel were told</h2></div>
+    <div class="cs-prose">
+      <p>A redesign moves buttons people have clicked for a year. So every redesigned page opened with a short note listing what moved, in plain words, with a tour of that page and one searchable list of everything that changed. The note switches itself off after 15 November, so nothing has to be removed later.</p>
+    </div>
+    <div class="cs-figs">
+      <Screen html={movedNote} label="the note on the Leave page" tksNav="leave" frag="moved">
+        <b>The note</b>, word for word as it ships on the Leave page. Each release also gets its own What's New page, written for personnel and reviewed before it goes out.
+      </Screen>
+    </div>
+  </section>
+
+  <section class="section cs-step" aria-labelledby="s6">
+    <div class="sec-head"><span class="label">06</span><h2 id="s6">What I'd still fix</h2></div>
+    <div class="cs-prose">
+      <p>A critique I ran on the new landing page on 19 Oct scored it 25 out of 40. Its summary was fair: the layout still reads like a generic editorial template. The personnel screens are where the time went, and the landing is the next thing I'd take on.</p>
+      <p>If you'd like to see the real thing, I can walk you through it live in an interview, on an invented office with invented people.</p>
+    </div>
+  </section>
+</CaseStudy>
+
+<style>
+  .ll-swatches {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 14px 20px;
+    margin: 28px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .ll-swatches li {
+    display: grid;
+    grid-template-columns: 28px minmax(0, 1fr);
+    gap: 0 10px;
+    align-items: center;
+    font-size: 15px;
+  }
+  .ll-swatches i {
+    grid-row: span 2;
+    width: 28px;
+    height: 28px;
+    border-radius: 4px;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.18);
+  }
+</style>

@@ -31,6 +31,8 @@ interface Project {
   spec?: [string, string][];
   highlights: string[];
   stack: string[];
+  /** A redesign written up as a case study under /work/. */
+  caseStudy?: { slug: string; label: string };
 }
 
 const projects: Project[] = [
@@ -60,6 +62,7 @@ const projects: Project[] = [
       "A small opt-out break-room mini-game on the dashboard, deliberately never joined to attendance data so play can't be read as evaluation.",
     ],
     stack: ['PHP 8.2', 'Laravel 11', 'Filament 3', 'Livewire 3', 'MySQL', 'Apache Kafka', 'Tailwind CSS', 'DomPDF', 'PHPUnit 11', 'GitHub Actions'],
+    caseStudy: { slug: 'ledger-lite', label: 'the Ledger Lite redesign' },
   },
   {
     id: 'pmt',
@@ -78,6 +81,7 @@ const projects: Project[] = [
       'Cross-app import with stable identity resolution (uuid, then email, then employee number) and a dry-run preview built on rolled-back transactions.',
     ],
     stack: ['Laravel 12', 'Filament 5', 'Kafka', 'MySQL', 'Tailwind CSS 4', 'PHPUnit 11'],
+    caseStudy: { slug: 'aurum', label: 'the Aurum redesign' },
   },
   {
     id: 'kiosk',
@@ -273,7 +277,7 @@ const navLinks = [
           <h2>Work</h2>
           <p class="label">roles reflect commit ownership as of 24 Sep 2026</p>
         </div>
-        <p class="sec-lede">Internal university systems doing compliance-heavy work: civil-service forms, multi-stage approval chains, audit trails and encrypted personal data. These are private government codebases, so I can't hand you a live demo. Instead, each entry gives the architecture, the decisions and, where I can measure it, the real usage. The code you can open and install is my <a class="link" href="#page-builder">open-source Filament plugin</a>, further down.</p>
+        <p class="sec-lede">Internal university systems doing compliance-heavy work: civil-service forms, multi-stage approval chains, audit trails and encrypted personal data. These are private government codebases, so I can't hand you a live demo. Instead, each entry gives the architecture, the decisions and, where I can measure it, the real usage. Two redesigns have their own case studies, with the screens rebuilt using invented people. The code you can open and install is my <a class="link" href="#page-builder">open-source Filament plugin</a>, further down.</p>
         {
           projects.map((p) => (
             <article id={p.id} class="project">
@@ -285,6 +289,11 @@ const navLinks = [
               </header>
               <div class="project-body">
                 <p class="project-desc">{p.desc}</p>
+                {p.caseStudy && (
+                  <p class="project-case mono">
+                    <a class="link" href={`${base}work/${p.caseStudy.slug}/`}>case study: {p.caseStudy.label} →</a>
+                  </p>
+                )}
                 {p.spec && (
                   <dl class="spec">
                     {p.spec.map(([k, v]) => (
@@ -436,59 +445,6 @@ const navLinks = [
 </Layout>
 
 <style is:global>
-  .wrap {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 24px;
-  }
-  @media (max-width: 600px) {
-    .wrap {
-      padding: 0 16px;
-    }
-  }
-
-  /* ---------- top bar ---------- */
-  .topbar {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: 6px 18px;
-    padding: 22px 0 14px;
-    border-bottom: 1px solid var(--color-rule);
-    font-size: 12px;
-    color: var(--color-muted);
-  }
-  .topbar-name {
-    color: var(--color-ink);
-    text-decoration: none;
-  }
-  .topbar-name b {
-    font-weight: 500;
-  }
-  .topbar-nav {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px 22px;
-    margin-left: auto;
-  }
-  .topbar-nav a {
-    color: var(--color-muted);
-    text-decoration: none;
-    transition: color 0.15s ease;
-  }
-  .topbar-nav a:hover {
-    color: var(--color-ink);
-  }
-  @media (max-width: 759px) {
-    .topbar-role {
-      flex-basis: 100%;
-    }
-    .topbar-nav {
-      gap: 6px 16px;
-      margin-left: 0;
-    }
-  }
-
   /* ---------- hero ---------- */
   .hero {
     display: grid;
@@ -604,30 +560,6 @@ const navLinks = [
     font-size: 12.5px;
   }
 
-  /* ---------- sections ---------- */
-  .section {
-    padding: 44px 0 64px;
-    border-top: 1px solid var(--color-rule);
-  }
-  .sec-head {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: 4px 18px;
-  }
-  .section h2 {
-    font-size: clamp(28px, 3vw, 34px);
-    font-weight: 600;
-    line-height: 1.1;
-  }
-  .sec-lede {
-    max-width: 68ch;
-    margin-top: 14px;
-    font-size: 18px;
-    line-height: 1.5;
-    color: var(--color-soft);
-  }
-
   /* ---------- work ---------- */
   .project {
     display: grid;
@@ -659,6 +591,9 @@ const navLinks = [
   }
   .project-body {
     max-width: 760px;
+  }
+  .project-case {
+    font-size: 12.5px;
   }
   .project-desc {
     font-size: 18px;
@@ -860,10 +795,6 @@ const navLinks = [
   .contact-links {
     margin-top: 22px;
     font-size: 13px;
-  }
-  .footer {
-    padding: 22px 0 36px;
-    border-top: 1px solid var(--color-rule);
   }
 </style>
 

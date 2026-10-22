@@ -1,0 +1,27 @@
+<style>
+  [data-frag="moved"] .mv { display: grid; grid-template-columns: minmax(0, 1fr) 24px minmax(0, 1.4fr); gap: 4px 12px; align-items: baseline; padding: 9px 0; border-top: 1px solid var(--rule-soft); font-size: 13.5px; }
+  [data-frag="moved"] .mv s { color: var(--ink-muted); text-decoration-color: var(--rule); }
+  [data-frag="moved"] .mv i { font-style: normal; color: var(--ink-faint); }
+  @container screen (max-width: 600px) {
+    [data-frag="moved"] .mv { grid-template-columns: minmax(0, 1fr); }
+    [data-frag="moved"] .mv i { display: none; }
+  }
+</style>
+<section class="k-card">
+  <div class="k-stack xs">
+    <span class="k-eyebrow maroon">New look · this note shows until 15 Nov</span>
+    <p class="k-h2">Leave has a new look</p>
+    <p class="k-sub">Your records, credits and filings did not change. Here is where things moved.</p>
+  </div>
+  <div>
+    <div class="mv"><s>The View As Signatory button</s><i>→</i><span>The To sign tab, beside My leave and All filings</span></div>
+    <div class="mv"><s>The leave table</s><i>→</i><span>The All filings tab. My leave sorts what needs you, what is on the way and what is done.</span></div>
+    <div class="mv"><s>The Update Leave Approver button</s><i>→</i><span>The Change link under the page title</span></div>
+    <div class="mv"><s>Approved</s><i>→</i><span>Office Approved, with a note on who has your leave</span></div>
+  </div>
+  <div class="k-row">
+    <span class="k-btn primary sm">Show me around</span>
+    <span class="k-btn sm">Everything that moved</span>
+    <span class="k-link">Something missing? Tell us</span>
+  </div>
+</section>

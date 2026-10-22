@@ -1,0 +1,158 @@
+<style>
+    [data-frag="leave-a"] .grp { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; padding-bottom: 8px; border-bottom: 1px solid var(--rule); }
+    [data-frag="leave-a"] .grp .k-small { flex: 1 1 220px; }
+    [data-frag="leave-a"] .dk { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 14px 24px; padding: 18px 20px; border: 1px solid var(--rule); border-radius: 16px; background: var(--card); }
+    [data-frag="leave-a"] .dk.needs { border-color: var(--amber); box-shadow: inset 4px 0 0 var(--amber); }
+    [data-frag="leave-a"] .when { font: 600 26px/1.05 var(--serif); letter-spacing: -.015em; color: var(--ink); }
+    [data-frag="leave-a"] .fx { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; text-align: right; }
+    [data-frag="leave-a"] .fx b { font: 600 21px/1.1 var(--mono); font-variant-numeric: tabular-nums; color: var(--ink); }
+    [data-frag="leave-a"] .fx b.none { color: var(--ink-faint); }
+    [data-frag="leave-a"] .track { grid-column: 1 / -1; max-width: 440px; }
+    [data-frag="leave-a"] .track small { display: block; font-size: 11.5px; font-weight: 500; color: var(--ink-muted); }
+    [data-frag="leave-a"] .foot { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; padding-top: 12px; border-top: 1px solid var(--rule-soft); }
+    [data-frag="leave-a"] .dn { display: grid; grid-template-columns: 52px minmax(0, 1fr) 96px 132px 18px; align-items: center; gap: 12px; padding: 12px 4px; border-bottom: 1px solid var(--rule-soft); }
+    [data-frag="leave-a"] .dn:last-child { border-bottom: 0; }
+    [data-frag="leave-a"] .dn .amt { font: 600 14px/1.2 var(--mono); text-align: right; font-variant-numeric: tabular-nums; color: var(--ink-dim); }
+    [data-frag="leave-a"] .cr { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 14px 12px; margin: 0; }
+    [data-frag="leave-a"] .cr dt { font-size: 14px; font-weight: 600; color: var(--ink); }
+    [data-frag="leave-a"] .cr dt small { display: block; font-size: 12px; font-weight: 400; color: var(--ink-muted); }
+    [data-frag="leave-a"] .cr dd { margin: 0; font: 700 21px/1.1 var(--sans); font-variant-numeric: tabular-nums; text-align: right; color: var(--ink); }
+    [data-frag="leave-a"] .cr dd span { font-size: 13px; font-weight: 600; color: var(--ink-muted); }
+    [data-frag="leave-a"] .mini { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px; }
+    [data-frag="leave-a"] .mini div { display: flex; flex-direction: column; gap: 1px; padding: 2px 0 2px 10px; border-left: 1px solid var(--rule); }
+    [data-frag="leave-a"] .mini div:first-child { border-left: 0; padding-left: 0; }
+    [data-frag="leave-a"] .mini b { font: 700 18px/1.15 var(--sans); font-variant-numeric: tabular-nums; }
+    @container screen (max-width: 600px) {
+      [data-frag="leave-a"] .k-page-head > .k-btn { width: 100%; height: 46px; }
+      [data-frag="leave-a"] .dk { grid-template-columns: minmax(0, 1fr); gap: 12px; padding: 16px; }
+      [data-frag="leave-a"] .when { font-size: 24px; }
+      [data-frag="leave-a"] .fx { flex-direction: row; flex-wrap: wrap; align-items: baseline; justify-content: flex-start; gap: 4px 8px; text-align: left; padding: 8px 12px; border-radius: 10px; background: var(--paper); }
+      [data-frag="leave-a"] .fx b { font-size: 17px; }
+      [data-frag="leave-a"] .foot > .k-row { width: 100%; }
+      [data-frag="leave-a"] .foot .k-btn.primary { flex: 1 1 auto; height: 48px; font-size: 15px; }
+      [data-frag="leave-a"] .dn { grid-template-columns: 46px minmax(0, 1fr) auto; gap: 10px; padding: 12px 0; }
+      [data-frag="leave-a"] .dn > .k-pill, [data-frag="leave-a"] .dn > .chev { display: none; }
+    }
+  </style>
+
+  <div class="k-page-head">
+    <div class="k-stack xs">
+      <span class="k-eyebrow">Leave · 2026</span>
+      <p class="k-title">My leave <em>1 needs you</em></p>
+    </div>
+    <a href="#" class="k-btn"><svg class="k-i"><use href="#i-plus"></use></svg>File leave</a>
+  </div>
+
+  <div class="k-only-phone">
+    <div class="k-card tight">
+      <div class="mini">
+        <div><span class="k-eyebrow">VL</span><b>12.50</b></div>
+        <div><span class="k-eyebrow">SL</span><b>9.75</b></div>
+        <div><span class="k-eyebrow">SPL left</span><b>5</b></div>
+        <div><span class="k-eyebrow">Monetize</span><b>7.5</b></div>
+      </div>
+      <div class="k-row k-between"><span class="k-small">VL already counts the 3 days on the way</span><a href="#" class="k-link">History</a></div>
+    </div>
+  </div>
+
+  <div class="k-split">
+    <div class="k-stack lg">
+
+      <section class="k-stack sm" aria-labelledby="la-needs">
+        <div class="grp"><span class="k-mark">§ 1</span><p class="k-h3" id="la-needs">Needs you</p><span class="k-count maroon">1</span><span class="k-small">Drafts and returned leave. Your approver sees them only after you submit.</span></div>
+        <article class="dk needs">
+          <div class="k-stack xs">
+            <div class="k-row sm"><span class="k-tag">MFL</span><span class="k-small k-strong">Mandatory/Forced Leave</span><span class="k-pill plain">Draft</span></div>
+            <span class="when">21–23 Dec</span>
+            <span class="k-small">Mon to Wed · 3 days · saved 2 Oct</span>
+          </div>
+          <div class="fx"><span class="k-eyebrow">Credits</span><b class="none">none</b><span class="k-small">Not counted in TKS credits</span></div>
+          <div class="foot">
+            <span class="k-row sm k-amber k-small"><svg class="k-i sm"><use href="#i-warn"></use></svg><b>Not sent yet.</b> Ana Santos cannot see it.</span>
+            <div class="k-row sm">
+              <a href="#" class="k-btn ghost sm"><svg class="k-i sm"><use href="#i-edit"></use></svg>Edit</a>
+              <button type="button" class="k-iconbtn" aria-label="Delete draft"><svg class="k-i sm"><use href="#i-trash"></use></svg></button>
+              <button type="button" class="k-btn primary"><svg class="k-i"><use href="#i-send"></use></svg>Submit to Ana Santos</button>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <section class="k-stack sm" aria-labelledby="la-way">
+        <div class="grp"><span class="k-mark">§ 2</span><p class="k-h3" id="la-way">On the way</p><span class="k-count">2</span><span class="k-small">TKS counts leave against your credits from the day you file it.</span></div>
+        <article class="dk">
+          <div class="k-stack xs">
+            <div class="k-row sm"><span class="k-tag maroon">VL</span><span class="k-small k-strong">Vacation Leave</span><span class="k-pill info">Submitted</span></div>
+            <span class="when">6–7 Oct</span>
+            <span class="k-small">Tue and Wed · 2 days · <b class="k-amber">starts tomorrow</b></span>
+          </div>
+          <div class="fx"><span class="k-eyebrow">Credits</span><b>−2.00 VL</b><span class="k-small">counted since 1 Oct</span></div>
+          <ol class="k-steps track">
+            <li class="done">Filed<small>Thu 1 Oct</small></li>
+            <li class="now">Ana Santos<small>to sign</small></li>
+            <li>HRDO<small>records it</small></li>
+          </ol>
+          <div class="foot">
+            <span class="k-small">Within the Philippines · commutation not requested</span>
+            <div class="k-row sm">
+              <a href="#" class="k-btn ghost sm"><svg class="k-i sm"><use href="#i-eye"></use></svg>Preview</a>
+              <a href="#" class="k-btn sm"><svg class="k-i sm"><use href="#i-download"></use></svg>PDF</a>
+            </div>
+          </div>
+        </article>
+        <article class="dk">
+          <div class="k-stack xs">
+            <div class="k-row sm"><span class="k-tag maroon">VL</span><span class="k-small k-strong">Vacation Leave</span><span class="k-pill ok">Office Approved</span></div>
+            <span class="when">29 Sep</span>
+            <span class="k-small">Tuesday · 1 day · taken</span>
+          </div>
+          <div class="fx"><span class="k-eyebrow">Credits</span><b>−1.00 VL</b><span class="k-small">counted since 22 Sep</span></div>
+          <ol class="k-steps track">
+            <li class="done">Filed<small>22 Sep</small></li>
+            <li class="done">Ana Santos<small>signed 25 Sep</small></li>
+            <li class="now">HRDO<small>to record</small></li>
+          </ol>
+          <div class="foot">
+            <span class="k-small">Within the Philippines · commutation not requested</span>
+            <div class="k-row sm">
+              <a href="#" class="k-btn ghost sm"><svg class="k-i sm"><use href="#i-eye"></use></svg>Preview</a>
+              <a href="#" class="k-btn sm"><svg class="k-i sm"><use href="#i-download"></use></svg>PDF</a>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <section class="k-stack sm" aria-labelledby="la-done">
+        <div class="grp"><span class="k-mark">§ 3</span><p class="k-h3" id="la-done">Done in 2026</p><span class="k-count">7</span><a href="#" class="k-link" style="margin-left:auto">Show all<svg class="k-i sm"><use href="#i-chev-right"></use></svg></a></div>
+        <div>
+          <a href="#" class="dn"><span class="k-tag">SL</span><span class="k-stack xs"><b class="k-strong">22 Sep · 1 day</b><span class="k-small">Sick Leave · recorded 28 Sep</span></span><span class="amt">−1.00 SL</span><span class="k-pill ok">HR Approved</span><svg class="k-i sm chev k-faint"><use href="#i-chev-right"></use></svg></a>
+          <a href="#" class="dn"><span class="k-tag">SPL</span><span class="k-stack xs"><b class="k-strong">11 Sep · 1 day</b><span class="k-small">Special Privilege Leave · recorded 15 Sep</span></span><span class="amt">−1 SPL</span><span class="k-pill ok">HR Approved</span><svg class="k-i sm chev k-faint"><use href="#i-chev-right"></use></svg></a>
+          <a href="#" class="dn"><span class="k-tag maroon">VL</span><span class="k-stack xs"><b class="k-strong">13–14 Aug · 2 days</b><span class="k-small">Vacation Leave · recorded 18 Aug</span></span><span class="amt">−2.00 VL</span><span class="k-pill ok">HR Approved</span><svg class="k-i sm chev k-faint"><use href="#i-chev-right"></use></svg></a>
+          <a href="#" class="dn"><span class="k-tag">SL</span><span class="k-stack xs"><b class="k-strong">20 Jul · AM only</b><span class="k-small">Sick Leave · recorded 23 Jul</span></span><span class="amt">−0.50 SL</span><span class="k-pill ok">HR Approved</span><svg class="k-i sm chev k-faint"><use href="#i-chev-right"></use></svg></a>
+        </div>
+      </section>
+    </div>
+
+    <aside class="k-stack">
+      <section class="k-card k-hide-phone" aria-labelledby="la-credits">
+        <div class="k-row k-between"><p class="k-h2" id="la-credits">Credits</p><a href="#" class="k-link">History</a></div>
+        <dl class="cr">
+          <dt>Vacation<small>Counts the 3 days on the way</small></dt><dd>12.50</dd>
+          <dt>Sick<small>Nothing on the way</small></dt><dd>9.75</dd>
+          <dt>Special privilege<small>1 used this year</small></dt><dd>5 <span>of 6 left</span></dd>
+          <dt>Monetizable<small>VL above 5, up to 10</small></dt><dd>7.5</dd>
+        </dl>
+        <hr class="k-hr">
+        <p class="k-small" style="margin:0">Reference only. HRDO keeps the official record.</p>
+      </section>
+      <section class="k-card tight" aria-labelledby="la-approver">
+        <span class="k-eyebrow" id="la-approver">Your Leave Approver</span>
+        <div class="k-row nowrap">
+          <span class="k-avatar">AS</span>
+          <span class="k-stack xs k-grow"><b class="k-strong">Ana Santos</b><span class="k-small">Chief Administrative Officer</span></span>
+          <a href="#" class="k-link">Change</a>
+        </div>
+        <span class="k-small">Signs every leave you submit. HRDO records it after her.</span>
+      </section>
+    </aside>
+  </div>

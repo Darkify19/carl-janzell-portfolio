@@ -1,0 +1,308 @@
+---
+import CaseStudy from '../../layouts/CaseStudy.astro';
+import Screen from '../../components/Screen.astro';
+import '../../case-studies/aurum/aurum.css';
+
+const base = import.meta.env.BASE_URL.endsWith('/')
+  ? import.meta.env.BASE_URL
+  : import.meta.env.BASE_URL + '/';
+
+// Sample IPCR, labelled as a sample wherever it shows. The shares add up:
+// 0.87 + 0.70 + 0.70 + 0.60 + 0.60 + 0.50 + 0.50 = 4.47 (unrounded 4.4667).
+const targets = [
+  { name: 'Appointments', weight: 20, avg: 4.33 },
+  { name: 'HR information system', weight: 15, avg: 4.67 },
+  { name: 'Service records', weight: 15, avg: 4.67 },
+  { name: 'Leave administration', weight: 15, avg: 4.0 },
+  { name: '201 files', weight: 15, avg: 4.0 },
+  { name: 'Committee work', weight: 10, avg: 5.0 },
+  { name: 'Training', weight: 10, avg: 5.0 },
+];
+const share = (t: (typeof targets)[number]) => ((t.avg * t.weight) / 100).toFixed(2);
+const stops = ['5 · Outstanding', '4 · Very Satisfactory', '3 · Satisfactory', '2 · Unsatisfactory', '1 · Poor'];
+
+const landing = [
+  { name: 'A · Ledger', idea: 'A Form 1 sheet as the hero, with the five signed steps of a filing.', verdict: 'not taken' },
+  { name: 'B · Aurum Console', idea: "Dark and data-first: what's yours to do next, on one live board.", verdict: 'shipped first, on 2 Oct', picked: true },
+  { name: 'C · Observatory', idea: 'The whole semester as one night sky, the IPCR orbiting inward.', verdict: 'its night sky came back on 21 Oct' },
+  { name: 'D · Commons', idea: 'Role tabs, a status guide and sign-in right on the page.', verdict: 'its sign-in on the page came back on 21 Oct' },
+];
+
+const rules = [
+  'Show the climb, not a snapshot.',
+  'Evidence before ratings.',
+  'One gold button per screen.',
+  'Name the person, not the role.',
+  'Celebrate what is on record.',
+  'Private by default.',
+];
+
+const shipped = [
+  ['25 Jun', 'Per-user themes: Aurum, Nebula Codex and a default style, each a token sheet over one shared skin. The ambient star field.'],
+  ['10 Jul', 'IPCR summary, sign-off and targets panels. The star field gets a day mode and a night mode.'],
+  ['17 Jul', 'Sign-in rebuilt around one action, with Google One Tap and a light/dark switch.'],
+  ['7 Aug', 'The rating page, with a live projection that sticks to the top while you rate.'],
+  ['26 Aug', 'Guided tours, styled in the performance theme.'],
+  ['2 Oct', 'A guest landing page at the root, direction B, that is also the sign-in screen.'],
+  ['15 Oct', 'Aurum, refined. Home rebuilt around where you stand. Tasks tagged as evidence for commitments. The IPCR list split into My IPCR, To sign and All filings. The record drawn as Form 1 with your result beside it, and a rate sheet with the evidence and comments in reach.'],
+  ['21 Oct', 'A critique scores the landing 24 of 40. The same day it becomes the Sign-in Desk under a night sky. Google sign-in is steered to UP Mail, and every rejection gets a next step.'],
+] as const;
+
+const star = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.3l-5.9 3.3 1.3-6.6-4.9-4.6 6.6-.8z"/></svg>';
+---
+
+<CaseStudy
+  title="Aurum · performance app redesign case study · Carl Janzell Oropesa"
+  description="How I redesigned UPLB's performance app so every screen says where you stand, what moves you up and what to do next: the rating projection, the token-sheet themes, and the sign-in page rebuilt after a critique."
+  eyebrow="case study · UPLB Personnel Performance · 25 Jun to 21 Oct 2026"
+  heading="A performance app that shows you where you stand"
+  lede="UPLB Personnel Performance holds each person's semester: their commitments, the work behind them, the rating and the signed form. Its first screens said where a filing was and little else. Over four months I reworked it so every screen answers three things: where you stand, what moves you up, and what to do next."
+  facts={[
+    ['used by', '685 people signed in, 23 Jul to 14 Oct 2026'],
+    ['role', 'design and build, from the theme system to the sign-in page'],
+    ['how', 'options drawn as HTML boards with an AI coding agent, built in Filament, then critiqued again once live'],
+    ['stack', 'Laravel 12 · Filament 5 · Tailwind CSS 4'],
+  ]}
+  next={{ href: `${base}work/ledger-lite/`, label: 'ledger lite' }}
+>
+  <Fragment slot="head">
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&family=Inter:wght@400;500;600&display=swap"
+    />
+  </Fragment>
+
+  <section class="section cs-step" aria-labelledby="s1">
+    <div class="sec-head"><span class="label">01</span><h2 id="s1">The problem</h2></div>
+    <div class="cs-prose">
+      <p>The moment that matters most in this app is a reviewer rating someone's semester. It was a stock repeater of number boxes. A reviewer typed about 21 numbers, one per criterion, with no running total, and the final rating only appeared in a toast after the review had already moved on.</p>
+      <p>The rest said status and not standing. The IPCR list was a table with a View as Signatory toggle, and Home was a welcome band over widgets. Nothing told a person where they stood, or what would move their rating.</p>
+    </div>
+    <div class="cs-figs">
+      <Screen label="before · rating a review">
+        <div slot="screen" class="fi-stock">
+          <div class="modal">
+            <p class="mt">Rate IPCR · Juan dela Cruz</p>
+            <div class="rep">
+              {
+                targets.slice(0, 3).map((t, i) => (
+                  <div class="item">
+                    <p>{t.name}</p>
+                    <div class="row">
+                      <label>Quality<span class="in">{['5', '5', '4'][i]}</span></label>
+                      <label>Efficiency<span class="in">{['4', '5', '5'][i]}</span></label>
+                      <label>Timeliness<span class="in">{['4', '4', '5'][i]}</span></label>
+                    </div>
+                  </div>
+                ))
+              }
+              <div class="item">
+                <p>Leave administration</p>
+                <div class="row">
+                  <label>Quality<span class="in empty">0</span></label>
+                  <label>Efficiency<span class="in empty">0</span></label>
+                  <label>Timeliness<span class="in empty">0</span></label>
+                </div>
+              </div>
+            </div>
+            <div class="foot"><span class="btn primary">Complete review</span><span class="btn">Cancel</span></div>
+          </div>
+          <div class="toast"><b>Review completed</b><span>Final rating 4.47 · Very Satisfactory</span></div>
+        </div>
+        <b>Before.</b> Number boxes per criterion and no total. The rating showed up only in the toast, after the review was done. Rebuilt from the audit I wrote before redesigning it.
+      </Screen>
+    </div>
+  </section>
+
+  <section class="section cs-step" aria-labelledby="s2">
+    <div class="sec-head"><span class="label">02</span><h2 id="s2">What I explored</h2></div>
+    <div class="cs-prose">
+      <p>The rating came first. On 5 Aug I wrote up eleven findings on the rating screen, lettered like the clauses on the form, and a fix in four phases. Phase one was a live projection of the final rating that stays on screen while you rate. Phase two replaced number boxes with five labelled stops. The proposal ended on three questions only the HR process could answer: whether fractional ratings are real practice, whether self-rating should come back, and whether rating should stay in a modal.</p>
+      <p>The landing page got four whole directions on 2 Oct.</p>
+    </div>
+    <ul class="cs-options">
+      {
+        landing.map((d) => (
+          <li class={d.picked ? 'picked' : ''}>
+            <h3>{d.name}</h3>
+            <p>{d.idea}</p>
+            <p class="verdict">{d.verdict}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <section class="section cs-step" aria-labelledby="s3">
+    <div class="sec-head"><span class="label">03</span><h2 id="s3">The pick: keep the gold, change what it's for</h2></div>
+    <blockquote class="cs-quote">
+      The gold identity stays: UP gold, maroon and forest green on warm cream, charcoal chrome, the laurel and star. What changes is what it is for: every screen now says where you stand, what moves you up, and what to do next.
+      <cite class="label">the redesign's system board · Oct 2026</cite>
+    </blockquote>
+    <div class="cs-prose">
+      <p>Six rules came with it, and each one is checkable on a screen:</p>
+    </div>
+    <ul class="cs-options au-rules">
+      {
+        rules.map((r, i) => (
+          <li>
+            <h3>{r}</h3>
+            <p class="verdict">rule {i + 1}</p>
+          </li>
+        ))
+      }
+    </ul>
+    <div class="cs-prose">
+      <p>Private by default means no leaderboards of people. Heads see office progress, never a ranking of staff, and the laurel seal is struck only on an approved rating. Every rating, weight and count is set in IBM Plex Mono, because “a number in the body face is a bug”. Gold fills always carry dark ink, since white on gold fails contrast.</p>
+      <p>The themes are one skin with swappable token sheets. Adding a theme means writing a new sheet, not new selectors. Here's the same Home card under three of them:</p>
+    </div>
+    <div class="au-themes">
+      {
+        [
+          ['', 'Aurum · day'],
+          ['pf-night', 'Aurum · night'],
+          ['pf-nebula', 'Nebula Codex'],
+        ].map(([cls, name]) => (
+          <Screen label={name}>
+            <div slot="screen" class={`pf-scope ${cls} pf-pad`}>
+              <div class="pf-card pf-standing">
+                <div class="pf-stripe" />
+                <div class="body">
+                  <span class="pf-eyebrow">2nd Semester 2026 · Day 114 of 184</span>
+                  <h4>Good morning, Juan</h4>
+                  <span class="role">Administrative Officer I · Demo Office</span>
+                  <div class="pf-meter"><i style="width:62%" /></div>
+                  <div class="pf-tiles">
+                    <div class="pf-tile"><span class="pf-eyebrow">Trajectory</span><b>+0.37</b><small>since 1st Sem 2024</small></div>
+                    <div class="pf-tile best"><span class="pf-eyebrow">Best</span><b>4.53</b><small>2nd Sem 2025</small></div>
+                  </div>
+                  <span class="pf-tag">Sample</span>
+                </div>
+              </div>
+            </div>
+          </Screen>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="section cs-step" aria-labelledby="s4">
+    <div class="sec-head"><span class="label">04</span><h2 id="s4">What shipped</h2></div>
+    <div class="cs-figs">
+      <Screen label="after · the rate sheet">
+        <div slot="screen" class="pf-scope">
+          <div class="pf-bar"><b>UPLB Performance</b><span>Home</span><span>Task Board</span><span class="on">IPCR</span></div>
+          <div class="pf-pad" style="display:grid;gap:14px">
+            <div class="pf-card pf-proj">
+              <div class="score">
+                <span class="pf-eyebrow">Rating so far</span>
+                <span class="numerical">3.47</span>
+                <span class="adj">Provisional</span>
+              </div>
+              <div>
+                <div class="head"><span>15 of 21 criteria rated</span><span>80% of 100% weight</span></div>
+                <div class="pf-meter" style="margin-top:8px"><i style="width:80%" /></div>
+                <p class="hint">Provisional — 2 targets still unrated, so the rating can only go up from here.</p>
+              </div>
+              <span class="pf-saved">✓ Saved as you rate · 2:14 PM</span>
+            </div>
+            <div class="pf-card">
+              <div class="pf-target">
+                <p class="pf-title" style="font-size:17px">HR information system <span class="pf-eyebrow">· 15%</span></p>
+                <div class="pf-crit"><span>Quality<small>How well was it done?</small></span><div class="pf-stops">{stops.map((s, i) => <span class={i === 0 ? 'on' : ''}>{s}</span>)}</div></div>
+                <div class="pf-crit"><span>Efficiency<small>How well were resources used?</small></span><div class="pf-stops">{stops.map((s, i) => <span class={i === 0 ? 'on' : ''}>{s}</span>)}</div></div>
+                <div class="pf-crit"><span>Timeliness<small>Was it delivered on time?</small></span><div class="pf-stops">{stops.map((s, i) => <span class={i === 1 ? 'on' : ''}>{s}</span>)}</div></div>
+                <div class="pf-rowscore"><span>Average<strong>4.67</strong></span><span>Contributes<strong>0.70</strong></span></div>
+              </div>
+              <div class="pf-target">
+                <p class="pf-title" style="font-size:17px">Committee work <span class="pf-eyebrow">· 10%</span></p>
+                <div class="pf-rowscore"><span>Not yet rated — worth up to <strong>0.50</strong> of the final rating.</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <b>After.</b> The rating builds as you pick, and every pick saves itself. The band's name stays hidden until every target is rated. The template's own comment explains why: <q>The numeral is honest at any point; the word is not.</q> Calling a half-rated review “Poor” would read as a verdict the unrated targets can still overturn. Sample figures.
+      </Screen>
+      <Screen label="after · your result">
+        <div slot="screen" class="pf-scope pf-pad au-result">
+          <div class="pf-card pf-pad au-result-card">
+            <div class="pf-seal"><div><Fragment set:html={star} /><b>4.47</b><small>Very Satisfactory</small></div></div>
+            <div class="au-result-text">
+              <span class="pf-eyebrow">Your result · 1st Semester 2026 · approved</span>
+              <p class="pf-title">0.53 to Outstanding</p>
+              <p style="color:var(--pf-ink-dim)">Your aim this semester is 4.75. Only you see it.</p>
+              <span class="pf-tag">Sample</span>
+            </div>
+          </div>
+        </div>
+        <b>The laurel seal</b> appears only on an approved rating, never as decoration. The next band and a private aim sit beside it, because the point is the next semester. Sample figures.
+      </Screen>
+    </div>
+    <ol class="cs-timeline">
+      {
+        shipped.map(([when, what]) => (
+          <li>
+            <time>{when} 2026</time>
+            <span>{what}</span>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <section class="section cs-step" aria-labelledby="s5">
+    <div class="sec-head"><span class="label">05</span><h2 id="s5">The sign-in page, after a critique</h2></div>
+    <div class="cs-prose">
+      <p>The landing I shipped on 2 Oct didn't hold up. On 21 Oct a critique scored it 24 of 40 and summed it up in four words: specific content, borrowed shell. It used a stock SaaS section order, ran past 7,000 pixels on a phone for what is a sign-in screen, and met a rejected sign-in with vendor error text under a celebratory hero.</p>
+      <p>I rebuilt it the same day as the Sign-in Desk: one card that holds the sign-in and stays put, beside a story told under a night sky. Two ideas came back from directions I'd passed on. Commons put sign-in on the page, and Observatory gave the sky. A rejected sign-in now gets a calm heading, the reason and a next step.</p>
+      <p>One part of the story is the rating arithmetic as a row of meters, where width is weight and fill is score:</p>
+    </div>
+    <div class="cs-figs">
+      <Screen label="landing · where a rating comes from">
+        <div slot="screen" class="pf-scope pf-rail">
+          <div class="rh"><b>Where a 4.47 comes from</b><span class="pf-tag">Sample</span></div>
+          <div class="pf-bridge">
+            {
+              targets.map((t) => (
+                <div class="pf-m" style={`flex:${t.weight};--fill:${(t.avg / 5) * 100}%`}>
+                  <span class="n">{t.name}</span>
+                  <span class="w">{t.weight}%</span>
+                  <span class="tube"><i /></span>
+                  <span class="s">{share(t)}<small>avg {t.avg.toFixed(2)}</small></span>
+                </div>
+              ))
+            }
+          </div>
+          <div class="pf-sum"><span>The shares add up to</span><b>4.47</b><span>Very Satisfactory · 0.53 to Outstanding</span></div>
+        </div>
+        <b>Show the maths.</b> Each meter's gold area is its share of the final rating, the same way UP SPMS Form 1 computes it. Sample figures.
+      </Screen>
+    </div>
+  </section>
+</CaseStudy>
+
+<style>
+  /* :nth-child(n) only lifts specificity over the three-column .cs-options rule */
+  .au-rules li:nth-child(n) {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+  .au-themes {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    margin-top: 28px;
+  }
+  .au-result-card {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 22px 28px;
+  }
+  .au-result-text {
+    display: grid;
+    gap: 6px;
+    justify-items: start;
+    min-width: 0;
+    flex: 1 1 220px;
+  }
+</style>

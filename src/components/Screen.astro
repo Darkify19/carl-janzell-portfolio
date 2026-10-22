@@ -1,0 +1,64 @@
+---
+// A rebuilt product screen in a plain window frame. The markup inside is a
+// static mock (no live links or controls), so the frame is inert and hidden
+// from assistive tech; the caption carries what the screen shows.
+interface Props {
+  /** The mock's markup; or pass it in the "screen" slot instead. */
+  html?: string;
+  label: string;
+  /** Wrap the mock in the TKS kit: top navigation with this item active. */
+  tksNav?: 'home' | 'attendance' | 'dtr' | 'leave' | 'requests';
+  /** The kit's data-frag key the mock's own CSS is scoped to, e.g. "leave-a". */
+  frag?: string;
+}
+
+const { html, label, tksNav, frag } = Astro.props;
+const nav = ['home', 'attendance', 'dtr', 'leave', 'requests'];
+const icon = (name: string) => `<svg class="k-i sm"><use href="#i-${name}"></use></svg>`;
+---
+
+<figure class="cs-fig">
+  <div class="cs-frame" aria-hidden="true" inert>
+    <div class="cs-frame-bar">{label}</div>
+    <div class="cs-shot">
+      {
+        tksNav ? (
+          <div class="k-scope">
+            <div class="p-nav">
+              <span class="p-brand"><span class="p-logo">TKS</span>Timekeeping</span>
+              <span class="p-links">
+                {nav.map((k) => (
+                  <span class={k === tksNav ? 'on' : ''}>
+                    {k === 'dtr' ? 'DTR' : k[0].toUpperCase() + k.slice(1)}
+                    {k === 'requests' && <Fragment set:html={icon('chev-down')} />}
+                  </span>
+                ))}
+              </span>
+              <span class="p-tools">
+                <span class="p-round"><Fragment set:html={icon('bell')} /><b>3</b></span>
+                <span class="p-me">JD</span>
+              </span>
+            </div>
+            <div class="k-screen">
+              <div class="k-page" data-frag={frag} set:html={html} />
+            </div>
+          </div>
+        ) : html ? (
+          <Fragment set:html={html} />
+        ) : (
+          <slot name="screen" />
+        )
+      }
+    </div>
+  </div>
+  <figcaption><slot /></figcaption>
+</figure>
+
+<style is:global>
+  /* the kit's top nav wraps instead of overflowing on narrow screens */
+  @media (max-width: 760px) {
+    .k-scope .p-nav { flex-wrap: wrap; gap: 10px 16px; padding: 10px 14px; }
+    .k-scope .p-links { order: 3; flex-basis: 100%; overflow-x: auto; }
+    .k-scope .p-tools { margin-left: auto; }
+  }
+</style>

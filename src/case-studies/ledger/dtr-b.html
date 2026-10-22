@@ -1,0 +1,140 @@
+<style>
+    [data-frag="dtr-b"] .regsplit { display: grid; grid-template-columns: 268px minmax(0, 1fr); gap: 24px; align-items: start; }
+    [data-frag="dtr-b"] .sheetpane { grid-column: 2; grid-row: 1; }
+    [data-frag="dtr-b"] .regcol { grid-column: 1; grid-row: 1; }
+    [data-frag="dtr-b"] .reg-head { display: flex; justify-content: space-between; align-items: center; padding: 14px 16px 10px; border-bottom: 1px solid var(--rule-strong); }
+    [data-frag="dtr-b"] .reg-item { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 2px 10px; padding: 10px 16px; border-bottom: 1px solid var(--rule-soft); }
+    [data-frag="dtr-b"] .reg-item:last-child { border-bottom: 0; }
+    [data-frag="dtr-b"] .reg-item b { font-weight: 600; color: var(--ink); }
+    [data-frag="dtr-b"] .reg-item .k-small { grid-column: 1; }
+    [data-frag="dtr-b"] .reg-item.on { background: var(--green-tint); box-shadow: inset 3px 0 0 var(--green); }
+    [data-frag="dtr-b"] .reg-item.on b { color: var(--green); }
+    [data-frag="dtr-b"] .reg-item.run b { color: var(--ink-muted); }
+    [data-frag="dtr-b"] .reg-item .k-i { grid-row: 1 / span 2; grid-column: 2; color: var(--ink-faint); }
+    [data-frag="dtr-b"] .reg-item.on .k-i { color: var(--green); }
+    [data-frag="dtr-b"] .sheet-top { display: grid; grid-template-columns: 72px minmax(0, 1fr) 72px; gap: 12px; align-items: start; }
+    [data-frag="dtr-b"] .sheet-name { display: flex; flex-direction: column; align-items: center; gap: 2px; margin-top: 4px; }
+    [data-frag="dtr-b"] .sheet-name b { min-width: 220px; padding-bottom: 3px; border-bottom: 1px solid var(--rule-strong); text-align: center; font-weight: 700; letter-spacing: .03em; }
+    [data-frag="dtr-b"] .sheet-name span, [data-frag="dtr-b"] .sheet-meta { font-size: 11.5px; color: var(--ink-muted); text-align: center; }
+    [data-frag="dtr-b"] .sheet-meta { margin: 0; }
+    [data-frag="dtr-b"] .sheet-meta u { color: var(--ink); text-decoration-color: var(--rule-strong); }
+    [data-frag="dtr-b"] .qrbox { display: flex; flex-direction: column; align-items: center; gap: 4px; font: 500 9.5px/1 var(--mono); color: var(--ink-muted); }
+    [data-frag="dtr-b"] .qr { position: relative; width: 62px; height: 62px; background: repeating-conic-gradient(var(--ink-dim) 0 25%, transparent 0 50%) 0 0 / 7px 7px; border: 3px solid var(--card); outline: 1px solid var(--rule); }
+    [data-frag="dtr-b"] .qr i { position: absolute; width: 20px; height: 20px; border: 3px solid var(--ink); background: var(--card); box-shadow: inset 0 0 0 3px var(--card), inset 0 0 0 10px var(--ink); }
+    [data-frag="dtr-b"] .qr i:nth-child(1) { top: 0; left: 0; } [data-frag="dtr-b"] .qr i:nth-child(2) { top: 0; right: 0; } [data-frag="dtr-b"] .qr i:nth-child(3) { bottom: 0; left: 0; }
+    [data-frag="dtr-b"] .wd { margin-left: 5px; font-weight: 500; font-size: 10.5px; color: var(--ink-muted); }
+    [data-frag="dtr-b"] .ut { color: var(--maroon); font-weight: 700; }
+    [data-frag="dtr-b"] .cert { margin: 0; font-size: 11px; line-height: 1.45; color: var(--ink-dim); }
+    [data-frag="dtr-b"] .signs { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 24px; }
+    [data-frag="dtr-b"] .stepper { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: 8px; align-items: center; }
+    [data-frag="dtr-b"] .stepper .k-btn { padding: 0 10px; }
+    [data-frag="dtr-b"] .stepper .k-btn:last-child { color: var(--ink-faint); }
+    @container screen (max-width: 600px) {
+      [data-frag="dtr-b"] .regsplit { grid-template-columns: minmax(0, 1fr); }
+      [data-frag="dtr-b"] .sheetpane { grid-column: 1; }
+      [data-frag="dtr-b"] .sheet-top { grid-template-columns: minmax(0, 1fr) 56px; gap: 8px; }
+      [data-frag="dtr-b"] .sheet-top > .spacer { display: none; }
+      [data-frag="dtr-b"] .sheet-name b { min-width: 0; width: 100%; }
+      [data-frag="dtr-b"] .qr { width: 52px; height: 52px; }
+      [data-frag="dtr-b"] .qr i { width: 16px; height: 16px; box-shadow: inset 0 0 0 2px var(--card), inset 0 0 0 8px var(--ink); }
+      [data-frag="dtr-b"] .k-form48 th, [data-frag="dtr-b"] .k-form48 td { padding: 5px 2px; font-size: 12px; }
+      [data-frag="dtr-b"] .k-form48 th { font-size: 8.5px; letter-spacing: .02em; }
+      [data-frag="dtr-b"] .k-fill { padding: 3px 4px; font-size: 11px; }
+      [data-frag="dtr-b"] .wd { display: block; margin: 0; font-size: 9.5px; }
+      [data-frag="dtr-b"] .signs { grid-template-columns: minmax(0, 1fr); }
+      [data-frag="dtr-b"] .sheet-actions > .k-btn { flex: 1 1 auto; }
+      [data-frag="dtr-b"] .sheet-actions > .k-btn.primary { flex-basis: 100%; height: 52px; font-size: 16px; }
+    }
+  </style>
+
+  <div class="regsplit">
+    <section class="sheetpane k-stack">
+      <div class="k-only-phone">
+        <nav class="stepper" aria-label="Kinsena">
+          <a href="#" class="k-btn sm"><svg class="k-i sm"><use href="#i-chev-left"></use></svg>Sep 1–15</a>
+          <a href="#" class="k-btn sm"><svg class="k-i sm"><use href="#i-list"></use></svg>All DTRs</a>
+          <a href="#" class="k-btn sm" aria-disabled="true">Oct 1–15<svg class="k-i sm"><use href="#i-chev-right"></use></svg></a>
+        </nav>
+      </div>
+      <div class="k-stack xs">
+        <span class="k-eyebrow green">Generated · 1 Oct 2026, 8:14 AM</span>
+        <p class="k-title">September <em>16–30</em>, 2026</p>
+        <p class="k-sub">9 days worked · 2 days on leave or travel · 0:11 undertime</p>
+      </div>
+      <div class="k-row sheet-actions">
+        <button type="button" class="k-btn primary"><svg class="k-i"><use href="#i-download"></use></svg>Download PDF</button>
+        <button type="button" class="k-btn"><svg class="k-i"><use href="#i-refresh"></use></svg>Refresh</button>
+        <button type="button" class="k-btn"><svg class="k-i"><use href="#i-plus"></use></svg>Add Attendance</button>
+      </div>
+      <div class="k-card tight">
+        <div class="k-row nowrap">
+          <span class="k-avatar">AS</span>
+          <div class="k-stack xs k-grow"><span class="k-strong">In Charge: Ana Santos</span><span class="k-small">Chief Administrative Officer · prints on every DTR</span></div>
+          <button type="button" class="k-btn sm">Change</button>
+        </div>
+      </div>
+
+      <article class="k-sheet" aria-label="CS Form No. 48, September 16–30, 2026">
+        <div class="k-sheet-head"><span>Civil Service Form No. 48</span><span class="k-hide-phone">TKS-generated · scan QR to verify</span></div>
+        <div class="sheet-top">
+          <span class="spacer"></span>
+          <div class="k-stack xs">
+            <p class="k-sheet-title">Daily Time Record</p>
+            <div class="sheet-name"><b>JUAN DELA CRUZ</b><span>(Name)</span></div>
+            <p class="sheet-meta">For the month of <u>September 16–30, 2026</u></p>
+            <p class="sheet-meta">Schedule: Regular Shift (8AM - 5PM)<br>Mon, Tue, Wed, Thu, Fri · 8:00 AM - 5:00 PM · Break 12:00 PM – 1:00 PM</p>
+          </div>
+          <div class="qrbox"><span class="qr" aria-hidden="true"><i></i><i></i><i></i></span>7c1e4b92</div>
+        </div>
+        <div class="k-table-wrap">
+          <table class="k-form48">
+            <thead>
+              <tr><th rowspan="2">Day</th><th colspan="2">AM</th><th colspan="2">PM</th><th colspan="2">Undertime</th></tr>
+              <tr><th>Arrival</th><th>Departure</th><th>Arrival</th><th>Departure</th><th>Hrs</th><th>Min</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>16<span class="wd">Wed</span></td><td>7:52</td><td>12:01</td><td>12:55</td><td>5:03</td><td></td><td></td></tr>
+              <tr><td>17<span class="wd">Thu</span></td><td>7:48</td><td>12:00</td><td>12:58</td><td>4:56</td><td></td><td class="ut">4</td></tr>
+              <tr><td>18<span class="wd">Fri</span></td><td>7:55</td><td>12:02</td><td>12:57</td><td>5:05</td><td></td><td></td></tr>
+              <tr><td>19<span class="wd">Sat</span></td><td colspan="4"><span class="k-fill weekend">Saturday</span></td><td></td><td></td></tr>
+              <tr><td>20<span class="wd">Sun</span></td><td colspan="4"><span class="k-fill weekend">Sunday</span></td><td></td><td></td></tr>
+              <tr><td>21<span class="wd">Mon</span></td><td>7:50</td><td>12:00</td><td>12:59</td><td>5:02</td><td></td><td></td></tr>
+              <tr><td>22<span class="wd">Tue</span></td><td colspan="4"><span class="k-fill leave">VL</span></td><td></td><td></td></tr>
+              <tr><td>23<span class="wd">Wed</span></td><td>7:46</td><td>12:03</td><td>12:56</td><td>5:10</td><td></td><td></td></tr>
+              <tr><td>24<span class="wd">Thu</span></td><td>7:58</td><td>12:00</td><td>12:54</td><td>5:01</td><td></td><td></td></tr>
+              <tr><td>25<span class="wd">Fri</span></td><td colspan="4"><span class="k-fill travel">On Travel</span></td><td></td><td></td></tr>
+              <tr><td>26<span class="wd">Sat</span></td><td colspan="4"><span class="k-fill weekend">Saturday</span></td><td></td><td></td></tr>
+              <tr><td>27<span class="wd">Sun</span></td><td colspan="4"><span class="k-fill weekend">Sunday</span></td><td></td><td></td></tr>
+              <tr><td>28<span class="wd">Mon</span></td><td>7:51</td><td>12:01</td><td>12:58</td><td>5:04</td><td></td><td></td></tr>
+              <tr><td>29<span class="wd">Tue</span></td><td>8:07</td><td>12:00</td><td>12:57</td><td>5:00</td><td></td><td class="ut">7</td></tr>
+              <tr><td>30<span class="wd">Wed</span></td><td>7:49</td><td>12:02</td><td>12:59</td><td>5:06</td><td></td><td></td></tr>
+            </tbody>
+            <tfoot><tr><td></td><td colspan="4">TOTAL</td><td>0</td><td class="ut">11</td></tr></tfoot>
+          </table>
+        </div>
+        <p class="cert">I certify on my honor that the above is a true and correct report of the hours of work performed, record of which was made daily at the time of arrival at and departure from office.</p>
+        <div class="signs">
+          <div class="k-sheet-sign"><b>Juan dela Cruz</b><span>Signature over printed name</span></div>
+          <div class="k-sheet-sign"><b>Ana Santos</b><span>Chief Administrative Officer · In Charge</span></div>
+        </div>
+      </article>
+      <p class="k-small k-row sm nowrap" style="margin:0;align-items:flex-start"><svg class="k-i sm"><use href="#i-info"></use></svg><span>Missing a punch? Use Add Attendance and this sheet updates itself. Press Refresh when biometric punches came in after you generated. Leave, travel and holidays fill in on their own.</span></p>
+    </section>
+
+    <aside class="regcol k-hide-phone k-stack sm">
+      <button type="button" class="k-btn block"><svg class="k-i"><use href="#i-plus"></use></svg>Generate DTR</button>
+      <nav class="k-card flush" aria-label="All DTRs">
+        <div class="reg-head"><span class="k-eyebrow">All DTRs · 2026</span><span class="k-count">16</span></div>
+        <a href="#" class="reg-item run"><b>Oct 1–15</b><span class="k-pill plain">In progress</span><span class="k-small">Working day 3 of 11</span></a>
+        <a href="#" class="reg-item on"><b>Sep 16–30</b><svg class="k-i sm"><use href="#i-chev-right"></use></svg><span class="k-small">9 days · 0:11 undertime</span></a>
+        <a href="#" class="reg-item"><b>Sep 1–15</b><svg class="k-i sm"><use href="#i-chev-right"></use></svg><span class="k-small">10 days · 0:24 undertime</span></a>
+        <a href="#" class="reg-item"><b>Aug 16–31</b><svg class="k-i sm"><use href="#i-chev-right"></use></svg><span class="k-small">9 days · no undertime</span></a>
+        <a href="#" class="reg-item"><b>Aug 1–15</b><svg class="k-i sm"><use href="#i-chev-right"></use></svg><span class="k-small">10 days · 0:32 undertime</span></a>
+        <a href="#" class="reg-item"><b>Jul 16–31</b><svg class="k-i sm"><use href="#i-chev-right"></use></svg><span class="k-small">11 days · 0:05 undertime</span></a>
+        <a href="#" class="reg-item"><b>Jul 1–15</b><svg class="k-i sm"><use href="#i-chev-right"></use></svg><span class="k-small">11 days · 1:02 undertime</span></a>
+        <a href="#" class="reg-item"><b>Jun 1–15</b><svg class="k-i sm"><use href="#i-chev-right"></use></svg><span class="k-small">10 days · 0:18 undertime</span></a>
+        <a href="#" class="reg-item"><b>May 16–31</b><svg class="k-i sm"><use href="#i-chev-right"></use></svg><span class="k-small">10 days · 0:09 undertime</span></a>
+      </nav>
+      <a href="#" class="k-link">Show earlier DTRs<svg class="k-i sm"><use href="#i-chev-down"></use></svg></a>
+    </aside>
+  </div>
