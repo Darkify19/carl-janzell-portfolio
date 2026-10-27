@@ -37,16 +37,21 @@ const rules = [
   'Private by default.',
 ];
 
-const shipped = [
+const shipped: [string, string, string[]?][] = [
   ['25 Jun', 'Per-user themes: Aurum, Nebula Codex and a default style, each a token sheet over one shared skin. The ambient star field.'],
   ['10 Jul', 'IPCR summary, sign-off and targets panels. The star field gets a day mode and a night mode.'],
   ['17 Jul', 'Sign-in rebuilt around one action, with Google One Tap and a light/dark switch.'],
   ['7 Aug', 'The rating page, with a live projection that sticks to the top while you rate.'],
   ['26 Aug', 'Guided tours, styled in the performance theme.'],
   ['2 Oct', 'A guest landing page at the root, direction B, that is also the sign-in screen.'],
-  ['15 Oct', 'Aurum, refined. Home rebuilt around where you stand. Tasks tagged as evidence for commitments. The IPCR list split into My IPCR, To sign and All filings. The record drawn as Form 1 with your result beside it, and a rate sheet with the evidence and comments in reach.'],
+  ['15 Oct', 'Aurum, refined.', [
+    'Home rebuilt around where you stand',
+    'Tasks tagged as evidence for commitments',
+    'The IPCR list split into My IPCR, To sign and All filings',
+    'The record drawn as Form 1 with your result beside it, and a rate sheet with the evidence and comments in reach',
+  ]],
   ['21 Oct', 'A critique scores the landing 24 of 40. The same day it becomes the Sign-in Desk under a night sky. Google sign-in is steered to UP Mail, and every rejection gets a next step.'],
-] as const;
+];
 
 const star = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.3l-5.9 3.3 1.3-6.6-4.9-4.6 6.6-.8z"/></svg>';
 ---
@@ -141,7 +146,7 @@ const star = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.9 6
       <cite class="label">the redesign's system board · Oct 2026</cite>
     </blockquote>
     <div class="cs-prose">
-      <p>Six rules came with it, and each one is checkable on a screen:</p>
+      <p>The gold could stay because the first screens failed on what they said. They told you where a filing was and nothing about where you stood. So each screen got a new job, and six rules came with it. Each one is checkable on a screen:</p>
     </div>
     <ul class="cs-options au-rules">
       {
@@ -241,10 +246,13 @@ const star = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.9 6
     </div>
     <ol class="cs-timeline">
       {
-        shipped.map(([when, what]) => (
+        shipped.map(([when, what, parts]) => (
           <li>
             <time>{when} 2026</time>
-            <span>{what}</span>
+            <div>
+              {what}
+              {parts && <ul>{parts.map((p) => <li>{p}</li>)}</ul>}
+            </div>
           </li>
         ))
       }
@@ -278,6 +286,15 @@ const star = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.9 6
         </div>
         <b>Show the maths.</b> Each meter's gold area is its share of the final rating, the same way UP SPMS Form 1 computes it. Sample figures.
       </Screen>
+    </div>
+  </section>
+
+  <section id="still-to-fix" class="section cs-step" aria-labelledby="s6">
+    <div class="sec-head"><span class="label">06</span><h2 id="s6">What I'd still fix</h2></div>
+    <div class="cs-prose">
+      <p>Nobody was told. In TKS every redesigned page opened with a note on what moved. This redesign went out without one, and without a release page, so reviewers met the new rate sheet with no word that it had changed. A short what-moved note on Home and the rate sheet is the first thing I'd add.</p>
+      <p>The Sign-in Desk hasn't been critiqued since I rebuilt it on 21 Oct, so the last score on record is still the 24 of 40 that started the rebuild. That run is next.</p>
+      <p>I'm happy to walk through the rate sheet in an interview.</p>
     </div>
   </section>
 </CaseStudy>

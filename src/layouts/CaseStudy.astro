@@ -231,7 +231,7 @@ const base = import.meta.env.BASE_URL.endsWith('/')
     list-style: none;
     border-top: 1px solid var(--color-rule);
   }
-  .cs-timeline li {
+  .cs-timeline > li {
     display: grid;
     grid-template-columns: 110px minmax(0, 1fr);
     gap: 4px 20px;
@@ -246,6 +246,17 @@ const base = import.meta.env.BASE_URL.endsWith('/')
     line-height: 1.9;
     color: var(--color-muted);
     font-variant-numeric: tabular-nums;
+  }
+  /* a row's headline change, then what went into it */
+  .cs-timeline ul {
+    display: grid;
+    gap: 3px;
+    margin: 6px 0 0;
+    padding: 0 0 0 1.1em;
+    list-style: disc;
+  }
+  .cs-timeline ul li::marker {
+    color: var(--color-muted);
   }
 
   /* what users were told, quoted as it shipped */

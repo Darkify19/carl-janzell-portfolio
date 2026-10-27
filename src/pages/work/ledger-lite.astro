@@ -40,15 +40,24 @@ const modules = [
   { name: 'Trip ticket', picked: "Today's ticket first, with one big Log trip button", passed: 'a logbook of days, the ticket on paper' },
 ];
 
-const shipped = [
-  ['2 Oct', 'Ledger Lite theme. Sign-in becomes the TKS landing page, in Ledger Lite. Personnel home laid out like the design. The write-in and stamp-press motion.'],
-  ['7 Oct', 'Leave as a docket with a paper-form record page and one numbered filing sheet. DTR register beside the sheet, with a one-zip bulk download. Certificates of service in two lanes. Travel as trip cards. Trip ticket with today first. One status pill everywhere.'],
+const shipped: [string, string, string[]?][] = [
+  ['2 Oct', 'The Ledger Lite theme ships.', [
+    'Sign-in becomes the TKS landing page, in Ledger Lite',
+    'Personnel home laid out like the design',
+    'The write-in and stamp-press motion',
+  ]],
+  ['7 Oct', 'Every personnel module moves to the new design.', [
+    'Leave as a docket, with a paper-form record page and one numbered filing sheet',
+    'The DTR register beside the sheet, with a one-zip bulk download',
+    'Certificates of service in two lanes, travel as trip cards, the trip ticket with today first',
+    'One status pill everywhere',
+  ]],
   ['7 Oct', 'A “what moved” note on every redesigned page, a short tour per page and one searchable list.'],
   ['13 Oct', 'Landing page fits phones.'],
   ['15 Oct', 'Tours match each theme and gain step progress and Skip; tour wording rewritten in plain steps. Ledger Lite error and maintenance pages, prerendered so a maintenance window still shows one.'],
   ['21 Oct', 'Personnel fix a missed punch right on the Form 48 sheet while their office has manual entry open. Leave is filed by picking a leave card and tapping days on a calendar.'],
   ['22 Oct', 'The activity log reads as a day-by-day ledger, one plain sentence per change.'],
-] as const;
+];
 
 const swatches = [
   ['#F7F5EF', 'paper'],
@@ -115,6 +124,7 @@ const swatches = [
     </ul>
     <div class="cs-prose">
       <p>The pick was a blend, named on the final board: <strong>Ledger Lite, Form 48's character with Daylight's simplicity.</strong></p>
+      <p>Form 48 won on recognition. The DTR is the paper everyone signs twice a month, so screens that look like it need little explaining. Taken whole, though, it meant ruled tables and typewriter labels on every screen. Daylight kept that plain, with white cards on hairlines and one green action, and its moving sky stayed behind. Aurum Night would have matched the Performance app, but it gave personnel nothing they already knew.</p>
       <p>Then every module got three options of its own. Eleven questions, from list pages to the signature page, each drawn as three real screens with invented people, at desktop and phone width. A separate board did the same for motion: nine moments, from a stamp press on a verified DTR to a sliding bar under the phone tab bar.</p>
     </div>
     <ul class="cs-options">
@@ -170,10 +180,13 @@ const swatches = [
     </div>
     <ol class="cs-timeline">
       {
-        shipped.map(([when, what]) => (
+        shipped.map(([when, what, parts]) => (
           <li>
             <time>{when} 2026</time>
-            <span>{what}</span>
+            <div>
+              {what}
+              {parts && <ul>{parts.map((p) => <li>{p}</li>)}</ul>}
+            </div>
           </li>
         ))
       }
