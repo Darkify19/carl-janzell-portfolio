@@ -233,11 +233,16 @@ const base = import.meta.env.BASE_URL.endsWith('/')
   }
   .cs-timeline > li {
     display: grid;
-    grid-template-columns: 110px minmax(0, 1fr);
-    gap: 4px 20px;
+    gap: 0 20px;
     padding: 11px 0;
     border-bottom: 1px solid var(--color-rule);
     color: var(--color-body);
+  }
+  /* on phones the date sits above its row, so the text gets the full width */
+  @media (min-width: 640px) {
+    .cs-timeline > li {
+      grid-template-columns: 110px minmax(0, 1fr);
+    }
   }
   .cs-timeline time {
     font-family: var(--font-mono);
