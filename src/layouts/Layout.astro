@@ -38,7 +38,7 @@ const pathname = Astro.url.pathname.endsWith('/')
 const canonical = new URL(pathname, siteUrl).href;
 // The person lives on the home page, whichever page declares them.
 const home = new URL(base, siteUrl).href;
-const ogImage = new URL(image ?? `${base}og.png`, siteUrl).href;
+const ogImage = new URL(image ?? `${base}og.png?v=2`, siteUrl).href;
 const cvUrl = new URL(cvPath(base), siteUrl).href;
 
 const linkedin = 'https://www.linkedin.com/in/carl-janzell-764399179/';
