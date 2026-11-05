@@ -1,6 +1,6 @@
 ---
 // The UPLB HR ecosystem as a schematic. Every node, edge and label here is
-// real and checked against the repos (22 Sep 2026), so keep it that way when
+// real and checked against the repos (22 Sep 2026; payroll edge 5 Nov 2026), so keep it that way when
 // the ecosystem changes: the map is only worth showing while it's accurate.
 // It shows the main data paths, not every topic (PerporManTask also reads
 // uplb-personnel directly, for instance).
@@ -23,8 +23,9 @@ const systems: Record<string, Sys> = {
   tks: { name: 'UPLB-TKS', sub: 'timekeeping, leave', hi: '4,000+ personnel', owner: 'mine', core: true, href: '#tks' },
   pmt: { name: 'PerporManTask', sub: 'performance · IPCR', owner: 'mine', href: '#pmt' },
   saln: { name: 'uplb-saln', sub: 'SALN e-filing', owner: 'team', href: '#shared' },
-  kiosk: { name: 'UPLB Kiosk', sub: '22.8% of punches', owner: 'mine', href: '#kiosk' },
+  kiosk: { name: 'UPLB Kiosk', sub: '24.6% of punches', owner: 'mine', href: '#kiosk' },
   portal: { name: 'UPLB Portal', sub: 'single sign-on', owner: 'up' },
+  payroll: { name: 'UPLB Payroll', sub: 'payroll control', owner: 'team', href: '#payroll' },
 };
 
 interface Link {
@@ -48,6 +49,7 @@ const links: Link[] = [
   { from: 'tks', to: 'pmt', via: 'kafka', label: 'records', says: 'UPLB-TKS publishes personnel, appointment and signature records to PerporManTask over Kafka.', period: 3600, starts: [1900] },
   { from: 'kiosk', to: 'tks', via: 'db', label: 'punches', says: 'UPLB Kiosk writes attendance punches straight into the UPLB-TKS database.', period: 3000, starts: [0, 700, 1900] },
   { from: 'portal', to: 'tks', via: 'http', label: 'one-time-token SSO', says: 'UPLB Portal signs people in to UPLB-TKS with a one-time token.', period: 5200, starts: [300] },
+  { from: 'payroll', to: 'tks', via: 'http', label: 'REST: DTRs', says: 'UPLB Payroll pulls DTR timesheets from UPLB-TKS over REST once they are locked for payroll.', period: 6000, starts: [1500] },
 ];
 
 type Box = [x: number, y: number, w: number, h: number];
@@ -76,6 +78,7 @@ const layouts: Layout[] = [
       saln: [182, 310, 140, 52],
       kiosk: [389, 332, 150, 52],
       portal: [389, 0, 150, 52],
+      payroll: [580, 310, 140, 52],
     },
     paths: [
       'M130,184 H182',
@@ -85,6 +88,7 @@ const layouts: Layout[] = [
       'M542,184 H600',
       'M464,332 V228',
       'M464,52 V140',
+      'M650,310 V262 H520 V228',
     ],
     labels: [
       [156, 174, 'middle'],
@@ -94,6 +98,7 @@ const layouts: Layout[] = [
       [571, 174, 'middle'],
       [472, 286, 'start'],
       [472, 100, 'start'],
+      [585, 256, 'middle'],
     ],
     legend: [[0, 270], [0, 290], [0, 310], [0, 330], [0, 350], [0, 370]],
   },
@@ -106,27 +111,30 @@ const layouts: Layout[] = [
       hr: [8, 118, 136, 48],
       saln: [224, 118, 128, 48],
       tks: [8, 228, 136, 80],
-      pmt: [224, 244, 128, 48],
+      pmt: [224, 210, 128, 46],
       kiosk: [8, 370, 136, 48],
       portal: [224, 370, 128, 48],
+      payroll: [224, 276, 128, 46],
     },
     paths: [
       'M76,56 V118',
       'M56,166 V228',
       'M96,166 V228',
       'M144,142 H224',
-      'M144,268 H224',
+      'M144,233 H224',
       'M56,370 V308',
       'M288,370 V340 H116 V308',
+      'M144,299 H224',
     ],
     labels: [
       [84, 91, 'start'],
       [50, 201, 'end'],
       [102, 201, 'start'],
       [184, 135, 'middle'],
-      [184, 261, 'middle'],
+      [184, 226, 'middle'],
       [50, 343, 'end'],
       [202, 333, 'middle'],
+      [184, 292, 'middle'],
     ],
     legend: [[8, 450], [8, 470], [8, 490], [206, 450], [206, 470], [206, 490]],
   },
@@ -210,7 +218,7 @@ const legendRows: { kind: string; text: string }[] = [
     ))
   }
   <figcaption class="eco-cap">
-    The UPLB HR ecosystem is team architecture. Solid boxes are mine; dashed ones are team apps where I built specific layers. Main data paths only; the kiosk share covers the 180 days to 13 Oct 2026.
+    The UPLB HR ecosystem is team architecture. Solid boxes are mine; dashed ones are team apps where I built specific layers. Main data paths only; the kiosk share covers the 180 days to 5 Nov 2026.
     <button type="button" class="eco-toggle label" data-events-toggle aria-pressed="false">pause events</button>
   </figcaption>
   <ul class="sr-only">
