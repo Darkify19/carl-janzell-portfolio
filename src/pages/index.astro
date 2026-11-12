@@ -17,9 +17,9 @@ const email = 'carl.oropesa11@gmail.com';
 // commits; usage from UPLB-TKS's own Usage Analytics page.
 // Each one carries its window. Windowed; never extrapolated.
 const facts = [
-  { value: '822', label: 'production deploys of my code, 8\u00a0Apr to 5\u00a0Nov\u00a02026' },
-  { value: '331,656', label: 'attendance punches, 180 days to 5\u00a0Nov\u00a02026' },
-  { value: '470', label: 'concurrent users at the 8\u00a0AM rush, 5\u00a0Nov\u00a02026' },
+  { value: '878', label: 'production deploys of my code, 8\u00a0Apr to 12\u00a0Nov\u00a02026' },
+  { value: '2,656', label: 'personnel clocking in, 30 days to 12\u00a0Nov\u00a02026' },
+  { value: '100,415', label: 'attendance punches, 30 days to 12\u00a0Nov\u00a02026' },
 ];
 
 interface Project {
@@ -44,10 +44,10 @@ const projects: Project[] = [
     desc: "Daily time records, leave, performance reviews, certificates of service, travel requests and schedules for 4,000+ UP Los Baños personnel, served through two Filament panels: HR admin and employee self-service. It replaced the university's paper processes, and the rest of the ecosystem is built around it.",
     // Real production figures from the system's own Usage Analytics page.
     spec: [
-      ['serves', '4,000+ UP Los Baños personnel. 2,576 timed in within the 30 days to 5 Nov 2026, and 2,167 on 4 Nov alone.'],
-      ['captured', '331,656 attendance punches over the 180 days to 5 Nov 2026: 78.6% directly (web 54.0%, kiosk 24.6%) and 21.3% keyed in by hand. Over the 7 days to 5 Nov, 95.1% came in directly.'],
-      ['traffic', '444,014 page views and 30,595 logins over the 88 days to 5 Nov 2026; 971 unique users on an average working day, peaking at 2,204 on 3 Nov, and 470 concurrent at the 8 AM clock-in rush on 5 Nov.'],
-      ['shipped', "576 tagged production deploys from 8 Apr to 5 Nov 2026, each release with a “What's New” page written for personnel"],
+      ['serves', '4,000+ UP Los Baños personnel. 2,656 timed in within the 30 days to 12 Nov 2026, and 2,188 on 4 Nov alone.'],
+      ['captured', '100,415 attendance punches over the 30 days to 12 Nov 2026: 88.2% directly (web 57.4%, kiosk 30.8%) and 11.7% keyed in by hand. Over the 7 days to 12 Nov, 97.9% came in directly.'],
+      ['traffic', '222,540 page views and 17,749 logins over the 30 days to 12 Nov 2026; 1,249 unique users on an average working day, peaking at 2,204 on 3 Nov, and 439 concurrent at the 8 AM clock-in rush on 12 Nov.'],
+      ['shipped', "618 tagged production deploys from 8 Apr to 12 Nov 2026, each release with a “What's New” page written for personnel"],
     ],
     highlights: [
       'DTR engine: flexible periods, biometric and manual attendance merged, grace-period undertime.',
@@ -88,7 +88,7 @@ const projects: Project[] = [
     name: 'UPLB Kiosk',
     kind: 'Offline-first attendance terminal',
     role: 'lead developer · primary author',
-    desc: "Shared walk-up terminals for personnel who don't sit at a desk, writing punches straight into the TKS database. The kiosks carried 24.6% of every punch in the 180 days to 5 Nov 2026, and nearly a third of the punches from 1 Oct to 5 Nov. They're offline-first because a building's network is not a given, and every punch a kiosk fails to take is one a timekeeper has to key in later.",
+    desc: "Shared walk-up terminals for personnel who don't sit at a desk, writing punches straight into the TKS database. The kiosks carried 30.8% of every punch, nearly a third, in the 30 days to 12 Nov 2026. They're offline-first because a building's network is not a given, and every punch a kiosk fails to take is one a timekeeper has to key in later.",
     highlights: [
       "Offline-first punching: a dropped network doesn't drop the punch. Attendance is stored locally and replayed through a sync endpoint, and the screen says plainly that the punch is saved either way.",
       'Machine identity that survives a cleared browser: a device token issued once and mirrored across cookie and localStorage, so one physical kiosk stays one row instead of spawning a new device every session.',
@@ -259,7 +259,7 @@ const navLinks = [
               ))
             }
             <p class="stamp-wrap">
-              <span class="stamp" data-punch="stamp"><b>Verified</b> <small>5 Nov 2026</small></span>
+              <span class="stamp" data-punch="stamp"><b>Verified</b> <small>12 Nov 2026</small></span>
             </p>
           </div>
           <p class="hero-cta mono">
@@ -399,7 +399,7 @@ const navLinks = [
         <div class="sec-head">
           <h2>Public code and stack</h2>
         </div>
-        <p class="sec-lede">Laravel is where I go deepest, but I'm not tied to it. Two pieces of code you can read:</p>
+        <p class="sec-lede">Laravel is where I go deepest, but I'm not tied to it. Code you can read, and a game you can play:</p>
         <div class="public">
           <article id="page-builder">
             <h3>filament-page-builder</h3>
@@ -412,6 +412,26 @@ const navLinks = [
               <a class="link" href="https://packagist.org/packages/carljanzell/filament-page-builder" target="_blank" rel="noopener">packagist ↗</a>
             </p>
           </article>
+          <article id="feedback">
+            <h3>filament-feedback</h3>
+            <p class="label">laravel · filament · open source (mit)</p>
+            <p>In-app feedback for Filament panels, also listed in Filament's plugin directory. People press Feedback on any page, tag the modules they mean and how they feel, and follow their thread from Sent to Done. The team answers from one inbox, and a board shows the mood per module, so you can see how a release landed. It runs on Filament 3.3, 4 and 5, and UPLB-TKS and the performance app have used it in production since 10 Nov 2026.</p>
+            <p class="public-links mono">
+              <a class="link" href="https://filamentphp.com/plugins/carl-janzell-feedback" target="_blank" rel="noopener">plugin directory ↗</a>
+              <a class="link" href="https://github.com/Darkify19/filament-feedback" target="_blank" rel="noopener">source ↗</a>
+              <a class="link" href="https://darkify19.github.io/filament-feedback/" target="_blank" rel="noopener">docs ↗</a>
+              <a class="link" href="https://packagist.org/packages/carljanzell/filament-feedback" target="_blank" rel="noopener">packagist ↗</a>
+            </p>
+          </article>
+          <article id="insights">
+            <h3>filament-insights</h3>
+            <p class="label">laravel · filament · open source (mit)</p>
+            <p>Stats and chart dashboards an admin builds on any Filament resource, with no data-source classes to write. Each dashboard reads the resource's own table query, so a chart counts exactly the records its viewer could see in that table. One codebase supports Filament 3, 4 and 5, with version floors set past known security advisories.</p>
+            <p class="public-links mono">
+              <a class="link" href="https://github.com/Darkify19/filament-insights" target="_blank" rel="noopener">source ↗</a>
+              <a class="link" href="https://packagist.org/packages/carljanzell/filament-insights" target="_blank" rel="noopener">packagist ↗</a>
+            </p>
+          </article>
           <article>
             <h3>samyang</h3>
             <p class="label">ruby on rails 8 · graphql · vue 2</p>
@@ -419,6 +439,14 @@ const navLinks = [
             <p class="public-links mono">
               <a class="link" href="https://github.com/Darkify19/samyang-back" target="_blank" rel="noopener">samyang-back ↗</a>
               <a class="link" href="https://github.com/Darkify19/samyang-front" target="_blank" rel="noopener">samyang-front ↗</a>
+            </p>
+          </article>
+          <article id="bakunawa">
+            <h3>Bakunawa</h3>
+            <p class="label">roblox · luau · rojo · public beta</p>
+            <p>An original Roblox game, public since 11 Nov 2026. You're a sea serpent eating a Filipino barrio: bite chunks out of houses until they topple, grow, then fight other serpents for the moon in a short Eclipse round. The server makes every gameplay decision, the strict-mode Luau lives in Git and syncs into Studio with Rojo, and a failed save load never overwrites real progress. The source is private; the game is free to play.</p>
+            <p class="public-links mono">
+              <a class="link" href="https://www.roblox.com/games/18350520472/Bakunawa" target="_blank" rel="noopener">play on roblox ↗</a>
             </p>
           </article>
         </div>
